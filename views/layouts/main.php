@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="<?= $lang ?>">
+<html lang="<?php echo $lang; ?>">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><?= $config['title'] ?></title>
-  <meta name="description" content="<?= $config['description'] ?>" />
-  <meta property="og:title" content="<?= $config['title'] ?>" />
-  <meta property="og:description" content="<?= $config['description'] ?>" />
+  <title><?php echo $config['title']; ?></title>
+  <meta name="description" content="<?php echo $config['description']; ?>" />
+  <meta property="og:title" content="<?php echo $config['title']; ?>" />
+  <meta property="og:description" content="<?php echo $config['description']; ?>" />
   <meta property="og:image" content="assets/favicon/Logo.png" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#0a0a0a" />
@@ -33,68 +33,68 @@
   <div id="scrollProgress" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
-  <?= View::partial('navbar', [
+  <?php echo View::partial('navbar', [
       'lang' => $lang,
       'social' => $config['social'],
-  ]) ?>
+  ]); ?>
 
   <main>
 
     <!-- SECTION 1: INTRO -->
-    <?= View::section('intro') ?>
+    <?php echo View::section('intro'); ?>
 
     <!-- SECTION 2: HERO -->
-    <?= View::section('hero') ?>
+    <?php echo View::section('hero'); ?>
 
     <!-- SECTION 3: CURVED MARQUEE -->
-    <?= View::section('curved-marquee') ?>
+    <?php echo View::section('curved-marquee'); ?>
 
     <!-- SECTION 4: ABOUT ME DETAIL -->
-    <?= View::section('about') ?>
+    <?php echo View::section('about'); ?>
 
     <!-- SECTION 5: BIO STATEMENT + STATS -->
-    <?= View::section('bio-stats') ?>
+    <?php echo View::section('bio-stats'); ?>
 
     <!-- SECTION 6: MY SKILL SET -->
-    <?= View::section('skills', ['tools' => $tools]) ?>
+    <?php echo View::section('skills', ['tools' => $tools]); ?>
 
     <!-- SECTION 7: PROJECTS TEASER -->
-    <?= View::section('projects-teaser', ['counts' => $projectCounts]) ?>
+    <?php echo View::section('projects-teaser', ['counts' => $projectCounts]); ?>
 
     <!-- SECTION 8: PROJECTS GRID -->
-    <?= View::section('projects', ['projects' => $projects]) ?>
+    <?php echo View::section('projects', ['projects' => $projects]); ?>
 
     <!-- SECTION 9: SERVICES -->
-    <?= View::section('services', ['services' => $services]) ?>
+    <?php echo View::section('services', ['services' => $services]); ?>
 
     <!-- SECTION 10: TECH MARQUEE -->
-    <?= View::section('tech-marquee') ?>
+    <?php echo View::section('tech-marquee'); ?>
 
     <!-- SECTION 11: GALLERY -->
-    <?= View::section('gallery', ['gallery' => $gallery]) ?>
+    <?php echo View::section('gallery', ['gallery' => $gallery]); ?>
 
     <!-- SECTION 12: TESTIMONIALS -->
-    <?= View::section('testimonials', ['testimonials' => $testimonials]) ?>
+    <?php echo View::section('testimonials', ['testimonials' => $testimonials]); ?>
 
     <!-- SECTION 13: FAQ -->
-    <?= View::section('faq', ['faqs' => $faqs, 'faqCategories' => $faqCategories]) ?>
+    <?php echo View::section('faq', ['faqs' => $faqs, 'faqCategories' => $faqCategories]); ?>
 
     <!-- SECTION 14: CONTACT -->
-    <?= View::section('contact', [
+    <?php echo View::section('contact', [
         'emailjs' => $config['emailjs'],
         'whatsapp' => $config['whatsapp'],
-    ]) ?>
+    ]); ?>
 
     <!-- SECTION 15: CLOSING CTA -->
-    <?= View::section('cta-closing') ?>
+    <?php echo View::section('cta-closing'); ?>
 
   </main>
 
   <!-- FOOTER -->
-  <?= View::partial('footer', [
+  <?php echo View::partial('footer', [
       'social' => $config['social'],
       'visitorCount' => $visitorCount,
-  ]) ?>
+  ]); ?>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -103,10 +103,10 @@
 
   <!-- i18n data for JS -->
   <script>
-    window.__LANG = '<?= $lang ?>';
-    window.__LANG_DATA = <?= json_encode([
+    window.__LANG = '<?php echo $lang; ?>';
+    window.__LANG_DATA = <?php echo json_encode([
         'cta_clock_prefix' => i18n::t('cta_clock_prefix'),
-    ], JSON_UNESCAPED_UNICODE) ?>;
+    ], JSON_UNESCAPED_UNICODE); ?>;
   </script>
 
   <script src="assets/js/main.js"></script>
