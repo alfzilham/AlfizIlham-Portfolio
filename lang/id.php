@@ -19,13 +19,13 @@ return [
     'hero_preheading' => 'Hai, Nama Saya',
     'hero_name_line1' => 'Alfiz',
     'hero_name_line2' => 'Ilham',
-    'hero_tagline' => 'Membangun perangkat lunak, alur kerja AI, dan antarmuka yang memberikan kesan.',
-    'hero_badge' => '50+ Proyek Selesai',
+    'hero_tagline' => 'Fullstack developer yang mengintegrasikan AI langsung ke dalam produk \u2014 bukan sekadar menambahkan di akhir.',
+    'hero_badge' => 'Fullstack Developer, AI-Integrated Apps',
     'hero_cta_primary' => 'Ayo Berkolaborasi',
     'hero_cta_secondary' => 'Lihat Hasil Kerja',
-    'hero_stats_title' => '50+ Proyek Selesai',
-    'hero_stats_item1' => 'Konsultasi Gratis',
-    'hero_stats_item2' => 'Respon Cepat',
+    'hero_stats_title' => '500+ Komisi Selesai',
+    'hero_stats_item1' => '50+ Proyek Selesai',
+    'hero_stats_item2' => '4+ Tahun Pengalaman',
 
     // Curved Marquee
     'curved_text' => 'Alfiz Ilham ✦ Fullstack Developer & AI Engineer ✦',

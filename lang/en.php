@@ -19,13 +19,13 @@ return [
     'hero_preheading' => 'Hi, My Name Is',
     'hero_name_line1' => 'Alfiz',
     'hero_name_line2' => 'Ilham',
-    'hero_tagline' => 'Building software, AI workflows & interfaces that leave a mark.',
-    'hero_badge' => '50+ Projects Delivered',
+    'hero_tagline' => 'Fullstack developer who builds AI directly into products \u2014 not bolting it on after.',
+    'hero_badge' => 'Fullstack Developer, AI-Integrated Apps',
     'hero_cta_primary' => 'Let\'s Build Something',
     'hero_cta_secondary' => 'View My Work',
-    'hero_stats_title' => '50+ Projects Delivered',
-    'hero_stats_item1' => 'Free Consultation',
-    'hero_stats_item2' => 'Fast Response',
+    'hero_stats_title' => '500+ Commissions Delivered',
+    'hero_stats_item1' => '50+ Projects Completed',
+    'hero_stats_item2' => '4+ Years Experience',
 
     // Curved Marquee
     'curved_text' => 'Alfiz Ilham ✦ Fullstack Developer & AI Engineer ✦',
