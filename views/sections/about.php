@@ -28,31 +28,68 @@
   <div class="container">
     <div class="tech-ticker">
       <div class="tech-ticker-track">
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/html5.svg" alt="HTML" /><span>HTML</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/css3.svg" alt="CSS" /><span>CSS</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/javascript.svg" alt="JavaScript" /><span>JavaScript</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/typescript.svg" alt="TypeScript" /><span>TypeScript</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/python.svg" alt="Python" /><span>Python</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/database/csharp.svg" alt="C#" /><span>C#</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/coding-tools/sass.svg" alt="Sass" /><span>Sass</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/react.svg" alt="React" /><span>React</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/nextjs.svg" alt="Next.js" /><span>Next.js</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/tailwindcss.svg" alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/coding-tools/redux.svg" alt="Redux" /><span>Redux</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/nodejs.svg" alt="Node.js" /><span>Node.js</span></div>
+        <!-- Fullstack -->
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/html5.svg" alt="HTML" /><span>HTML</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/css3.svg" alt="CSS" /><span>CSS</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/javascript.svg" alt="JavaScript" /><span>JavaScript</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/typescript.svg" alt="TypeScript" /><span>TypeScript</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/php.svg" alt="PHP" /><span>PHP</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/python.svg" alt="Python" /><span>Python</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/csharp.svg" alt="C#" /><span>C#</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/sass.svg" alt="Sass" /><span>Sass</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/react.svg" alt="React" /><span>React</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/nextjs.svg" alt="Next.js" /><span>Next.js</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/tailwindcss.svg" alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/redux.svg" alt="Redux" /><span>Redux</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/nodejs.svg" alt="Node.js" /><span>Node.js</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/express.svg" alt="Express" /><span>Express</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/mongodb.svg" alt="MongoDB" /><span>MongoDB</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/neon.svg" alt="PostgreSQL" /><span>PostgreSQL</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/rest-api.svg" alt="REST" /><span>REST</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/github.svg" alt="Git" /><span>Git</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/docker.svg" alt="Docker" /><span>Docker</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/sql.svg" alt="SQL" /><span>SQL</span></div>
+        <!-- AI -->
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/claude.svg" alt="Claude API" /><span>Claude API</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /><span>OpenRouter</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/aws-bedrock.svg" alt="AWS Bedrock" /><span>AWS Bedrock</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/vertex-ai.svg" alt="Vertex AI" /><span>Vertex AI</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
+        <!-- Design -->
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/photoshop.svg" alt="Photoshop" /><span>Photoshop</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/lightroom.svg" alt="Lightroom" /><span>Lightroom</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/coreldraw.svg" alt="CorelDRAW" /><span>CorelDRAW</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/canva.svg" alt="Canva" /><span>Canva</span></div>
         <!-- Duplicate for seamless scroll -->
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/html5.svg" alt="HTML" /><span>HTML</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/css3.svg" alt="CSS" /><span>CSS</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/javascript.svg" alt="JavaScript" /><span>JavaScript</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/typescript.svg" alt="TypeScript" /><span>TypeScript</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/python.svg" alt="Python" /><span>Python</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/database/csharp.svg" alt="C#" /><span>C#</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/coding-tools/sass.svg" alt="Sass" /><span>Sass</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/react.svg" alt="React" /><span>React</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/nextjs.svg" alt="Next.js" /><span>Next.js</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/tailwindcss.svg" alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/coding-tools/redux.svg" alt="Redux" /><span>Redux</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/fundamentals/nodejs.svg" alt="Node.js" /><span>Node.js</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/html5.svg" alt="HTML" /><span>HTML</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/css3.svg" alt="CSS" /><span>CSS</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/javascript.svg" alt="JavaScript" /><span>JavaScript</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/typescript.svg" alt="TypeScript" /><span>TypeScript</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/php.svg" alt="PHP" /><span>PHP</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/python.svg" alt="Python" /><span>Python</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/csharp.svg" alt="C#" /><span>C#</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/sass.svg" alt="Sass" /><span>Sass</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/react.svg" alt="React" /><span>React</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/nextjs.svg" alt="Next.js" /><span>Next.js</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/tailwindcss.svg" alt="Tailwind CSS" /><span>Tailwind CSS</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/redux.svg" alt="Redux" /><span>Redux</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/nodejs.svg" alt="Node.js" /><span>Node.js</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/express.svg" alt="Express" /><span>Express</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/mongodb.svg" alt="MongoDB" /><span>MongoDB</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/neon.svg" alt="PostgreSQL" /><span>PostgreSQL</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/rest-api.svg" alt="REST" /><span>REST</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/github.svg" alt="Git" /><span>Git</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/docker.svg" alt="Docker" /><span>Docker</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/sql.svg" alt="SQL" /><span>SQL</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/claude.svg" alt="Claude API" /><span>Claude API</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /><span>OpenRouter</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/aws-bedrock.svg" alt="AWS Bedrock" /><span>AWS Bedrock</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/vertex-ai.svg" alt="Vertex AI" /><span>Vertex AI</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/photoshop.svg" alt="Photoshop" /><span>Photoshop</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/lightroom.svg" alt="Lightroom" /><span>Lightroom</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/coreldraw.svg" alt="CorelDRAW" /><span>CorelDRAW</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/design/canva.svg" alt="Canva" /><span>Canva</span></div>
       </div>
     </div>
   </div>

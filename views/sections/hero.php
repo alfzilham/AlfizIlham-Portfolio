@@ -11,9 +11,9 @@
   </div>
 
   <!-- Floating icons -->
-  <div class="floating-icon hero-icon-1"><img src="assets/image/icons/ai-productivity/claude.svg" alt="Claude" /></div>
-  <div class="floating-icon hero-icon-2"><img src="assets/image/icons/ai-productivity/obsidian.svg" alt="Obsidian" /></div>
-  <div class="floating-icon hero-icon-3"><img src="assets/image/icons/fundamentals/react.svg" alt="React" /></div>
+  <div class="floating-icon hero-icon-1"><img src="assets/image/icons/ai/claude.svg" alt="Claude" /></div>
+  <div class="floating-icon hero-icon-2"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /></div>
+  <div class="floating-icon hero-icon-3"><img src="assets/image/icons/fullstack/react.svg" alt="React" /></div>
 
   <!-- Foreground content -->
   <div class="container hero-content">
