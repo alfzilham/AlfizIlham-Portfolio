@@ -32,14 +32,14 @@ return [
 
     // About Detail
     'about_eyebrow' => 'Tentang Saya',
-    'about_heading' => 'SAYA MEMBANGUN PERANGKAT LUNAK, AI & PENGALAMAN DIGITAL',
-    'about_description' => 'Dari aplikasi full-stack hingga alur kerja AI dan antarmuka yang bersih, saya mengubah ide menjadi kenyataan — disesuaikan dengan kebutuhan Anda.',
+    'about_heading' => 'SAYA MEMBANGUN APLIKASI FULLSTACK DENGAN AI TERINTEGRASI',
+    'about_description' => 'Fullstack developer yang mengintegrasikan AI langsung ke dalam produk \u2014 website produksi, tool workflow, dan aplikasi dengan asisten AI yang terhubung melalui OpenRouter. React, Next.js, Node.js, Python, dan PHP.',
     'about_cta_primary' => 'Mari Bicara',
     'about_cta_secondary' => 'Unduh CV',
-    'about_role' => 'Software & AI Engineer',
+    'about_role' => 'Fullstack Developer, AI-Integrated Apps',
     'about_stat1_number' => '50+',
     'about_stat1_label' => 'Proyek Selesai',
-    'about_stat2_number' => '3+',
+    'about_stat2_number' => '4+',
     'about_stat2_label' => 'Tahun Pengalaman',
 
     // Bio Stats

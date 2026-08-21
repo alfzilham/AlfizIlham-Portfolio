@@ -32,14 +32,14 @@ return [
 
     // About Detail
     'about_eyebrow' => 'About Me',
-    'about_heading' => 'I BUILD SOFTWARE, AI & DIGITAL EXPERIENCES',
-    'about_description' => 'From full-stack apps to AI workflows and clean interfaces, I turn ideas into reality — tailored to your needs.',
+    'about_heading' => 'I BUILD FULLSTACK APPS WITH AI BUILT IN',
+    'about_description' => 'Fullstack developer who builds AI directly into products \u2014 production websites, workflow tools, and apps with AI assistants wired through OpenRouter. React, Next.js, Node.js, Python, and PHP.',
     'about_cta_primary' => 'Let\'s Talk',
     'about_cta_secondary' => 'Download CV',
-    'about_role' => 'Software & AI Engineer',
+    'about_role' => 'Fullstack Developer, AI-Integrated Apps',
     'about_stat1_number' => '50+',
-    'about_stat1_label' => 'Projects Done',
-    'about_stat2_number' => '3+',
+    'about_stat1_label' => 'Projects Completed',
+    'about_stat2_number' => '4+',
     'about_stat2_label' => 'Years Experience',
 
     // Bio Stats
