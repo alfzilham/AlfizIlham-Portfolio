@@ -24,6 +24,7 @@ class PageController
             'config' => [
                 'name' => config('name'),
                 'title' => config('title'),
+                'description' => config('description'),
                 'social' => config('social'),
                 'email' => config('email'),
                 'phone' => config('phone'),
