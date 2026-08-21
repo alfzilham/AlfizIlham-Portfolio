@@ -42,8 +42,8 @@ $router->get('/lang/{lang}', function () {
     exit;
 });
 
-// Get route from query string or URI
-$uri = $_GET['/'] ?? parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Get route from query string (set by .htaccess RewriteRule)
+$uri = $_GET['/'] ?? '/';
 $uri = trim($uri, '/');
 
 // Dispatch route
