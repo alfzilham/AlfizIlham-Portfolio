@@ -99,6 +99,49 @@
   .contact-info-strip {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* Education — Tablet */
+  .education {
+    padding: 60px 40px 40px;
+  }
+
+  .education::before {
+    font-size: 100px;
+    top: 14px;
+    right: 24px;
+  }
+
+  .education-title {
+    font-size: 38px;
+    margin-bottom: 56px;
+  }
+
+  .education-diagram {
+    height: 520px;
+  }
+
+  .education-node-1 { left: 6%;  top: 82%; }
+  .education-node-2 { left: 34%; top: 34%; }
+  .education-node-3 { left: 62%; top: 68%; }
+  .education-node-4 { left: 86%; top: 18%; }
+
+  .education-ghost-num {
+    font-size: 90px;
+  }
+
+  .education-ghost-num-1 { left: 2%;  top: 60%; }
+  .education-ghost-num-2 { left: 30%; top: 12%; }
+  .education-ghost-num-3 { left: 58%; top: 50%; }
+  .education-ghost-num-4 { left: 82%; top: 0%; }
+
+  .education-step {
+    width: 200px;
+  }
+
+  .education-step-1 { left: 0%;  top: 48%; }
+  .education-step-2 { left: 26%; top: 6%; }
+  .education-step-3 { left: 52%; top: 42%; }
+  .education-step-4 { left: 76%; top: 8%; }
 }
 
 /* --------------------------------------------------------------------------
@@ -400,4 +443,84 @@
   .contact-map-card {
     min-height: 300px;
   }
+
+  /* Education */
+  .education {
+    padding: 50px 24px 32px;
+  }
+
+  .education::before {
+    font-size: 64px;
+    top: 6px;
+    right: 16px;
+  }
+
+  .education-eyebrow {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+
+  .education-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+    letter-spacing: -0.5px;
+  }
+
+  .education-diagram {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-left: 32px;
+  }
+
+  .education-diagram::before {
+    content: "";
+    position: absolute;
+    left: 32px;
+    top: 32px;
+    bottom: 32px;
+    width: 2px;
+    background: var(--color-border-dark);
+    transform-origin: top;
+    transform: scaleY(0);
+    animation: edu-draw-line-vertical 1.4s cubic-bezier(0.65, 0.05, 0.36, 1) 0.2s forwards;
+    z-index: 0;
+  }
+
+  @keyframes edu-draw-line-vertical {
+    to { transform: scaleY(1); }
+  }
+
+  .education-wave { display: none; }
+  .education-ghost-num { display: none; }
+
+  .education-node {
+    position: relative;
+    left: 0 !important;
+    top: 0 !important;
+    margin-left: 0;
+    transform: rotate(45deg) scale(0.4);
+    margin-bottom: 14px;
+  }
+
+  .education-node-1 { animation-delay: 0.15s; }
+  .education-node-2 { animation-delay: 0.65s; }
+  .education-node-3 { animation-delay: 1.15s; }
+  .education-node-4 { animation-delay: 1.65s; }
+
+  .education-step {
+    position: relative;
+    width: 100%;
+    left: 0 !important;
+    top: 0 !important;
+    margin-bottom: 34px;
+    padding-left: 8px;
+  }
+
+  .education-step-1 { animation-delay: 0.3s; }
+  .education-step-2 { animation-delay: 0.8s; }
+  .education-step-3 { animation-delay: 1.3s; }
+  .education-step-4 { animation-delay: 1.8s; }
 }

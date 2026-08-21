@@ -55,7 +55,10 @@
     <!-- SECTION 5: BIO STATEMENT + STATS -->
     <?php echo View::section('bio-stats'); ?>
 
-    <!-- SECTION 6: MY SKILL SET -->
+    <!-- SECTION 6: EDUCATION -->
+    <?php echo View::section('education'); ?>
+
+    <!-- SECTION 7: MY SKILL SET -->
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
     <!-- SECTION 7: PROJECTS TEASER -->

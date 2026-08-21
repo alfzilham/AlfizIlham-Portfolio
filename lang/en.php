@@ -66,6 +66,22 @@ return [
     'skills_search_placeholder' => 'Search tools...',
     'skills_empty' => 'No tools match your search.',
 
+    // Education
+    'education_eyebrow' => 'Academic Background',
+    'education_heading' => 'Education.',
+    'education_step1_title' => 'Universitas Syiah Kuala',
+    'education_step1_desc' => "Bachelor's, Computer Engineering (Teknik Komputer)<br>2026 \u2013 Present",
+    'education_step1_location' => 'Banda Aceh, Indonesia',
+    'education_step2_title' => 'MAS Jeumala Amal',
+    'education_step2_desc' => 'High School Diploma, Science \u2014 Class of 34<br>July 2024 \u2013 May 2026',
+    'education_step2_location' => 'Pidie, Aceh, Indonesia',
+    'education_step3_title' => 'SMK Darul Ihsan',
+    'education_step3_desc' => 'Vocational Studies (1 year; transferred to MAS Jeumala Amal)<br>2023 \u2013 2024',
+    'education_step3_location' => 'Aceh, Indonesia',
+    'education_step4_title' => "MTsS Darul Ihsan",
+    'education_step4_desc' => 'Junior High School Diploma<br>Graduated 2023',
+    'education_step4_location' => 'Aceh, Indonesia',
+
     // Projects Teaser
     'projects_teaser_eyebrow' => 'My Projects',
     'projects_teaser_heading' => 'Curious What I\'ve Built?',

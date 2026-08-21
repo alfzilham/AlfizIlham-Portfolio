@@ -2004,3 +2004,176 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* --------------------------------------------------------------------------
+   21. EDUCATION TIMELINE
+   -------------------------------------------------------------------------- */
+
+.education {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 70px 60px 50px;
+  overflow: hidden;
+}
+
+.education::before {
+  content: "EDU";
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 120px;
+  font-weight: 800;
+  color: var(--color-bg-soft);
+  z-index: 0;
+  letter-spacing: -2px;
+}
+
+.education-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: var(--color-text-muted);
+  font-size: var(--fs-body-sm);
+  letter-spacing: 0.5px;
+  margin-bottom: 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.education-eyebrow-line {
+  width: 34px;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.education-title {
+  text-align: center;
+  font-size: clamp(36px, 4vw, 44px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 70px;
+  position: relative;
+  z-index: 1;
+}
+
+.education-diagram {
+  position: relative;
+  height: 380px;
+  margin-bottom: 40px;
+}
+
+.education-wave {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.education-wave path {
+  fill: none;
+  stroke: var(--color-border-dark);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1800;
+  stroke-dashoffset: 1800;
+  animation: edu-draw-line 1.8s cubic-bezier(0.65, 0.05, 0.36, 1) 0.2s forwards;
+}
+
+@keyframes edu-draw-line {
+  to { stroke-dashoffset: 0; }
+}
+
+.education-node {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--neu-shadow-out);
+  z-index: 3;
+  transform: rotate(45deg) scale(0.4);
+  opacity: 0;
+  animation: edu-pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.education-node svg {
+  transform: rotate(-45deg);
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes edu-pop-in {
+  to {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+.education-node-1 { left: 9%;  top: 76%; animation-delay: 0.15s; }
+.education-node-2 { left: 36%; top: 26%; animation-delay: 0.8s; }
+.education-node-3 { left: 63%; top: 60%; animation-delay: 1.4s; }
+.education-node-4 { left: 88%; top: 30%; animation-delay: 2.0s; }
+
+.education-ghost-num {
+  position: absolute;
+  font-size: 110px;
+  font-weight: 800;
+  color: var(--color-bg-soft);
+  z-index: 0;
+  line-height: 1;
+  user-select: none;
+}
+
+.education-ghost-num-1 { left: 4%;  top: 8%; }
+.education-ghost-num-2 { left: 32%; top: 36%; }
+.education-ghost-num-3 { left: 58%; top: 8%; }
+.education-ghost-num-4 { left: 84%; top: 42%; }
+
+.education-step {
+  position: absolute;
+  width: 240px;
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: edu-step-in 0.6s ease forwards;
+}
+
+.education-step h3 {
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.education-step-location {
+  display: block;
+  font-size: var(--fs-caption);
+  color: var(--color-text-faint);
+  margin-bottom: 8px;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+}
+
+.education-step p {
+  font-size: var(--fs-body-sm);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+@keyframes edu-step-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.education-step-1 { left: 2%;  top: 24%; text-align: left; animation-delay: 0.35s; }
+.education-step-2 { left: 28%; top: 78%; text-align: left; animation-delay: 1.0s; }
+.education-step-3 { left: 56%; top: 18%; text-align: left; animation-delay: 1.6s; }
+.education-step-4 { left: 78%; top: 62%; text-align: left; animation-delay: 2.2s; }

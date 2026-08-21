@@ -66,6 +66,22 @@ return [
     'skills_search_placeholder' => 'Cari tools...',
     'skills_empty' => 'Tidak ada tools yang cocok.',
 
+    // Education
+    'education_eyebrow' => 'Latar Belakang Pendidikan',
+    'education_heading' => 'Pendidikan.',
+    'education_step1_title' => 'Universitas Syiah Kuala',
+    'education_step1_desc' => 'Sarjana, Teknik Komputer<br>2026 \u2013 Sekarang',
+    'education_step1_location' => 'Banda Aceh, Indonesia',
+    'education_step2_title' => 'MAS Jeumala Amal',
+    'education_step2_desc' => 'Ijazah SMA, IPA \u2014 Angkatan 34<br>Juli 2024 \u2013 Mei 2026',
+    'education_step2_location' => 'Pidie, Aceh, Indonesia',
+    'education_step3_title' => 'SMK Darul Ihsan',
+    'education_step3_desc' => 'Pendidikan Kejuruan (1 tahun; pindah ke MAS Jeumala Amal)<br>2023 \u2013 2024',
+    'education_step3_location' => 'Aceh, Indonesia',
+    'education_step4_title' => "MTsS Darul Ihsan",
+    'education_step4_desc' => 'Ijazah SMP<br>Lulus 2023',
+    'education_step4_location' => 'Aceh, Indonesia',
+
     // Projects Teaser
     'projects_teaser_eyebrow' => 'Proyek Saya',
     'projects_teaser_heading' => 'Penasaran Apa Yang Saya Bangun?',
