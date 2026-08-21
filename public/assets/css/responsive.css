@@ -1,0 +1,403 @@
+/* ==========================================================================
+   RESPONSIVE.CSS — Media Query Overrides
+   Breakpoints: 480px (mobile) | 768px (tablet) | 1024px (desktop) | 1280px (wide)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1280px — Wide
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1280px) {
+  .container {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   1024px — Desktop → Tablet
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .section-padding {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+
+  /* Navbar */
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-hamburger {
+    display: flex;
+  }
+
+  .navbar-social {
+    display: none;
+  }
+
+  .lang-toggle {
+    display: none;
+  }
+
+  /* Icon Grid */
+  .icon-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  /* Tool Grid */
+  .tool-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Projects Grid */
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Services */
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+
+  .service-item {
+    padding: var(--space-5);
+  }
+
+  /* Gallery */
+  .gallery-masonry {
+    column-count: 3;
+  }
+
+  /* Testimonials */
+  .testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* FAQ */
+  .faq-layout {
+    grid-template-columns: 200px 1fr;
+  }
+
+  /* Footer */
+  .footer-dark-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* CTA Arc */
+  .cta-arc {
+    display: none;
+  }
+
+  .cta-closing-inner {
+    padding: 0 24px;
+  }
+
+  /* Contact Info Strip */
+  .contact-info-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   768px — Tablet → Mobile
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  /* Hero */
+  .hero-magnet,
+  .floating-icon {
+    display: none;
+  }
+
+  .hero-content {
+    padding-top: 40px;
+  }
+
+  .hero-name {
+    font-size: clamp(48px, 13vw, 96px);
+  }
+
+  .hero-stats-card {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 32px;
+  }
+
+  /* About Detail */
+  .about-detail-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .about-avatar {
+    max-width: 320px;
+    margin: 0 auto;
+  }
+
+  /* Icon Grid */
+  .icon-grid {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: var(--space-5);
+  }
+
+  /* Tool Grid */
+  .tool-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: var(--space-2);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .search-box {
+    min-width: 100%;
+  }
+
+  /* Projects Teaser */
+  .project-categories {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* Projects Grid */
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-bar-center {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Services */
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .services-top {
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .services-top-right {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Gallery */
+  .gallery-masonry {
+    column-count: 2;
+  }
+
+  /* Testimonials */
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* FAQ */
+  .faq-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .faq-sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .faq-category {
+    padding: 6px 12px;
+    font-size: var(--fs-body-sm);
+    border: none;
+    border-radius: var(--radius-full);
+    background: var(--color-bg);
+    box-shadow: var(--neu-shadow-out-sm);
+  }
+
+  .faq-category.active {
+    background: var(--color-accent);
+    color: var(--color-white);
+    box-shadow: var(--neu-shadow-out-sm);
+  }
+
+  .faq-panel {
+    padding: var(--space-5);
+  }
+
+  /* Contact */
+  .contact-header {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .contact-subtext {
+    text-align: left;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-info-strip {
+    grid-template-columns: 1fr;
+  }
+
+  /* Footer */
+  .footer-dark-inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--space-3);
+    text-align: center;
+  }
+
+  /* Stats Row */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Bio Statement */
+  .bio-statement {
+    font-size: var(--fs-h4);
+  }
+
+  /* Services Heading */
+  .services-heading {
+    font-size: clamp(36px, 8vw, 60px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   480px — Mobile
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .section-padding {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  /* Navbar */
+  .navbar-inner {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Intro (wordmark) */
+  .intro-mascot {
+    max-height: 280px;
+  }
+
+  /* Hero */
+  .hero-ctas {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hero-name {
+    font-size: clamp(40px, 12vw, 72px);
+  }
+
+  .hero-stats-card {
+    width: calc(100% - 32px);
+    max-width: 300px;
+  }
+
+  /* Icon Grid */
+  .icon-grid {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: var(--space-4);
+    column-gap: var(--space-3);
+  }
+
+  .icon-grid-item img {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Tool Grid */
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stats Row */
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Form */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Curved Marquee */
+  .curved-loop-svg {
+    font-size: clamp(32px, 8vw, 48px);
+  }
+
+  /* Footer Wordmark */
+  .footer-wordmark {
+    font-size: clamp(60px, 14vw, 120px);
+    text-shadow:
+      1px 1px 0 #e5e5e5,
+      2px 2px 0 #d4d4d4,
+      3px 3px 0 #c0c0c0;
+  }
+
+  /* CTA */
+  .cta-heading {
+    font-size: clamp(32px, 7vw, 48px);
+  }
+
+  /* Gallery */
+  .gallery-masonry {
+    column-count: 2;
+    column-gap: 8px;
+  }
+
+  .gallery-item {
+    margin-bottom: 8px;
+  }
+
+  /* Tech Ticker */
+  .tech-ticker-item span {
+    font-size: var(--fs-caption);
+  }
+
+  /* Contact Map */
+  #contact-map {
+    min-height: 300px;
+  }
+
+  .contact-map-card {
+    min-height: 300px;
+  }
+}

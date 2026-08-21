@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+vendor/
+composer.lock
+package-lock.json
+
+# OpenCode agent config
+.opencode/
+
+# Logs
+logs/
+
+# Graphify output
+graphify-out/
+
+# Database (runtime data)
+data/database.sqlite
+
+# Environment files
+config/.env
+*.env.local
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.~*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# PHP
+*.phar
+
+# Build artifacts
+*.min.css
+*.min.js
+
+# Cache
+.cache/
+*.cache
+
+# Temporary
+tmp/
+temp/
+*.tmp
