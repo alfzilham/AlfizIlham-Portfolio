@@ -988,14 +988,19 @@
   text-align: center;
 }
 
-/* Filter Bar */
+/* Filter Bar (hidden — icon grid only) */
 .filter-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-  margin-bottom: var(--space-6);
-  flex-wrap: wrap;
+  display: none;
+}
+
+/* Tool Cards Grid (hidden — icon grid only) */
+.tool-grid {
+  display: none;
+}
+
+/* Empty State (hidden) */
+.empty-state {
+  display: none;
 }
 
 .filter-bar-center {
