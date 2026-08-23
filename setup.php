@@ -200,35 +200,35 @@ $tools = [
     ['PostgreSQL', 'database', 'Database', 'assets/image/icons/fullstack/postgresql.svg', 26],
     ['MySQL', 'database', 'Database', 'assets/image/icons/fullstack/mysql.svg', 27],
     ['SQL', 'database', 'Query', 'assets/image/icons/fullstack/sql.svg', 28],
-    // devops (7)
+    // devops (6)
     ['Git', 'devops', 'Version Control', 'assets/image/icons/fullstack/git.svg', 29],
     ['GitHub', 'devops', 'Platform', 'assets/image/icons/fullstack/github.svg', 30],
     ['Docker', 'devops', 'Container', 'assets/image/icons/fullstack/docker.svg', 31],
     ['Linux', 'devops', 'Terminal', 'assets/image/icons/fullstack/linux.svg', 32],
     ['Railway', 'devops', 'Deploy', 'assets/image/icons/platform/railway.svg', 33],
     ['Vercel', 'devops', 'Deploy', 'assets/image/icons/platform/vercel.svg', 34],
-    ['Trae', 'devops', 'AI Coding', 'assets/image/icons/platform/trae.svg', 35],
-    // ai-ml (12)
+    // ai-ml (9)
     ['Claude', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/claude.svg', 36],
     ['OpenRouter', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/openrouter.svg', 37],
     ['Amazon Bedrock', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/aws-bedrock.svg', 38],
     ['Vertex AI', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/vertex-ai.svg', 39],
-    ['Google Colab', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/google-colab.svg', 40],
     ['TensorFlow', 'ai-ml', 'ML Framework', 'assets/image/icons/ai/tensorflow.svg', 41],
     ['NumPy', 'ai-ml', 'Data Science', 'assets/image/icons/ai/numpy.svg', 42],
     ['Pandas', 'ai-ml', 'Data Analysis', 'assets/image/icons/ai/pandas.svg', 43],
     ['Scikit-learn', 'ai-ml', 'ML Library', 'assets/image/icons/ai/scikit-learn.svg', 44],
     ['NVIDIA API', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/nvidia.svg', 45],
-    ['Codex', 'ai-ml', 'AI Coding', 'assets/image/icons/ai/codex.svg', 46],
-    ['OpenCode', 'ai-ml', 'AI Coding', 'assets/image/icons/ai/opencode.svg', 48],
     // design (5)
     ['Photoshop', 'design', 'Photo Edit', 'assets/image/icons/design/photoshop.svg', 49],
     ['Lightroom', 'design', 'Photo Edit', 'assets/image/icons/design/lightroom.svg', 50],
     ['CorelDRAW', 'design', 'Vector', 'assets/image/icons/design/coreldraw.svg', 51],
     ['Canva', 'design', 'Graphic Design', 'assets/image/icons/design/canva.svg', 52],
     ['CalliPro', 'design', 'Calligraphy', 'assets/image/icons/design/callipro.svg', 53],
-    // tools (4)
+    // tools (8)
+    ['Trae', 'tools', 'AI Coding', 'assets/image/icons/platform/trae.svg', 35],
+    ['Google Colab', 'tools', 'AI Platform', 'assets/image/icons/ai/google-colab.svg', 40],
+    ['Codex', 'tools', 'AI Coding', 'assets/image/icons/ai/codex.svg', 46],
     ['Obsidian', 'tools', 'Note-taking', 'assets/image/icons/ai/obsidian.svg', 47],
+    ['OpenCode', 'tools', 'AI Coding', 'assets/image/icons/ai/opencode.svg', 48],
     ['Android Studio', 'tools', 'IDE', 'assets/image/icons/platform/android-studio.svg', 54],
     ['Scratch', 'tools', 'Education', 'assets/image/icons/platform/scratch.svg', 55],
     ['n8n', 'tools', 'Automation', 'assets/image/icons/platform/n8n.svg', 56],
