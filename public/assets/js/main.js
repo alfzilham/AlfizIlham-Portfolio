@@ -1503,9 +1503,6 @@ function initEditorMode() {
     article.dataset.image = card.image;
     article.dataset.link = card.link || "";
 
-    const borders = ["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"];
-    article.style.setProperty("--card-border", borders[Number(card.id) % borders.length]);
-
     article.innerHTML = `
       <button type="button" class="chroma-menu-btn" aria-label="Card menu">
         <i data-lucide="more-vertical"></i>
