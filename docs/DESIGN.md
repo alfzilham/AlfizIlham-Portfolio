@@ -311,16 +311,12 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 
 ### 4.9 Services ("How Can I Help You")
 
-**Purpose**: List of 4 core service offerings.
+**Purpose**: List of 5 core service offerings.
 
 - Big heading: "HOW CAN I HELP YOU" (`--fs-hero`-ish scale, ~72-90px, weight 800, uppercase, two lines)
 - Below heading, a horizontal divider, then a row: left = short paragraph "From code to design to AI. Turning ideas into working products." (`--fs-h4`, weight 600, max-width 480px) + right side = primary button "Let's Talk" + small muted caption "Need a website, an AI workflow, or just a sharp logo? Here's how I can help."
 - Another divider line.
-- **4-column service grid** (collapses to 2-col tablet, 1-col mobile), each column:
-  - Title (bold, `--fs-h4`): "Full-Stack Development" / "AI & Automation" / "Tech Consultation" / "Design & Calligraphy"
-  - Description paragraph (muted, `--fs-body-sm`)
-  - Number label at bottom: "01" / "02" / "03" / "04" (`--fs-caption`, `--color-text-faint`)
-  - Columns separated by vertical divider lines (`border-left: 1px solid var(--color-border)`, except first column).
+- **AccordionGallery** (vanilla port of ReactBits component, 460px height, 5 panels): each panel shows a service illustration (monochrome line-art, `assets/image/services/service-N.webp`) with an active-expand / inactive-compress layout driven by GSAP (`flexGrow` animation, `rotateY` tilt, grayscale filter, parallax drift, label reveal stagger). Hover/click/focus/keyboard ←→ triggers the active state; description text updates dynamically below the accordion. Collapses to vertical stacking on mobile ≤520px.
 
 ---
 

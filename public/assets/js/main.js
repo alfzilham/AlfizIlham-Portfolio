@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollProgress();
   renderIconGrid();
   initSkillFilters();
-  renderServices();
+  initServicesAccordion();
   initCircularGallery();
   initEditorMode();
   renderGallery();
@@ -456,20 +456,236 @@ function initSkillFilters() {
    SERVICES (from PHP data)
    -------------------------------------------------------------------------- */
 
-function renderServices() {
-  const grid = document.getElementById("servicesGrid");
-  if (!grid) return;
+/* --------------------------------------------------------------------------
+   SERVICES ACCORDION GALLERY (vanilla port of ReactBits AccordionGallery)
+   -------------------------------------------------------------------------- */
 
-  const services = window.SERVICES_DATA;
+function initServicesAccordion() {
+  const root = document.getElementById("servicesAccordion");
+  const descEl = document.getElementById("servicesActiveDesc");
+  const items = window.SERVICES_DATA || [];
+  if (!root || !items.length || typeof gsap === "undefined") return;
 
-  grid.innerHTML = services.map(
-    (service) => `
-    <div class="service-item">
-      <div class="service-number">${service.number}</div>
-      <h4 class="service-title">${service.title}</h4>
-      <p class="service-desc">${service.description}</p>
-    </div>`
-  ).join("");
+  const count = items.length;
+  const prefersReduced =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const HEIGHT = 460;
+  const GAP = 10;
+  const RADIUS = 16;
+  const EXPAND_RATIO = 0.52;
+  const DURATION = prefersReduced ? 0 : 0.6;
+  const EASE = "power3.out";
+  const PARALLAX = 0.5;
+  const TILT = 8;
+  const STAGGER = 0.06;
+  const TRIGGER = "hover";
+  const SHOW_LABELS = true;
+  const GRAYSCALE = true;
+  const OVERLAY_COLOR = "#060010";
+  const TEXT_COLOR = "#ffffff";
+  const ACCENT_COLOR = "#ffffff";
+
+  root.style.height = HEIGHT + "px";
+  root.style.setProperty("--ag-gap", GAP + "px");
+  root.style.setProperty("--ag-radius", RADIUS + "px");
+  root.style.setProperty("--ag-accent", ACCENT_COLOR);
+  root.style.setProperty("--ag-overlay", OVERLAY_COLOR);
+  root.style.setProperty("--ag-text", TEXT_COLOR);
+
+  let activeIndex = 0;
+  let mediaSize = 320;
+  let tlRef = null;
+
+  // Build DOM
+  items.forEach((item, i) => {
+    const panel = document.createElement("div");
+    panel.className = "ag-panel" + (i === activeIndex ? " ag-panel--active" : "");
+    panel.style.borderRadius = RADIUS + "px";
+    panel.setAttribute("role", "listitem");
+    panel.setAttribute("tabindex", "0");
+    panel.setAttribute("aria-label", item.label || item.title || "");
+
+    const frame = document.createElement("span");
+    frame.className = "ag-panel__frame";
+
+    const media = document.createElement("span");
+    media.className = "ag-panel__media";
+    const img = document.createElement("img");
+    img.src = item.image || "";
+    img.alt = item.alt || item.label || item.title || "";
+    img.draggable = false;
+    media.appendChild(img);
+
+    const overlay = document.createElement("span");
+    overlay.className = "ag-panel__overlay";
+    overlay.setAttribute("aria-hidden", "true");
+
+    frame.appendChild(media);
+    frame.appendChild(overlay);
+
+    panel.appendChild(frame);
+
+    if (SHOW_LABELS) {
+      const label = document.createElement("span");
+      label.className = "ag-panel__label";
+      label.setAttribute("aria-hidden", "true");
+
+      const bar = document.createElement("span");
+      bar.className = "ag-panel__bar";
+
+      const text = document.createElement("span");
+      text.className = "ag-panel__text";
+      text.textContent = item.label || item.title || "";
+
+      label.appendChild(bar);
+      label.appendChild(text);
+      panel.appendChild(label);
+    }
+
+    panel.addEventListener("mouseenter", function () {
+      if (TRIGGER === "hover") setActive(i);
+    });
+    panel.addEventListener("click", function (e) {
+      if (i !== activeIndex) {
+        e.preventDefault();
+        setActive(i);
+      }
+    });
+    panel.addEventListener("focus", function () {
+      setActive(i);
+    });
+    panel.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        setActive((i + 1) % count);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        setActive((i - 1 + count) % count);
+      }
+    });
+
+    panel.dataset.index = i;
+    root.appendChild(panel);
+  });
+
+  function setActive(index) {
+    if (index === activeIndex) return;
+    activeIndex = index;
+    applyLayout(true);
+    updateDescription();
+  }
+
+  function updateDescription() {
+    if (!descEl) return;
+    const item = items[activeIndex];
+    const text = item.description || "";
+    if (prefersReduced) {
+      descEl.textContent = text;
+      return;
+    }
+    gsap.to(descEl, {
+      opacity: 0,
+      duration: 0.15,
+      onComplete: function () {
+        descEl.textContent = text;
+        gsap.to(descEl, { opacity: 1, duration: 0.2 });
+      },
+    });
+  }
+
+  function applyLayout(animate) {
+    const panels = root.querySelectorAll(".ag-panel");
+    if (!panels.length) return;
+
+    const totalWidth = root.offsetWidth - GAP * (count - 1);
+    const grow = count > 1 ? (EXPAND_RATIO * (count - 1)) / (1 - EXPAND_RATIO) : 1;
+    const dur = animate ? DURATION : 0;
+
+    tlRef?.kill();
+    const tl = gsap.timeline();
+
+    panels.forEach(function (panel, i) {
+      const isActive = i === activeIndex;
+      const media = panel.querySelector(".ag-panel__media");
+      const bar = panel.querySelector(".ag-panel__bar");
+      const text = panel.querySelector(".ag-panel__text");
+
+      const rot = isActive ? 0 : i < activeIndex ? TILT : -TILT;
+
+      tl.to(
+        panel,
+        {
+          flexGrow: isActive ? grow : 1,
+          rotateY: rot,
+          duration: dur,
+          ease: EASE,
+        },
+        0
+      );
+
+      if (media) {
+        const drift = Math.max(-1.5, Math.min(1.5, activeIndex - i));
+        const shift = drift * PARALLAX * mediaSize * 0.06;
+        const gray = GRAYSCALE ? (isActive ? 0 : 1) : 0;
+
+        tl.to(
+          media,
+          {
+            xPercent: -50,
+            yPercent: -50,
+            x: isActive ? 0 : shift,
+            "--ag-gray": gray,
+            "--ag-dim": isActive ? 0 : 0.35,
+            duration: dur,
+            ease: EASE,
+          },
+          0
+        );
+      }
+
+      if (SHOW_LABELS && bar && text) {
+        if (isActive) {
+          tl.to(
+            [bar, text],
+            { opacity: 1, x: 0, duration: dur, ease: EASE, stagger: prefersReduced ? 0 : STAGGER },
+            0
+          );
+        } else {
+          tl.to(
+            [bar, text],
+            { opacity: 0, x: -14, duration: dur * 0.6, ease: EASE },
+            0
+          );
+        }
+      }
+    });
+
+    tlRef = tl;
+  }
+
+  function measure() {
+    const rect = root.getBoundingClientRect();
+    const total = rect.width;
+    const usable = Math.max(total - GAP * (count - 1), 120);
+    const size = Math.max(140, usable * Math.min(Math.max(EXPAND_RATIO, 0.2), 0.9) * 1.22);
+    mediaSize = size;
+    root.style.setProperty("--ag-media-size", size + "px");
+    applyLayout(false);
+  }
+
+  measure();
+  const ro = new ResizeObserver(measure);
+  ro.observe(root);
+
+  // Set initial description
+  updateDescription();
+
+  // Cleanup on page unload
+  window.addEventListener("beforeunload", function () {
+    ro.disconnect();
+    tlRef?.kill();
+  });
 }
 
 /* --------------------------------------------------------------------------

@@ -36,7 +36,7 @@ All data previously hardcoded in JS arrays now lives in SQLite, accessed via PHP
 | Tools | `Tool::filtered()` | `tools` | 44 |
 | FAQs | `Faq::all()` | `faqs` | 15 |
 | Testimonials | `Testimonial::all()` | `testimonials` | 3 |
-| Services | `Service::all()` | `services` | 4 |
+| Services | `Service::all()` | `services` | 5 |
 | Gallery | `Gallery::all()` | `gallery` | 16 |
 
 Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__FAQS`, etc.

@@ -260,15 +260,16 @@ echo "Seeded " . count($tools) . " tools.\n";
 
 // Seed Services
 $services = [
-    ['01', 'Full-Stack Development', 'Websites, dashboards, and APIs built with React, Next.js, Node.js, and modern stacks — from frontend to database.', 1],
-    ['02', 'AI & Automation', 'AI workflows, ML integration, and prompt engineering — turning data and models into practical, deployable solutions.', 2],
-    ['03', 'Tech Consultation', 'Need advice on stack, architecture, or AI integration? Let\'s figure it out together.', 3],
-    ['04', 'Design & Calligraphy', 'Clean interfaces, brand identity, and handcrafted Naskh calligraphy — with 500+ commissions delivered.', 4],
+    ['01', 'Full-Stack Web Development', 'Production websites and web apps — React/Next.js on the front, Node.js/Python/PHP on the back, shipped end-to-end.', 'assets/image/services/service-1.webp', 1],
+    ['02', 'AI-Integrated Applications', 'Apps with an AI assistant built directly into the product — OpenRouter/Claude-powered, context-aware, production-ready.', 'assets/image/services/service-2.webp', 2],
+    ['03', 'Workflow Automation', 'n8n automations that connect your tools — webhook flows, LLM message filtering, and hands-off data routing.', 'assets/image/services/service-3.webp', 3],
+    ['04', 'API & Database Engineering', 'REST APIs and database design with live sync — Neon PostgreSQL, OAuth wiring, Excel/PDF/JSON export pipelines.', 'assets/image/services/service-4.webp', 4],
+    ['05', 'Tech Consultation', 'Advice on stack, architecture, and AI integration strategy — Claude API, AWS Bedrock, Vertex AI, and beyond.', 'assets/image/services/service-5.webp', 5],
 ];
 
 $db->exec("DELETE FROM services");
 
-$stmt = $db->getPdo()->prepare("INSERT INTO services (number, title, description, sort_order) VALUES (?, ?, ?, ?)");
+$stmt = $db->getPdo()->prepare("INSERT INTO services (number, title, description, image, sort_order) VALUES (?, ?, ?, ?, ?)");
 foreach ($services as $s) {
     $stmt->execute($s);
 }

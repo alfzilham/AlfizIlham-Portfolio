@@ -13,7 +13,10 @@
       </div>
     </div>
     <div class="divider"></div>
-    <div class="services-grid" id="servicesGrid"></div>
+    <div class="services-accordion-wrap">
+      <div id="servicesAccordion" class="accordion-gallery" role="list" aria-label="Services"></div>
+      <p class="services-active-desc" id="servicesActiveDesc"></p>
+    </div>
   </div>
 </section>
 
