@@ -172,4 +172,38 @@ return [
     'error_phone' => 'Nomor telepon wajib diisi',
     'error_service' => 'Silakan pilih layanan',
     'error_message' => 'Pesan wajib diisi (min 10 karakter)',
+
+    // Editor mode
+    'editor_login_title' => 'Mode Editor',
+    'editor_login_sub' => 'Masukkan password admin untuk melanjutkan.',
+    'editor_password_placeholder' => 'Password admin',
+    'editor_login_btn' => 'Buka Editor',
+    'editor_error_wrong_password' => 'Password salah. Coba lagi.',
+    'editor_mode_badge' => 'MODE EDITOR',
+    'editor_exit' => 'Keluar Mode',
+    'editor_logout' => 'Logout',
+    'editor_add_project' => '+ Tambah Proyek',
+    'editor_card_menu' => 'Menu kartu',
+    'editor_edit' => 'Edit',
+    'editor_delete' => 'Hapus',
+    'editor_submit' => 'Simpan Proyek',
+
+    // Card form
+    'form_add_title' => 'Tambah Proyek',
+    'form_edit_title' => 'Edit Proyek',
+    'form_title_label' => 'Judul Proyek',
+    'form_title_placeholder' => 'mis. PusakaApp — Sistem Reuni Sekolah',
+    'form_desc_label' => 'Deskripsi Proyek',
+    'form_desc_placeholder' => 'Ceritakan proyek ini dalam satu-dua kalimat...',
+    'form_image_label' => 'Gambar Proyek',
+    'form_error_title' => 'Judul wajib diisi (min 2 karakter)',
+    'form_error_description' => 'Deskripsi wajib diisi (min 10 karakter)',
+    'upload_drop_text' => 'Tarik & lepas gambar di sini, atau',
+    'upload_browse' => 'pilih file',
+    'upload_error_required' => 'Silakan pilih gambar',
+    'upload_error_size' => 'Ukuran gambar melebihi 5 MB',
+    'upload_error_type' => 'Hanya JPG, PNG, WebP, atau GIF yang diizinkan',
+
+    // Lightbox
+    'lightbox_close' => 'Tutup',
 ];

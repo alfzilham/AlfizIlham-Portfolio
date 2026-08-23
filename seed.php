@@ -110,6 +110,16 @@ CREATE TABLE IF NOT EXISTS gallery (
 )
 ");
 
+$db->exec("
+CREATE TABLE IF NOT EXISTS showcase_projects (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    image TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+");
+
 echo "Tables created.\n";
 
 // Seed Projects

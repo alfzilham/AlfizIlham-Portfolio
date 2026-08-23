@@ -1,0 +1,11 @@
+# Block web access to sensitive paths (server-side includes still work)
+RedirectMatch 403 (?i)/(config|data|logs|app|views|lang)/
+RedirectMatch 403 (?i)/(seed\.php|bootstrap\.php|composer\.(json|lock)|\.env)
+
+# Deny database & log files anywhere
+<FilesMatch "\.(sqlite|db|log)$">
+  Require all denied
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes

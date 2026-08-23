@@ -161,6 +161,15 @@ HTML Output → Browser
 ### projects, tools, faqs, testimonials, services, gallery
 Standard CRUD tables with `id`, content fields, and `sort_order`.
 
+### showcase_projects
+| Column | Type | Description |
+|--------|------|-------------|
+| id | INTEGER PK | Auto-increment |
+| title | TEXT | Card title |
+| description | TEXT | Card description |
+| image | TEXT | WebP path (assets/uploads/showcase/) |
+| created_at | DATETIME | Timestamp |
+
 ---
 
 ## 5. API Endpoints
@@ -172,6 +181,13 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 | GET | `/api/visitor` | ApiController::visitorCount() | Get visitor count |
 | GET | `/api/tools` | ApiController::tools() | Get filtered tools |
 | GET | `/api/projects` | ApiController::projects() | Get filtered projects |
+| GET | `/api/cards` | AdminController::listCards() | Public showcase cards list |
+| POST | `/api/admin/login` | AdminController::login() | Editor mode login |
+| POST | `/api/admin/logout` | AdminController::logout() | Clear admin session |
+| GET | `/api/admin/session` | AdminController::session() | Check auth state |
+| POST | `/api/admin/cards` | AdminController::createCard() | Create showcase card (admin) |
+| POST | `/api/admin/cards/{id}` | AdminController::updateCard() | Update showcase card (admin) |
+| DELETE | `/api/admin/cards/{id}` | AdminController::deleteCard() | Delete showcase card (admin) |
 | GET | `/lang/{lang}` | Closure | Switch language (en/id) |
 
 ---

@@ -23,6 +23,14 @@ class Router
     }
 
     /**
+     * Register a DELETE route
+     */
+    public function delete($path, $handler)
+    {
+        $this->routes['DELETE'][$path] = $handler;
+    }
+
+    /**
      * Dispatch the current request
      */
     public function dispatch($uri)

@@ -195,6 +195,35 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 ## 13. Open Resolved
 
+---
+
+## 14. Editor Mode (Admin Showcase CRUD)
+
+**Auth**: `Ctrl+Shift+E` → password modal → `POST /api/admin/login` (bcrypt hash in `config/config.php`, verified via `password_verify()`) → `$_SESSION['is_admin']`. All write endpoints return 401 without session.
+
+**Endpoints**:
+
+| Method | Endpoint | Auth | Purpose |
+|--------|----------|------|---------|
+| GET | `/api/cards` | public | List showcase cards |
+| POST | `/api/admin/login` | public | Login {password} |
+| POST | `/api/admin/logout` | — | Clear session |
+| GET | `/api/admin/session` | — | Check auth state |
+| POST | `/api/admin/cards` | admin | Create card (multipart: title, description, image) |
+| POST | `/api/admin/cards/{id}` | admin | Update card (image optional) |
+| DELETE | `/api/admin/cards/{id}` | admin | Delete card (+ unlink image file) |
+
+**Upload rules**: finfo MIME whitelist (jpeg/png/webp/gif), max 5 MB, resized to max 1600px, converted to WebP quality 85 via GD, random filename stored in `public/assets/uploads/showcase/`.
+
+**UI behaviors**:
+- ChromaGrid (3×320px columns, dark gradient cards with rotating accent palette) sits between the subtitle and the circular gallery; hidden when empty
+- Card hover: image scales ×1.06 + per-card radial spotlight; grid-level grayscale mask follows cursor (GSAP)
+- Kebab ⋮ button (editor mode only): Edit reopens prefilled form modal; Delete uses native `confirm()`
+- Click card outside editor mode → lightbox (image + title + description); disabled while editor mode is on
+- `Ctrl+Shift+E` toggles editor UI when already authenticated; floating badge shows Exit/Logout
+
+**Acceptance criteria**: unauthenticated writes get 401; created cards persist in SQLite (`showcase_projects`, newest first) and appear for all visitors after reload; uploaded images are served as `.webp`; deleting a card removes its image file.
+
 All original open questions from the pre-MVC spec have been resolved:
 
 | # | Question | Resolution |

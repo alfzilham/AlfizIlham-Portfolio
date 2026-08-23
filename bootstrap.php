@@ -52,6 +52,7 @@ require_once APP_PATH . '/Models/Testimonial.php';
 require_once APP_PATH . '/Models/Service.php';
 require_once APP_PATH . '/Models/Gallery.php';
 require_once APP_PATH . '/Models/Visitor.php';
+require_once APP_PATH . '/Models/ShowcaseProject.php';
 
 // Load services
 require_once APP_PATH . '/Services/ContactService.php';
@@ -60,3 +61,4 @@ require_once APP_PATH . '/Services/VisitorService.php';
 // Load controllers
 require_once APP_PATH . '/Controllers/PageController.php';
 require_once APP_PATH . '/Controllers/ApiController.php';
+require_once APP_PATH . '/Controllers/AdminController.php';

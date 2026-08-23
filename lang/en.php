@@ -172,4 +172,38 @@ return [
     'error_phone' => 'Phone number is required',
     'error_service' => 'Please select a service',
     'error_message' => 'Message is required (min 10 characters)',
+
+    // Editor mode
+    'editor_login_title' => 'Editor Mode',
+    'editor_login_sub' => 'Enter the admin password to continue.',
+    'editor_password_placeholder' => 'Admin password',
+    'editor_login_btn' => 'Unlock Editor',
+    'editor_error_wrong_password' => 'Wrong password. Try again.',
+    'editor_mode_badge' => 'EDITOR MODE',
+    'editor_exit' => 'Exit',
+    'editor_logout' => 'Logout',
+    'editor_add_project' => '+ Add Project',
+    'editor_card_menu' => 'Card menu',
+    'editor_edit' => 'Edit',
+    'editor_delete' => 'Delete',
+    'editor_submit' => 'Save Project',
+
+    // Card form
+    'form_add_title' => 'Add Project',
+    'form_edit_title' => 'Edit Project',
+    'form_title_label' => 'Project Title',
+    'form_title_placeholder' => 'e.g. PusakaApp — School Reunion System',
+    'form_desc_label' => 'Project Description',
+    'form_desc_placeholder' => 'Describe the project in one or two sentences...',
+    'form_image_label' => 'Project Image',
+    'form_error_title' => 'Title is required (min 2 characters)',
+    'form_error_description' => 'Description is required (min 10 characters)',
+    'upload_drop_text' => 'Drag & drop an image here, or',
+    'upload_browse' => 'browse files',
+    'upload_error_required' => 'Please choose an image',
+    'upload_error_size' => 'Image exceeds 5 MB limit',
+    'upload_error_type' => 'Only JPG, PNG, WebP, or GIF allowed',
+
+    // Lightbox
+    'lightbox_close' => 'Close',
 ];

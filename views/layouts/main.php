@@ -62,7 +62,7 @@
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
     <!-- SECTION 7: PROJECTS TEASER -->
-    <?php echo View::section('projects-teaser', ['projects' => $projects]); ?>
+    <?php echo View::section('projects-teaser', ['projects' => $projects, 'showcase' => $showcase]); ?>
 
     <!-- SECTION 9: SERVICES -->
     <?php echo View::section('services', ['services' => $services]); ?>
@@ -96,6 +96,78 @@
       'visitorCount' => $visitorCount,
   ]); ?>
 
+  <!-- Editor mode: login modal -->
+  <div class="editor-overlay" id="editorLoginOverlay" hidden>
+    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorLoginTitle">
+      <button type="button" class="modal-close" data-close-modal aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
+      <h2 id="editorLoginTitle"><?= i18n::t('editor_login_title') ?></h2>
+      <p class="editor-modal-sub"><?= i18n::t('editor_login_sub') ?></p>
+      <form id="editorLoginForm" novalidate>
+        <input type="password" id="editorPassword" name="password" placeholder="<?= i18n::t('editor_password_placeholder') ?>" autocomplete="current-password" required />
+        <p class="form-error" id="editorLoginError"></p>
+        <button type="submit" class="btn btn-primary btn-block"><?= i18n::t('editor_login_btn') ?></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Editor mode: card form modal (create/edit) -->
+  <div class="editor-overlay" id="cardFormOverlay" hidden>
+    <div class="editor-modal editor-modal-wide" role="dialog" aria-modal="true" aria-labelledby="cardFormTitle">
+      <button type="button" class="modal-close" data-close-modal aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
+      <h2 id="cardFormTitle"><?= i18n::t('form_add_title') ?></h2>
+      <form id="cardForm" novalidate>
+        <label for="cardTitle"><?= i18n::t('form_title_label') ?></label>
+        <input type="text" id="cardTitle" name="title" placeholder="<?= i18n::t('form_title_placeholder') ?>" required />
+        <span class="form-error" id="cardTitleError"></span>
+
+        <label for="cardDescription"><?= i18n::t('form_desc_label') ?></label>
+        <textarea id="cardDescription" name="description" rows="3" placeholder="<?= i18n::t('form_desc_placeholder') ?>" required></textarea>
+        <span class="form-error" id="cardDescError"></span>
+
+        <label><?= i18n::t('form_image_label') ?></label>
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="cardImage" name="image" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+          <div class="dropzone-empty" id="dropzoneEmpty">
+            <i data-lucide="upload-cloud"></i>
+            <p><?= i18n::t('upload_drop_text') ?></p>
+            <span class="dropzone-browse"><?= i18n::t('upload_browse') ?></span>
+          </div>
+          <div class="dropzone-preview" id="dropzonePreview" hidden>
+            <img id="dropzonePreviewImg" alt="" />
+            <div class="dropzone-preview-info">
+              <span class="dropzone-name" id="dropzoneName"></span>
+              <span class="dropzone-badge">.webp</span>
+            </div>
+            <button type="button" class="dropzone-remove" id="dropzoneRemove" aria-label="Remove image">&times;</button>
+          </div>
+        </div>
+        <span class="form-error" id="cardImageError"></span>
+
+        <button type="submit" class="btn btn-primary btn-block" id="cardFormSubmit"><?= i18n::t('editor_submit') ?></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" hidden>
+    <button type="button" class="modal-close lightbox-close" data-close-lightbox aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
+    <figure class="lightbox-figure">
+      <img id="lightboxImage" src="" alt="" />
+      <figcaption>
+        <h3 id="lightboxTitle"></h3>
+        <p id="lightboxDescription"></p>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- Editor mode floating badge -->
+  <div class="editor-badge" id="editorBadge">
+    <span class="dot"></span>
+    <span><?= i18n::t('editor_mode_badge') ?></span>
+    <button type="button" id="editorExitBtn"><?= i18n::t('editor_exit') ?></button>
+    <button type="button" id="editorLogoutBtn"><?= i18n::t('editor_logout') ?></button>
+  </div>
+
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
@@ -105,6 +177,7 @@
   <!-- i18n data for JS -->
   <script>
     window.__LANG = '<?php echo $lang; ?>';
+    window.__IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;
     window.__LANG_DATA = <?php echo json_encode([
         'cta_clock_prefix' => i18n::t('cta_clock_prefix'),
     ], JSON_UNESCAPED_UNICODE); ?>;

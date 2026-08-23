@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSkillFilters();
   renderServices();
   initCircularGallery();
+  initEditorMode();
   renderGallery();
   renderTestimonials();
   renderFaqPanel();
@@ -893,6 +894,465 @@ function createCircularGallery(container, items, OGL, opts) {
     io.observe(container);
   } else {
     rafId = requestAnimationFrame(update);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   EDITOR MODE (admin CRUD for ChromaGrid showcase)
+   -------------------------------------------------------------------------- */
+
+function initEditorMode() {
+  const body = document.body;
+  const grid = document.getElementById("chromaGrid");
+  const gridWrap = document.getElementById("chromaGridWrap");
+  if (!grid || !gridWrap) return;
+
+  let isAdmin = !!window.__IS_ADMIN;
+  let editorOn = false;
+  let editingId = null;
+  let selectedFile = null;
+
+  const loginOverlay = document.getElementById("editorLoginOverlay");
+  const loginForm = document.getElementById("editorLoginForm");
+  const passwordInput = document.getElementById("editorPassword");
+  const loginError = document.getElementById("editorLoginError");
+
+  const formOverlay = document.getElementById("cardFormOverlay");
+  const cardForm = document.getElementById("cardForm");
+  const cardFormTitle = document.getElementById("cardFormTitle");
+  const titleInput = document.getElementById("cardTitle");
+  const descInput = document.getElementById("cardDescription");
+  const titleError = document.getElementById("cardTitleError");
+  const descError = document.getElementById("cardDescError");
+  const imageError = document.getElementById("cardImageError");
+  const submitBtn = document.getElementById("cardFormSubmit");
+
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("cardImage");
+  const dzEmpty = document.getElementById("dropzoneEmpty");
+  const dzPreview = document.getElementById("dropzonePreview");
+  const dzPreviewImg = document.getElementById("dropzonePreviewImg");
+  const dzName = document.getElementById("dropzoneName");
+  const dzRemove = document.getElementById("dropzoneRemove");
+
+  const lightbox = document.getElementById("lightbox");
+
+  const isId = () => window.LANG === "id";
+  const ADD_LABEL = cardFormTitle ? cardFormTitle.textContent : "Add Project";
+
+  function openOverlay(el) {
+    el.hidden = false;
+    body.style.overflow = "hidden";
+  }
+
+  function closeOverlay(el) {
+    el.hidden = true;
+    body.style.overflow = "";
+  }
+
+  function closeAllMenus() {
+    grid.querySelectorAll(".chroma-menu.open").forEach((m) => m.classList.remove("open"));
+  }
+
+  function enterEditor() {
+    editorOn = true;
+    body.classList.add("editor-mode");
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function exitEditor() {
+    editorOn = false;
+    body.classList.remove("editor-mode");
+    closeAllMenus();
+  }
+
+  // ---------- shortcut Ctrl+Shift+E ----------
+  document.addEventListener("keydown", (e) => {
+    if (e.ctrlKey && e.shiftKey && (e.key === "E" || e.key === "e")) {
+      e.preventDefault();
+      if (!isAdmin) {
+        openOverlay(loginOverlay);
+        setTimeout(() => passwordInput.focus(), 50);
+      } else {
+        editorOn ? exitEditor() : enterEditor();
+      }
+    }
+    if (e.key === "Escape") {
+      closeAllMenus();
+      if (loginOverlay && !loginOverlay.hidden) {
+        closeOverlay(loginOverlay);
+        loginError.textContent = "";
+        loginForm.reset();
+      } else if (formOverlay && !formOverlay.hidden) {
+        closeOverlay(formOverlay);
+      } else if (lightbox && !lightbox.hidden) {
+        closeLightbox();
+      }
+    }
+  });
+
+  [loginOverlay, formOverlay].forEach((ov) => {
+    if (!ov) return;
+    ov.addEventListener("pointerdown", (e) => {
+      if (e.target === ov) closeOverlay(ov);
+    });
+  });
+
+  document.querySelectorAll("[data-close-modal]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const ov = btn.closest(".editor-overlay");
+      if (ov) closeOverlay(ov);
+    });
+  });
+
+  // ---------- login ----------
+  loginForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    loginError.textContent = "";
+    try {
+      const res = await fetch("index.php?/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: passwordInput.value }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success) {
+        isAdmin = true;
+        window.__IS_ADMIN = true;
+        loginForm.reset();
+        closeOverlay(loginOverlay);
+        enterEditor();
+      } else {
+        loginError.textContent = data.error || "Login failed";
+      }
+    } catch (_) {
+      loginError.textContent = "Network error";
+    }
+  });
+
+  document.getElementById("editorExitBtn")?.addEventListener("click", exitEditor);
+
+  document.getElementById("editorLogoutBtn")?.addEventListener("click", async () => {
+    await fetch("index.php?/api/admin/logout", { method: "POST" }).catch(() => {});
+    isAdmin = false;
+    window.__IS_ADMIN = false;
+    exitEditor();
+  });
+
+  // ---------- card interactions (delegation) ----------
+  grid.addEventListener("click", (e) => {
+    const menuBtn = e.target.closest(".chroma-menu-btn");
+    if (menuBtn) {
+      if (!editorOn) return;
+      e.stopPropagation();
+      const menu = menuBtn.parentElement.querySelector(".chroma-menu");
+      const wasOpen = menu.classList.contains("open");
+      closeAllMenus();
+      if (!wasOpen) menu.classList.add("open");
+      return;
+    }
+
+    const actionBtn = e.target.closest(".chroma-menu button");
+    if (actionBtn) {
+      e.stopPropagation();
+      const card = actionBtn.closest(".chroma-card");
+      closeAllMenus();
+      if (actionBtn.dataset.action === "edit") {
+        openForm(card);
+      } else if (actionBtn.dataset.action === "delete") {
+        const msg = isId() ? "Hapus proyek ini?" : "Delete this project?";
+        if (confirm(msg)) deleteCard(card);
+      }
+      return;
+    }
+
+    const card = e.target.closest(".chroma-card");
+    if (card && !editorOn) {
+      openLightbox(card.dataset);
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".chroma-card")) closeAllMenus();
+  });
+
+  async function deleteCard(card) {
+    try {
+      const res = await fetch(`index.php?/api/admin/cards/${card.dataset.id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        card.remove();
+        if (!grid.querySelector(".chroma-card")) gridWrap.hidden = true;
+      }
+    } catch (_) {}
+  }
+
+  // ---------- lightbox ----------
+  function openLightbox(data) {
+    const img = document.getElementById("lightboxImage");
+    const t = document.getElementById("lightboxTitle");
+    const d = document.getElementById("lightboxDescription");
+    img.src = data.image || "";
+    img.alt = data.title || "";
+    t.textContent = data.title || "";
+    d.textContent = data.description || "";
+    openOverlay(lightbox);
+  }
+
+  function closeLightbox() {
+    closeOverlay(lightbox);
+  }
+
+  lightbox?.addEventListener("pointerdown", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document
+    .querySelector("[data-close-lightbox]")
+    ?.addEventListener("click", closeLightbox);
+
+  // ---------- chroma spotlight (grid mask + per-card radial) ----------
+  const fadeEl = grid.querySelector(".chroma-fade");
+  const hasGsap = typeof gsap !== "undefined";
+  const setGridX = hasGsap ? gsap.quickSetter(grid, "--x", "px") : null;
+  const setGridY = hasGsap ? gsap.quickSetter(grid, "--y", "px") : null;
+  const spot = { x: grid.clientWidth / 2, y: grid.clientHeight / 2 };
+
+  if (setGridX && setGridY) {
+    setGridX(spot.x);
+    setGridY(spot.y);
+  }
+
+  function moveSpotlight(x, y) {
+    if (!setGridX || !setGridY) return;
+    gsap.to(spot, {
+      x,
+      y,
+      duration: 0.45,
+      ease: "power3.out",
+      overwrite: true,
+      onUpdate: () => {
+        setGridX(spot.x);
+        setGridY(spot.y);
+      },
+    });
+    if (fadeEl) gsap.to(fadeEl, { opacity: 0, duration: 0.25, overwrite: true });
+  }
+
+  gridWrap.addEventListener("pointermove", (e) => {
+    const r = grid.getBoundingClientRect();
+    moveSpotlight(e.clientX - r.left, e.clientY - r.top);
+  });
+
+  gridWrap.addEventListener("pointerleave", () => {
+    if (fadeEl) gsap.to(fadeEl, { opacity: 1, duration: 0.6, overwrite: true });
+  });
+
+  grid.addEventListener("mousemove", (e) => {
+    const card = e.target.closest(".chroma-card");
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    card.style.setProperty("--mouse-x", `${e.clientX - r.left}px`);
+    card.style.setProperty("--mouse-y", `${e.clientY - r.top}px`);
+  });
+
+  // ---------- add project button ----------
+  document.getElementById("addProjectBtn")?.addEventListener("click", () => openForm(null));
+
+  // ---------- form modal ----------
+  function resetErrors() {
+    titleError.textContent = "";
+    descError.textContent = "";
+    imageError.textContent = "";
+  }
+
+  function showEmptyDropzone() {
+    selectedFile = null;
+    fileInput.value = "";
+    dzPreview.hidden = true;
+    dzEmpty.hidden = false;
+  }
+
+  function showPreviewFromUrl(url) {
+    selectedFile = null;
+    fileInput.value = "";
+    dzPreviewImg.src = url;
+    dzName.textContent = url.split("/").pop() || "image";
+    dzEmpty.hidden = true;
+    dzPreview.hidden = false;
+  }
+
+  function setFile(file) {
+    const okTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!okTypes.includes(file.type)) {
+      imageError.textContent = isId()
+        ? "Hanya JPG, PNG, WebP, atau GIF yang diizinkan"
+        : "Only JPG, PNG, WebP, or GIF allowed";
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      imageError.textContent = isId()
+        ? "Ukuran gambar melebihi 5 MB"
+        : "Image exceeds 5 MB limit";
+      return;
+    }
+    imageError.textContent = "";
+    selectedFile = file;
+    dzPreviewImg.src = URL.createObjectURL(file);
+    dzName.textContent = file.name;
+    dzEmpty.hidden = true;
+    dzPreview.hidden = false;
+  }
+
+  function openForm(card) {
+    editingId = card ? Number(card.dataset.id) : null;
+    selectedFile = null;
+    resetErrors();
+    cardForm.reset();
+
+    if (card) {
+      cardFormTitle.textContent = isId() ? "Edit Proyek" : "Edit Project";
+      titleInput.value = card.dataset.title || "";
+      descInput.value = card.dataset.description || "";
+      showPreviewFromUrl(card.dataset.image || "");
+    } else {
+      cardFormTitle.textContent = ADD_LABEL;
+      showEmptyDropzone();
+    }
+    openOverlay(formOverlay);
+    setTimeout(() => titleInput.focus(), 50);
+  }
+
+  dropzone.addEventListener("click", () => fileInput.click());
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files[0]) setFile(fileInput.files[0]);
+  });
+  ["dragover", "dragenter"].forEach((ev) =>
+    dropzone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropzone.classList.add("dragover");
+    })
+  );
+  ["dragleave", "drop"].forEach((ev) =>
+    dropzone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("dragover");
+    })
+  );
+  dropzone.addEventListener("drop", (e) => {
+    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+  });
+  dzRemove.addEventListener("click", (e) => {
+    e.stopPropagation();
+    showEmptyDropzone();
+  });
+
+  cardForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    resetErrors();
+
+    let valid = true;
+    if (titleInput.value.trim().length < 2) {
+      titleError.textContent = isId()
+        ? "Judul wajib diisi (min 2 karakter)"
+        : "Title is required (min 2 characters)";
+      valid = false;
+    }
+    if (descInput.value.trim().length < 10) {
+      descError.textContent = isId()
+        ? "Deskripsi wajib diisi (min 10 karakter)"
+        : "Description is required (min 10 characters)";
+      valid = false;
+    }
+    if (!editingId && !selectedFile) {
+      imageError.textContent = isId() ? "Silakan pilih gambar" : "Please choose an image";
+      valid = false;
+    }
+    if (!valid) return;
+
+    const fd = new FormData();
+    fd.append("title", titleInput.value.trim());
+    fd.append("description", descInput.value.trim());
+    if (selectedFile) fd.append("image", selectedFile);
+
+    const url = editingId
+      ? `index.php?/api/admin/cards/${editingId}`
+      : "index.php?/api/admin/cards";
+
+    submitBtn.disabled = true;
+    try {
+      const res = await fetch(url, { method: "POST", body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success && data.card) {
+        upsertCardNode(data.card);
+        closeOverlay(formOverlay);
+      } else if (data.errors) {
+        titleError.textContent = data.errors.title || "";
+        descError.textContent = data.errors.description || "";
+      } else {
+        imageError.textContent = data.error || "Error";
+      }
+    } catch (_) {
+      imageError.textContent = "Network error";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+
+  // ---------- DOM node builder ----------
+  function buildCardNode(card) {
+    const article = document.createElement("article");
+    article.className = "chroma-card";
+    article.dataset.id = card.id;
+    article.dataset.title = card.title;
+    article.dataset.description = card.description;
+    article.dataset.image = card.image;
+
+    const palette = [
+      ["#4F46E5", "linear-gradient(145deg, #4F46E5, #000)"],
+      ["#10B981", "linear-gradient(210deg, #10B981, #000)"],
+      ["#F59E0B", "linear-gradient(165deg, #F59E0B, #000)"],
+      ["#EF4444", "linear-gradient(195deg, #EF4444, #000)"],
+      ["#8B5CF6", "linear-gradient(225deg, #8B5CF6, #000)"],
+      ["#06B6D4", "linear-gradient(135deg, #06B6D4, #000)"],
+    ];
+    const p = palette[Number(card.id) % palette.length];
+    article.style.setProperty("--card-border", p[0]);
+    article.style.setProperty("--card-gradient", p[1]);
+
+    article.innerHTML = `
+      <button type="button" class="chroma-menu-btn" aria-label="Card menu">
+        <i data-lucide="more-vertical"></i>
+      </button>
+      <div class="chroma-menu">
+        <button type="button" data-action="edit">Edit</button>
+        <button type="button" data-action="delete" class="danger">${isId() ? "Hapus" : "Delete"}</button>
+      </div>
+      <div class="chroma-img-wrapper">
+        <img src="${card.image}" alt="" loading="lazy" />
+      </div>
+      <footer class="chroma-info">
+        <h3 class="name"></h3>
+        <p class="role"></p>
+      </footer>`;
+
+    article.querySelector(".name").textContent = card.title;
+    article.querySelector(".role").textContent = card.description;
+    article.querySelector(".chroma-img-wrapper img").alt = card.title;
+    return article;
+  }
+
+  function upsertCardNode(card) {
+    gridWrap.hidden = false;
+    const existing = grid.querySelector(`.chroma-card[data-id="${card.id}"]`);
+    const node = buildCardNode(card);
+    if (existing) {
+      existing.replaceWith(node);
+    } else {
+      const anchor = grid.querySelector(".chroma-overlay");
+      grid.insertBefore(node, anchor);
+    }
+    if (window.lucide) lucide.createIcons();
   }
 }
 

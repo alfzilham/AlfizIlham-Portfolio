@@ -294,7 +294,8 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 - Small eyebrow label "My Projects" centered
 - Heading: "Curious What I've Built?" (`--fs-h1`, centered)
 - Subheading paragraph centered, muted: "Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks."
-- **Circular WebGL Gallery** below the subtitle, **full-bleed** (outside the container — no side padding/max-width; header text stays centered inside the container). Vanilla port of ReactBits CircularGallery, OGL loaded via dynamic `import()` from esm.sh:
+- **ChromaGrid Showcase** between the subtitle and the circular gallery (admin-curated via Editor Mode — see SPEC.md §14): 3×320px dark gradient cards with rotating accent palette (indigo/emerald/amber/red/violet/cyan), per-card radial spotlight on hover, image scale ×1.06, grid-level grayscale mask following the cursor; kebab ⋮ menu visible only in editor mode; click opens a lightbox (image + title + description)
+- **Circular WebGL Gallery** below, **full-bleed** (outside the container — no side padding/max-width; header text stays centered inside the container). Vanilla port of ReactBits CircularGallery, OGL loaded via dynamic `import()` from esm.sh:
   - Items: all non-website projects (9 design posters + 18 calligraphy pieces) with project name as canvas-texture label under each card
   - Label font: `bold 30px "Plus Jakarta Sans"`, color `#0a0a0a` (adapted from the component's white default for our light background)
   - Config: bend `-3` (curves downward — vertically mirrored valley), border radius `0.05`, scrollSpeed `2`, scrollEase `0.05`; items duplicated ×2 for seamless infinite loop

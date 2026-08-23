@@ -1,16 +1,62 @@
 <?php
 /** @var array $projects */
+/** @var array $showcase */
 $galleryItems = array_values(array_map(function ($p) {
     return ['image' => $p['image'], 'text' => $p['name']];
 }, array_filter($projects, function ($p) {
     return $p['category'] !== 'website';
 })));
+$chromaPalette = [
+    ['border' => '#4F46E5', 'gradient' => 'linear-gradient(145deg, #4F46E5, #000)'],
+    ['border' => '#10B981', 'gradient' => 'linear-gradient(210deg, #10B981, #000)'],
+    ['border' => '#F59E0B', 'gradient' => 'linear-gradient(165deg, #F59E0B, #000)'],
+    ['border' => '#EF4444', 'gradient' => 'linear-gradient(195deg, #EF4444, #000)'],
+    ['border' => '#8B5CF6', 'gradient' => 'linear-gradient(225deg, #8B5CF6, #000)'],
+    ['border' => '#06B6D4', 'gradient' => 'linear-gradient(135deg, #06B6D4, #000)'],
+];
 ?>
 <section class="projects-teaser section-padding" id="project">
   <div class="container text-center">
     <p class="eyebrow"><?= i18n::t('projects_teaser_eyebrow') ?></p>
     <h1><?= i18n::t('projects_teaser_heading') ?></h1>
     <p class="section-subtitle"><?= i18n::t('projects_teaser_subtitle') ?></p>
+  </div>
+
+  <!-- ChromaGrid Showcase (admin-curated) -->
+  <div class="chroma-grid-wrap" id="chromaGridWrap" <?= $showcase ? '' : 'hidden' ?>>
+    <div class="chroma-grid-actions">
+      <button type="button" id="addProjectBtn" class="btn btn-primary"><?= i18n::t('editor_add_project') ?></button>
+    </div>
+    <div class="chroma-grid" id="chromaGrid">
+      <?php foreach ($showcase as $i => $card): ?>
+        <?php $palette = $chromaPalette[$i % count($chromaPalette)]; ?>
+        <article
+          class="chroma-card"
+          data-id="<?= (int) $card['id'] ?>"
+          data-title="<?= sanitize($card['title']) ?>"
+          data-description="<?= sanitize($card['description']) ?>"
+          data-image="<?= sanitize($card['image']) ?>"
+          style="--card-border: <?= $palette['border'] ?>; --card-gradient: <?= $palette['gradient'] ?>"
+        >
+          <button type="button" class="chroma-menu-btn" aria-label="<?= i18n::t('editor_card_menu') ?>">
+            <i data-lucide="more-vertical"></i>
+          </button>
+          <div class="chroma-menu">
+            <button type="button" data-action="edit"><?= i18n::t('editor_edit') ?></button>
+            <button type="button" data-action="delete" class="danger"><?= i18n::t('editor_delete') ?></button>
+          </div>
+          <div class="chroma-img-wrapper">
+            <img src="<?= sanitize($card['image']) ?>" alt="<?= sanitize($card['title']) ?>" loading="lazy" />
+          </div>
+          <footer class="chroma-info">
+            <h3 class="name"><?= sanitize($card['title']) ?></h3>
+            <p class="role"><?= sanitize($card['description']) ?></p>
+          </footer>
+        </article>
+      <?php endforeach; ?>
+      <div class="chroma-overlay"></div>
+      <div class="chroma-fade"></div>
+    </div>
   </div>
 
   <!-- Circular WebGL Gallery -->

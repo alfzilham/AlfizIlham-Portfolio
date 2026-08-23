@@ -13,6 +13,8 @@ class PageController
         $data = [
             'lang' => current_lang(),
             'projects' => Project::all(),
+            'showcase' => ShowcaseProject::all(),
+            'isAdmin' => !empty($_SESSION['is_admin']),
             'tools' => Tool::all(),
             'faqs' => Faq::all(),
             'faqCategories' => Faq::categories(),
