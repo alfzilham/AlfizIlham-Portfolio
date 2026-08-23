@@ -237,11 +237,12 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 **Purpose**: Deeper bio + stats + tech ticker.
 
-- Left column: mascot illustration seated at a desk with dual monitors (placeholder image), with 2 floating stat cards overlapping top-left of the image:
-  - Card 1: "50+" bold big number + "Projects Done" label
-  - Card 2: "3+" bold big number + "Years Experience" label
-  - Each stat card: white bg, `border-radius: var(--radius-md)`, padding `16px 20px`, `box-shadow: var(--shadow-md)`, positioned `absolute`.
-  - Below image: small pill label "Software & AI Engineer" centered, overlapping the image's bottom edge.
+- Left column: mascot illustration seated at a desk with dual monitors (placeholder image), with 2 floating stat cards overlapping top corners of the image:
+  - Card 1 (top-left): "50+" bold number + "Projects Completed" label — layered **behind** the image (`z-index: 0` vs image `z-index: 1`)
+  - Card 2 (top-right): "4+" bold number + "Years Experience" label — in front of the image (`z-index: 2`)
+  - Each stat card: white bg, compact padding `10px 14px`, number at `--fs-h3` weight 800, label at `--fs-caption` muted, `border-radius: var(--neu-radius)`, `box-shadow: var(--neu-shadow-out)`, positioned `absolute`
+  - Both cards float gently (vertical bob ±8px, `3.5s ease-in-out infinite`) in opposite phases (card 2 delayed `-1.75s`); disabled under `prefers-reduced-motion`.
+  - Below image: small pill label "Fullstack Developer, AI-Integrated Apps" centered, overlapping the image's bottom edge.
 - Right column:
   - Eyebrow pill badge: "About Me" (small pill, border, `--fs-caption`)
   - Heading: "I BUILD SOFTWARE, AI & DIGITAL EXPERIENCES" (`--fs-h1`, weight 800, uppercase, tight line-height)

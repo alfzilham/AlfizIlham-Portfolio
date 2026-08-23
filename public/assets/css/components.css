@@ -783,6 +783,8 @@
 }
 
 .about-avatar {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 450px;
 }
@@ -791,7 +793,7 @@
   position: absolute;
   background: var(--color-bg);
   border-radius: var(--neu-radius);
-  padding: 16px 20px;
+  padding: 10px 14px;
   box-shadow: var(--neu-shadow-out);
   display: flex;
   flex-direction: column;
@@ -802,20 +804,36 @@
 .stat-card-1 {
   top: 10px;
   left: 10px;
+  z-index: 0;
+  animation: float-y 3.5s ease-in-out infinite;
 }
 
 .stat-card-2 {
   top: 10px;
   right: 10px;
+  animation: float-y 3.5s ease-in-out infinite;
+  animation-delay: -1.75s;
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-card-1,
+  .stat-card-2 {
+    animation: none;
+  }
 }
 
 .stat-big {
-  font-size: var(--fs-h2);
+  font-size: var(--fs-h3);
   font-weight: var(--fw-extrabold);
 }
 
 .stat-label {
-  font-size: var(--fs-body-sm);
+  font-size: var(--fs-caption);
   color: var(--color-text-muted);
 }
 
