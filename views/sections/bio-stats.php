@@ -1,6 +1,6 @@
 <section class="bio-stats section-padding" id="bio-stats">
   <div class="container">
-    <p class="bio-statement"><?= i18n::t('bio_statement') ?></p>
+    <p class="bio-statement" data-fold-text><?= i18n::t('bio_statement') ?></p>
     <div class="divider"></div>
     <div class="stats-row">
       <div class="stat-item">

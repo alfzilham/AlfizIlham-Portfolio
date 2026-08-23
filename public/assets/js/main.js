@@ -36,6 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactForm();
   initLiveClock();
   initScrollReveal();
+  initFoldText();
+  initStatCounters();
   initGalleryHover();
   initVisitorCounter();
   initLucideIcons();
@@ -871,7 +873,9 @@ function initVisitorCounter() {
    -------------------------------------------------------------------------- */
 
 function initScrollReveal() {
-  const sections = document.querySelectorAll("section:not(.intro):not(.tech-marquee)");
+  const sections = document.querySelectorAll(
+    "section:not(.intro):not(.tech-marquee):not(.bio-stats)"
+  );
   sections.forEach((section) => section.classList.add("reveal"));
 
   const observer = new IntersectionObserver(
@@ -886,6 +890,144 @@ function initScrollReveal() {
   );
 
   sections.forEach((section) => observer.observe(section));
+}
+
+/* --------------------------------------------------------------------------
+   FOLD TEXT ENTRANCE (vanilla port of ReactBits FoldText — GSAP)
+   -------------------------------------------------------------------------- */
+
+function initFoldText() {
+  const root = document.querySelector("[data-fold-text]");
+  if (!root || typeof gsap === "undefined") return;
+
+  const text = root.textContent.trim().replace(/\s+/g, " ");
+  if (!text) return;
+
+  const reduceMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  root.setAttribute("aria-label", text);
+
+  const visual = document.createElement("span");
+  visual.className = "fold-visual";
+  visual.setAttribute("aria-hidden", "true");
+
+  const words = text.split(" ");
+  const fragment = document.createDocumentFragment();
+
+  words.forEach((word, index) => {
+    const segment = document.createElement("span");
+    segment.className = "fold-segment";
+    const piece = document.createElement("span");
+    piece.className = "fold-piece";
+    piece.textContent = word;
+    segment.appendChild(piece);
+    fragment.appendChild(segment);
+    if (index < words.length - 1) {
+      fragment.appendChild(document.createTextNode(" "));
+    }
+  });
+
+  root.textContent = "";
+  root.appendChild(visual);
+  visual.appendChild(fragment);
+
+  const pieces = visual.querySelectorAll(".fold-piece");
+
+  const hingeOrigin = "50% 0%";
+  const duration = reduceMotion ? Math.min(0.65, 0.22) : 0.65;
+  const stagger = reduceMotion ? Math.min(0.045, 0.02) : 0.045;
+  const rotateX = reduceMotion ? 0 : -92;
+  const crease = reduceMotion ? 0 : 0.55;
+
+  const fromVars = {
+    opacity: 0,
+    rotateX: rotateX,
+    "--fold-crease": crease,
+    transformOrigin: hingeOrigin,
+    force3D: true,
+  };
+
+  const play = () => {
+    gsap.fromTo(
+      pieces,
+      { ...fromVars },
+      {
+        opacity: 1,
+        rotateX: 0,
+        "--fold-crease": 0,
+        duration: duration,
+        ease: reduceMotion ? "power1.out" : "power3.out",
+        stagger: stagger,
+        clearProps: "willChange",
+      }
+    );
+  };
+
+  gsap.set(pieces, { ...fromVars, opacity: 0 });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          play();
+          observer.disconnect();
+        }
+      });
+    },
+    { rootMargin: "0px 0px -18% 0px", threshold: 0 }
+  );
+
+  observer.observe(root);
+}
+
+/* --------------------------------------------------------------------------
+   STAT COUNTERS (count-up on scroll — numbers only)
+   -------------------------------------------------------------------------- */
+
+function initStatCounters() {
+  const values = document.querySelectorAll("#bio-stats .stat-item-value");
+  if (!values.length || typeof gsap === "undefined") return;
+
+  const reduceMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const animateValue = (el) => {
+    const raw = el.textContent.trim();
+    const match = raw.match(/^(\d+)(.*)$/);
+    if (!match) return;
+
+    const target = parseInt(match[1], 10);
+    const suffix = match[2] || "";
+    if (reduceMotion || target <= 0) return;
+
+    const counter = { value: 0 };
+    gsap.to(counter, {
+      value: target,
+      duration: 1.2,
+      ease: "power2.out",
+      onUpdate: () => {
+        el.textContent = Math.round(counter.value) + suffix;
+      },
+      onComplete: () => {
+        el.textContent = target + suffix;
+      },
+    });
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateValue(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.4 }
+  );
+
+  values.forEach((el) => observer.observe(el));
 }
 
 /* --------------------------------------------------------------------------

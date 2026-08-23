@@ -12,7 +12,8 @@ Design specification for rebuilding this personal portfolio from scratch using *
 | UI Icons                            | Lucide Icons                                             | `https://unpkg.com/lucide@latest/dist/umd/lucide.js`                                                   |
 | Brand Icons                         | Bootstrap Icons                                          | `https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css`                         |
 | Map                                 | Leaflet.js + CARTO Dark Tiles                            | `https://unpkg.com/leaflet@1.9.4/dist/leaflet.js` + `https://unpkg.com/leaflet@1.9.4/dist/leaflet.css` |
-| Animation (optional, scroll reveal) | Vanilla JS `IntersectionObserver`                        | —                                                                                                      |
+| Animation (scroll reveal)           | Vanilla JS `IntersectionObserver`                        | —                                                                                                      |
+| Animation (fold text, counters)     | GSAP 3                                                   | `https://unpkg.com/gsap@3/dist/gsap.min.js`                                                            |
 
 No frameworks (no React/Tailwind/Bootstrap CSS) — pure HTML/CSS/JS only. Bootstrap is used **only** for its icon font, not its CSS framework.
 
@@ -257,6 +258,9 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 - Full-width large bold paragraph (`--fs-h2`, weight 700, no max-width — fills the container, line-height 1.3): _"Building software and AI workflows for production websites, tools, and data-driven projects. With a background in design and 500+ commissions, I deliver work that's both functional and polished."_
 - Section uses a reduced top padding override (`.bio-stats.section-padding { padding-top: 72px }`) to tighten the gap after the About section's tech ticker; mobile (≤768px) reverts to the standard `64px` rhythm.
+- **Entrance animation ("FoldText")**: statement splits per word at runtime (`data-fold-text`, vanilla JS + GSAP CDN). Each word folds down from a top hinge — `rotateX: -92° → 0°`, `transform-origin: 50% 0%`, perspective `700px`, stagger `45ms`, `power3.out`, duration `0.65s` — with a crease-shading overlay (`::after` gradient, `mix-blend-mode: multiply`) driven by the `--fold-crease` CSS var. Triggered once via IntersectionObserver (~82% viewport). This section is excluded from the generic scroll reveal to avoid double animation.
+- **Stat counter animation**: each `.stat-item-value` number counts up from `0` to target (`50+`, `4+`, `20+`, `30+`) over `1.2s` with `power2.out` when scrolled into view; suffix preserved, labels static.
+- Both animations respect `prefers-reduced-motion` (shortened/skipped) and degrade gracefully to static text if GSAP fails to load.
 - Horizontal divider line below (`1px solid var(--color-border)`).
 - 4-column stat row: each column = big number (`--fs-h2`, weight 800) + label beneath (`--fs-body-sm`, `--color-text-muted`):
   - Projects Completed — 50+
@@ -621,3 +625,5 @@ alfizilham/
 | Live clock (CTA section)   | `setInterval` updates text every 1000ms, format `hh:mm:ss AM/PM` |
 | Visitor "LIVE" dot         | CSS `@keyframes pulse` opacity loop                              |
 | Scroll reveal (optional)   | `IntersectionObserver` adds `.in-view` class → fade+slide-up     |
+| Bio statement (4.5)        | "FoldText" word-by-word fold entrance (GSAP, top hinge, once)    |
+| Stat numbers (4.5)         | Count-up `0 → target` on scroll (GSAP, suffix preserved)         |

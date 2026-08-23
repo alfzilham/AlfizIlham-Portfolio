@@ -18,6 +18,7 @@ PHP 8.x MVC (vanilla, no framework) with vanilla HTML/CSS/JS frontend.
 | Brand Icons | Bootstrap Icons | CDN `<link>` (font only) |
 | Map | Leaflet.js + CARTO Dark tiles | CDN |
 | Smooth Scroll | Lenis.js | CDN |
+| Animation (fold text, counters) | GSAP 3 | CDN |
 | Contact Form | EmailJS (primary) + PHP fallback | Client-side + server-side |
 | i18n | PHP session-based | EN/ID toggle via `$_SESSION['lang']` |
 | Server | XAMPP (Apache) | `.htaccess` URL rewriting |

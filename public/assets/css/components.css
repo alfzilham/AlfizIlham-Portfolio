@@ -924,6 +924,51 @@
   margin-bottom: var(--space-7);
 }
 
+/* Fold Text entrance (vanilla port of ReactBits FoldText) */
+.fold-visual {
+  display: inline;
+}
+
+.fold-segment {
+  display: inline-block;
+  perspective: 700px;
+}
+
+.fold-piece {
+  position: relative;
+  display: inline-block;
+  line-height: inherit;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+.fold-piece::after {
+  content: "";
+  position: absolute;
+  inset: -0.08em -0.02em;
+  pointer-events: none;
+  opacity: var(--fold-crease, 0);
+  mix-blend-mode: multiply;
+  border-radius: 0.08em;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.58) 0%,
+    rgba(0, 0, 0, 0.22) 42%,
+    rgba(255, 255, 255, 0.26) 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-piece {
+    transform: none !important;
+  }
+
+  .fold-piece::after {
+    opacity: 0 !important;
+  }
+}
+
 .stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
