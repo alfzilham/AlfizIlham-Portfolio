@@ -255,7 +255,8 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 **Purpose**: Short paragraph restating value prop in bold display type, followed by a 4-stat counter row.
 
-- Centered or left-aligned large bold paragraph (`--fs-h2`, weight 700, max-width `900px`, line-height 1.3): _"Building software and AI workflows for production websites, tools, and data-driven projects. With a background in design and 500+ commissions, I deliver work that's both functional and polished."_
+- Full-width large bold paragraph (`--fs-h2`, weight 700, no max-width — fills the container, line-height 1.3): _"Building software and AI workflows for production websites, tools, and data-driven projects. With a background in design and 500+ commissions, I deliver work that's both functional and polished."_
+- Section uses a reduced top padding override (`.bio-stats.section-padding { padding-top: 72px }`) to tighten the gap after the About section's tech ticker; mobile (≤768px) reverts to the standard `64px` rhythm.
 - Horizontal divider line below (`1px solid var(--color-border)`).
 - 4-column stat row: each column = big number (`--fs-h2`, weight 800) + label beneath (`--fs-body-sm`, `--color-text-muted`):
   - Projects Completed — 50+

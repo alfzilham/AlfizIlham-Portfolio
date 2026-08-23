@@ -154,6 +154,11 @@
     padding-bottom: 64px;
   }
 
+  /* Bio Stats — keep mobile rhythm */
+  .bio-stats.section-padding {
+    padding-top: 64px;
+  }
+
   /* Hero */
   .hero-magnet,
   .floating-icon {
