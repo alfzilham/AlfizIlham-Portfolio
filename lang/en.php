@@ -183,6 +183,7 @@ return [
     'editor_exit' => 'Exit',
     'editor_logout' => 'Logout',
     'editor_add_project' => 'Add Project',
+    'editor_add_certificate' => 'Add Certificate',
     'editor_card_menu' => 'Card menu',
     'editor_edit' => 'Edit',
     'editor_delete' => 'Delete',
@@ -220,4 +221,12 @@ return [
     'form_error_link' => 'Enter a valid URL (http/https)',
     'delete_modal_title' => 'Delete this project?',
     'delete_cancel' => 'Cancel',
+
+    // Certificates
+    'certificates_heading' => 'Certificates & Credentials',
+    'certificates_subtitle' => 'Verified achievements and professional certifications that validate my expertise.',
+    'form_credential_id_label' => 'Credential ID (optional)',
+    'form_credential_id_placeholder' => 'e.g. GCP-2024-XXXXX',
+    'form_credential_link_label' => 'Credential Link (optional)',
+    'form_credential_link_placeholder' => 'https://credential-url.com',
 ];

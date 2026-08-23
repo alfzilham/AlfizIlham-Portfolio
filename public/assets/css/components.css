@@ -2317,10 +2317,7 @@ body.card-form-open .editor-toolbar {
 .tech-marquee {
   background: var(--color-bg-dark);
   overflow: hidden;
-  padding: 40px 0;
-  transform: rotate(-3deg);
-  transform-origin: center;
-  margin: -28px 0;
+  padding: 0;
 }
 
 .tech-marquee-row {
@@ -2569,6 +2566,50 @@ body.card-form-open .editor-toolbar {
 
 .faq-item.hidden {
   display: none;
+}
+
+/* --------------------------------------------------------------------------
+   15B. CERTIFICATES
+   -------------------------------------------------------------------------- */
+
+.certificates-heading {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: var(--fw-extrabold);
+  text-transform: uppercase;
+  line-height: var(--lh-tight);
+  margin-bottom: var(--space-3);
+}
+
+.certificates-subtitle {
+  font-size: var(--fs-body);
+  color: var(--color-text-muted);
+  max-width: 560px;
+}
+
+.certificates-grid-wrap {
+  padding: 0 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-6);
+  height: 460px;
+}
+
+.certificates-wheel-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background: #0a0a0a;
+}
+
+.cert-carousel-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
 }
 
 /* --------------------------------------------------------------------------

@@ -136,6 +136,110 @@ class AdminController
         json_response(['success' => true]);
     }
 
+    // ──────────────────────────────────────────────
+    //  CERTIFICATES CRUD
+    // ──────────────────────────────────────────────
+
+    /**
+     * GET /api/admin/certificates
+     */
+    public function listCertificates()
+    {
+        self::requireAdmin();
+        json_response(['certificates' => Certificate::all()]);
+    }
+
+    /**
+     * POST /api/admin/certificates
+     */
+    public function createCertificate()
+    {
+        self::requireAdmin();
+
+        $title = sanitize($_POST['title'] ?? '');
+        $credentialId = sanitize($_POST['credential_id'] ?? '');
+        $credentialLink = self::normalizeLink($_POST['credential_link'] ?? '');
+
+        $errors = self::validateCertificateFields($title);
+        if ($errors) {
+            json_response(['success' => false, 'errors' => $errors], 422);
+        }
+
+        $upload = self::handleUpload();
+        if (!$upload['ok']) {
+            json_response(['success' => false, 'error' => $upload['error']], 422);
+        }
+
+        $id = Certificate::create($title, $credentialId, $credentialLink, $upload['path']);
+        json_response(['success' => true, 'certificate' => Certificate::find($id)], 201);
+    }
+
+    /**
+     * POST /api/admin/certificates/{id}
+     */
+    public function updateCertificate()
+    {
+        self::requireAdmin();
+
+        $id = (int) ($_GET['id'] ?? 0);
+        $existing = Certificate::find($id);
+        if (!$existing) {
+            json_response(['success' => false, 'error' => 'Certificate not found'], 404);
+        }
+
+        $title = sanitize($_POST['title'] ?? '');
+        $credentialId = sanitize($_POST['credential_id'] ?? '');
+        $credentialLink = self::normalizeLink($_POST['credential_link'] ?? '');
+
+        $errors = self::validateCertificateFields($title);
+        if ($errors) {
+            json_response(['success' => false, 'errors' => $errors], 422);
+        }
+
+        $imagePath = $existing['image'];
+        if (!empty($_FILES['image']['name'])) {
+            $upload = self::handleUpload();
+            if (!$upload['ok']) {
+                json_response(['success' => false, 'error' => $upload['error']], 422);
+            }
+            self::deleteImageFile($existing['image']);
+            $imagePath = $upload['path'];
+        }
+
+        Certificate::update($id, $title, $credentialId, $credentialLink, $imagePath);
+        json_response(['success' => true, 'certificate' => Certificate::find($id)]);
+    }
+
+    /**
+     * DELETE /api/admin/certificates/{id}
+     */
+    public function deleteCertificate()
+    {
+        self::requireAdmin();
+
+        $id = (int) ($_GET['id'] ?? 0);
+        $existing = Certificate::find($id);
+        if (!$existing) {
+            json_response(['success' => false, 'error' => 'Certificate not found'], 404);
+        }
+
+        self::deleteImageFile($existing['image']);
+        Certificate::delete($id);
+        json_response(['success' => true]);
+    }
+
+    /**
+     * Validate certificate fields
+     */
+    private static function validateCertificateFields($title)
+    {
+        $errors = [];
+        if (mb_strlen(trim($title)) < 2) {
+            $errors['title'] = i18n::t('form_error_title');
+        }
+        return $errors;
+    }
+
     /**
      * Validate title/description/link fields
      */

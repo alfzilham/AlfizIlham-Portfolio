@@ -324,10 +324,10 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 
 **Purpose**: Secondary scrolling ticker, dark-themed, listing services + tech stack.
 
-- Full-width **black background** bar with a **3° upward slant** (`transform: rotate(-3deg)`), two stacked rows of scrolling text, each row scrolling in **opposite directions** (row 1 left→right, row 2 right→left) infinitely.
-- Row 1 text: "FULL-STACK WEB DEVELOPMENT ✦ AI-INTEGRATED APPLICATIONS ✦ WORKFLOW AUTOMATION ✦ API & DATABASE ENGINEERING ✦ TECH CONSULTATION ✦ ..." — white text, uppercase, bold, `--fs-body` size (~16-18px), letter-spacing wide.
+- Full-width **black background** bar, two stacked rows of scrolling text, each row scrolling in **opposite directions** (row 1 left→right, row 2 right→left) infinitely.
+- Row 1 text: "AI & AUTOMATION ✦ TECH CONSULTATION ✦ DESIGN & CALLIGRAPHY ✦ FULL-STACK DEVELOPMENT ✦ AI & AUTOMATION ✦ TECH CONSUL..." — white text, uppercase, bold, small-caps feel, `--fs-body` size (~16-18px), letter-spacing wide.
 - Row 2 text: "PYTHON ✦ NODE.JS ✦ DOCKER ✦ TENSORFLOW ✦ CLAUDE API ✦ POSTGRESQL ✦ TAILWIND CSS ✦ GIT ✦ FRAMER MOTION ✦ REACT ✦ NEXT..." — same style.
-- Padding `40px 0` per row to accommodate rotation, `background: #0a0a0a`, `color: #fff`, negative margin `-28px 0` to compensate vertical shift.
+- Padding `16px 0` per row, `background: #0a0a0a`, `color: #fff`.
 
 ---
 
@@ -369,6 +369,20 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
   - Divider or spacing
   - Reviewer row: circular avatar photo (40px) + name (bold, `--fs-body-sm`) + role/title (muted, `--fs-caption`) beneath name
   - Card style: `background: var(--color-bg-soft)`, `border-radius: var(--radius-md)`, padding `24px`, no heavy shadow (flat card).
+
+---
+
+### 4.12B Certificates & Credentials
+
+**Purpose**: 2-column interactive section showcasing verified certifications.
+
+- **Left column** — OptionWheel: vertical curved wheel of certificate titles, grayscale blur on non-active items, scroll/click/drag to select, keyboard ↑↓ navigation
+- **Right column** — DepthCarousel: depth-perspective stacked cards showing certificate images, drag/wheel to navigate, no arrow controls or dot indicators
+- **Sync**: bidirectional — OptionWheel selection updates DepthCarousel and vice versa
+- **Auto-slide**: both advance every 5 seconds; pauses on hover over DepthCarousel
+- **Hover overlay**: certificate data (title + credential ID as hyperlink if link exists) in black gradient at bottom of card
+- **Editor mode**: "+ Add Certificate" button in toolbar → modal form with title*, credential_id, credential_link, image*
+- **Data source**: SQLite `certificates` table, CRUD via admin API
 
 ---
 

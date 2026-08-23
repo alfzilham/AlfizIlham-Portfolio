@@ -183,6 +183,7 @@ return [
     'editor_exit' => 'Keluar Mode',
     'editor_logout' => 'Logout',
     'editor_add_project' => 'Tambah Proyek',
+    'editor_add_certificate' => 'Tambah Sertifikat',
     'editor_card_menu' => 'Menu kartu',
     'editor_edit' => 'Edit',
     'editor_delete' => 'Hapus',
@@ -220,4 +221,12 @@ return [
     'form_error_link' => 'Masukkan URL yang valid (http/https)',
     'delete_modal_title' => 'Hapus proyek ini?',
     'delete_cancel' => 'Batal',
+
+    // Certificates
+    'certificates_heading' => 'Sertifikat & Kredensial',
+    'certificates_subtitle' => 'Pencapaian terverifikasi dan sertifikasi profesional yang membuktikan keahlian saya.',
+    'form_credential_id_label' => 'ID Kredential (opsional)',
+    'form_credential_id_placeholder' => 'contoh: GCP-2024-XXXXX',
+    'form_credential_link_label' => 'Link Kredential (opsional)',
+    'form_credential_link_placeholder' => 'https://url-kredential.com',
 ];

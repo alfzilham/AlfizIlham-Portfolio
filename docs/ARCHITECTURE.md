@@ -171,6 +171,17 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 | link | TEXT NULL | Optional live project URL |
 | created_at | DATETIME | Timestamp |
 
+### certificates
+| Column | Type | Description |
+|--------|------|-------------|
+| id | INTEGER PK | Auto-increment |
+| title | TEXT | Certificate name |
+| credential_id | TEXT NULL | Optional credential ID |
+| credential_link | TEXT NULL | Optional credential URL |
+| image | TEXT | WebP path (assets/uploads/certificates/) |
+| sort_order | INTEGER | Display order |
+| created_at | DATETIME | Timestamp |
+
 ---
 
 ## 5. API Endpoints

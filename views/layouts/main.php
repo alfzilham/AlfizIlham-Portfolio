@@ -76,7 +76,10 @@
     <!-- SECTION 12: TESTIMONIALS -->
     <?php echo View::section('testimonials', ['testimonials' => $testimonials]); ?>
 
-    <!-- SECTION 13: FAQ -->
+    <!-- SECTION 13: CERTIFICATES -->
+    <?php echo View::section('certificates', ['certificates' => $certificates]); ?>
+
+    <!-- SECTION 14: FAQ -->
     <?php echo View::section('faq', ['faqs' => $faqs, 'faqCategories' => $faqCategories]); ?>
 
     <!-- SECTION 14: CONTACT -->
@@ -161,6 +164,44 @@
     </div>
   </div>
 
+  <!-- Editor mode: certificate form modal -->
+  <div class="editor-overlay" id="certFormOverlay" data-lenis-prevent hidden>
+    <div class="editor-modal editor-modal-wide" role="dialog" aria-modal="true" aria-labelledby="certFormTitle">
+      <button type="button" class="modal-close" data-close-modal aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
+      <h2 id="certFormTitle"><?= i18n::t('form_add_title') ?></h2>
+      <form id="certForm" novalidate>
+        <label for="certTitle"><?= i18n::t('form_title_label') ?></label>
+        <input type="text" id="certTitle" name="title" placeholder="<?= i18n::t('form_title_placeholder') ?>" required />
+        <span class="form-error" id="certTitleError"></span>
+
+        <label for="certCredentialId"><?= i18n::t('form_credential_id_label') ?></label>
+        <input type="text" id="certCredentialId" name="credential_id" placeholder="<?= i18n::t('form_credential_id_placeholder') ?>" />
+        <span class="form-error" id="certCredentialIdError"></span>
+
+        <label for="certCredentialLink"><?= i18n::t('form_credential_link_label') ?></label>
+        <input type="url" id="certCredentialLink" name="credential_link" placeholder="<?= i18n::t('form_credential_link_placeholder') ?>" />
+        <span class="form-error" id="certCredentialLinkError"></span>
+
+        <label><?= i18n::t('form_image_label') ?></label>
+        <div class="dropzone" id="certDropzone">
+          <input type="file" id="certImage" name="image" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+          <div class="dropzone-empty" id="certDropzoneEmpty">
+            <i data-lucide="upload-cloud"></i>
+            <p><?= i18n::t('upload_drop_text') ?></p>
+            <span class="dropzone-browse"><?= i18n::t('upload_browse') ?></span>
+          </div>
+          <div class="dropzone-preview" id="certDropzonePreview" title="<?= i18n::t('upload_change_hint') ?>" hidden>
+            <img id="certDropzonePreviewImg" alt="" />
+            <span class="dropzone-name" id="certDropzoneName"></span>
+          </div>
+        </div>
+        <span class="form-error" id="certImageError"></span>
+
+        <button type="submit" class="btn btn-primary btn-block" id="certFormSubmit"><?= i18n::t('editor_submit') ?></button>
+      </form>
+    </div>
+  </div>
+
   <!-- Lightbox (macOS-style viewer) -->
   <div class="lb-viewer" id="lightbox" data-lenis-prevent hidden role="dialog" aria-modal="true" aria-label="Project viewer">
     <div class="lb-counter" id="lbCounter">1 / 1</div>
@@ -205,6 +246,10 @@
     <span class="editor-toolbar-divider"></span>
     <button type="button" id="addProjectBtn" class="editor-toolbar-cta">
       <i data-lucide="plus"></i><?= i18n::t('editor_add_project') ?>
+    </button>
+    <span class="editor-toolbar-divider"></span>
+    <button type="button" id="addCertBtn" class="editor-toolbar-cta">
+      <i data-lucide="plus"></i><?= i18n::t('editor_add_certificate') ?>
     </button>
     <span class="editor-toolbar-divider"></span>
     <button type="button" id="editorLogoutBtn" class="editor-toolbar-btn editor-toolbar-muted">

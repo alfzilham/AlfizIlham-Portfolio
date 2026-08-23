@@ -15,6 +15,7 @@ Functional specification: what each interactive feature must do, data shapes, ac
 | Projects | `#project` |
 | Services | `#service` |
 | Gallery | `#gallery` |
+| Certificates | `#certificate` |
 | FAQ | `#faq` |
 | Contact | `#contact` |
 
@@ -82,6 +83,23 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 - Multiple items can be open simultaneously
 
 **Acceptance criteria**: accordion expands/collapses smoothly; category filter works; `aria-expanded` attribute toggled correctly.
+
+---
+
+## 5B. Certificates & Credentials
+
+**Data flow**: `Certificate::all()` → PHP → JSON → JS (OptionWheel + DepthCarousel).
+
+- Section `#certificate` — 2-column grid layout
+- **Left column**: OptionWheel (vertical curved wheel) showing certificate titles; scroll/click/drag to select; keyboard ↑↓ navigation; grayscale blur on non-active items
+- **Right column**: DepthCarousel (depth-perspective stacked cards) showing certificate images; drag/wheel to navigate; no arrow controls or dot indicators
+- **Sync**: OptionWheel ↔ DepthCarousel bidirectional — selecting in one updates the other
+- **Auto-slide**: both advance every 5 seconds; pauses on hover over DepthCarousel
+- **Hover overlay**: certificate data (title + credential ID as hyperlink if link exists) shown in black gradient at bottom of card, visible only on hover
+- **Editor mode**: "+ Add Certificate" button in toolbar → modal form (title*, credential_id, credential_link, image*) → saves to SQLite `certificates` table
+- **CRUD endpoints**: GET/POST/DELETE `/api/admin/certificates[/{id}]` (admin auth required)
+
+**Acceptance criteria**: wheel and carousel stay in sync; auto-slide advances both; hover pauses; editor mode allows full CRUD; images served as `.webp`.
 
 ---
 

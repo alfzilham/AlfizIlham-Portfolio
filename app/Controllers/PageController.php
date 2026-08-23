@@ -21,6 +21,7 @@ class PageController
             'testimonials' => Testimonial::all(),
             'services' => Service::all(),
             'gallery' => Gallery::all(),
+            'certificates' => Certificate::all(),
             'visitorCount' => VisitorService::getCount(),
             'config' => [
                 'name' => config('name'),

@@ -150,6 +150,21 @@
     gap: var(--space-5);
   }
 
+  /* Certificates — stack on mobile */
+  .certificates-grid {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: var(--space-4);
+  }
+
+  .certificates-wheel-wrap {
+    height: 200px;
+  }
+
+  .cert-carousel-wrap {
+    height: 320px;
+  }
+
   /* Bio Stats — keep mobile rhythm */
   .bio-stats.section-padding {
     padding-top: 64px;

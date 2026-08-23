@@ -53,6 +53,7 @@ require_once APP_PATH . '/Models/Service.php';
 require_once APP_PATH . '/Models/Gallery.php';
 require_once APP_PATH . '/Models/Visitor.php';
 require_once APP_PATH . '/Models/ShowcaseProject.php';
+require_once APP_PATH . '/Models/Certificate.php';
 
 // Load services
 require_once APP_PATH . '/Services/ContactService.php';
