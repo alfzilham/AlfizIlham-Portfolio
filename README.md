@@ -34,7 +34,7 @@ Personal portfolio website for **Alfiz Ilham** — Software & AI Engineer, Co-Fo
    ```
 4. Initialize database:
    ```bash
-   php setup.php
+   php seed.php
    ```
 5. Open in browser: `http://localhost/alfizilham`
 

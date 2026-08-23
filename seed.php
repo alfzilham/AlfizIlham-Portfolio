@@ -1,10 +1,15 @@
 <?php
 /**
- * Database Setup Script
- * Run once: php setup.php
+ * Database Seeder
+ * Run once: php seed.php
  *
  * Creates SQLite database + seeds data from original JS arrays.
+ * CLI only — cannot be executed via browser.
  */
+
+if (PHP_SAPI !== 'cli') {
+    exit("This script can only be run from the command line.\n");
+}
 
 // Load bootstrap for constants
 define('ROOT_PATH', __DIR__);

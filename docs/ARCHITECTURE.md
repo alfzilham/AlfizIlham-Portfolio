@@ -92,7 +92,7 @@ alfizilham/
 ├── logs/                       ← Error logs
 ├── .opencode/                  ← Agent configuration
 ├── bootstrap.php               ← Autoloader + initialization
-├── setup.php                   ← Database seeder
+├── seed.php                     ← Database seeder (CLI only)
 ├── AGENT.md                    ← Agent rules
 ├── README.md                   ← Project readme
 ├── LICENSE                     ← All Rights Reserved

@@ -65,7 +65,7 @@ The site is bilingual (EN/ID toggle in navbar) — English is the default langua
 ## 6. Known Constraints
 
 - **PHP MVC (vanilla)** — no frontend framework, no CSS framework beyond Bootstrap Icons (icon font only). Vanilla routing, no Composer dependencies.
-- **SQLite database** — lightweight, serverless. No MySQL/PostgreSQL required. Data seeded via `setup.php`.
+- **SQLite database** — lightweight, serverless. No MySQL/PostgreSQL required. Data seeded via `seed.php` (CLI only).
 - **Single page** — all sections live on `index.php`; nav links are anchor scrolls (`#about`, `#skills`, etc.).
 - **Static assets, no CMS** — all project/gallery images are pre-exported `.webp` files in `public/assets/image/`.
 - **Contact form** — EmailJS as primary submission method, PHP `mail()` as fallback. No dedicated email service configured yet.

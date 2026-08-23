@@ -108,7 +108,7 @@ alfizilham/
 ├── logs/                       ← Error logs
 ├── .opencode/                  ← Agent configuration
 ├── bootstrap.php               ← Autoloader
-├── setup.php                   ← DB seeder
+├── seed.php                     ← DB seeder
 ├── AGENT.md                    ← This file
 ├── README.md                   ← Project readme
 ├── LICENSE                     ← All Rights Reserved
@@ -149,5 +149,5 @@ alfizilham/
 
 1. Start XAMPP (Apache)
 2. Place project in `C:\xampp\htdocs\alfizilham`
-3. Run `php setup.php` to initialize database
+3. Run `php seed.php` to initialize database
 4. Open `http://localhost/alfizilham`
