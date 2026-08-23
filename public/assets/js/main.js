@@ -486,7 +486,7 @@ function initServicesAccordion() {
   const TEXT_COLOR = "#ffffff";
   const ACCENT_COLOR = "#ffffff";
 
-  root.style.minHeight = HEIGHT + "px";
+  root.style.height = HEIGHT + "px";
   root.style.setProperty("--ag-gap", GAP + "px");
   root.style.setProperty("--ag-radius", RADIUS + "px");
   root.style.setProperty("--ag-accent", ACCENT_COLOR);
@@ -536,8 +536,17 @@ function initServicesAccordion() {
 
       const text = document.createElement("span");
       text.className = "ag-panel__text";
-      text.textContent = item.label || item.title || "";
 
+      const titleEl = document.createElement("span");
+      titleEl.className = "ag-panel__title";
+      titleEl.textContent = item.label || item.title || "";
+
+      const descEl = document.createElement("span");
+      descEl.className = "ag-panel__desc";
+      descEl.textContent = item.description || "";
+
+      text.appendChild(titleEl);
+      text.appendChild(descEl);
       label.appendChild(bar);
       label.appendChild(text);
       panel.appendChild(label);
@@ -566,32 +575,13 @@ function initServicesAccordion() {
     });
 
     panel.dataset.index = i;
-    root.insertBefore(panel, descEl);
+    root.appendChild(panel);
   });
 
   function setActive(index) {
     if (index === activeIndex) return;
     activeIndex = index;
     applyLayout(true);
-    updateDescription();
-  }
-
-  function updateDescription() {
-    if (!descEl) return;
-    const item = items[activeIndex];
-    const text = item.description || "";
-    if (prefersReduced) {
-      descEl.textContent = text;
-      return;
-    }
-    gsap.to(descEl, {
-      opacity: 0,
-      duration: 0.15,
-      onComplete: function () {
-        descEl.textContent = text;
-        gsap.to(descEl, { opacity: 1, duration: 0.2 });
-      },
-    });
   }
 
   function applyLayout(animate) {
@@ -677,9 +667,6 @@ function initServicesAccordion() {
   measure();
   const ro = new ResizeObserver(measure);
   ro.observe(root);
-
-  // Set initial description
-  updateDescription();
 
   // Cleanup on page unload
   window.addEventListener("beforeunload", function () {

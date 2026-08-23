@@ -2165,7 +2165,6 @@ body.card-form-open .editor-toolbar {
 
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   gap: var(--ag-gap);
   width: 100%;
   max-width: 100%;
@@ -2260,25 +2259,29 @@ body.card-form-open .editor-toolbar {
 .ag-panel__text {
   color: var(--ag-text);
   font-family: inherit;
-  font-weight: 600;
   font-size: clamp(1rem, 1.4vw, 1.4rem);
   letter-spacing: 0.01em;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   opacity: 0;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
 }
 
-/* Services active description */
-.services-active-desc {
-  flex: 0 0 auto;
-  width: 100%;
-  font-size: var(--fs-body);
-  color: var(--color-text-muted);
-  text-align: center;
-  min-height: 1.6em;
-  margin-top: var(--space-4);
+.ag-panel__title {
+  display: block;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ag-panel__desc {
+  display: block;
+  font-weight: 400;
+  font-size: var(--fs-body-sm);
+  opacity: 0.75;
+  margin-top: 4px;
+  white-space: normal;
+  line-height: var(--lh-body);
 }
 
 /* Accordion gallery: mobile stacking */
