@@ -24,9 +24,9 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- App CSS -->
-  <link rel="stylesheet" href="assets/css/global.css" />
-  <link rel="stylesheet" href="assets/css/components.css" />
-  <link rel="stylesheet" href="assets/css/responsive.css" />
+  <link rel="stylesheet" href="assets/css/global.css?v=<?= filemtime(PUBLIC_PATH . '/assets/css/global.css') ?>" />
+  <link rel="stylesheet" href="assets/css/components.css?v=<?= filemtime(PUBLIC_PATH . '/assets/css/components.css') ?>" />
+  <link rel="stylesheet" href="assets/css/responsive.css?v=<?= filemtime(PUBLIC_PATH . '/assets/css/responsive.css') ?>" />
 </head>
 <body>
 
@@ -227,6 +227,6 @@
     ], JSON_UNESCAPED_UNICODE); ?>;
   </script>
 
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js?v=<?= filemtime(PUBLIC_PATH . '/assets/js/main.js') ?>"></script>
 </body>
 </html>

@@ -1126,7 +1126,7 @@ function initEditorMode() {
 
     const card = e.target.closest(".chroma-card");
     if (card && !editorOn) {
-      openLightbox(card.dataset);
+      openLightbox(card);
     }
   });
 
@@ -1159,6 +1159,7 @@ function initEditorMode() {
 
   function collectLbItems() {
     return Array.from(grid.querySelectorAll(".chroma-card")).map((c) => ({
+      id: c.dataset.id || "",
       image: c.dataset.image || "",
       title: c.dataset.title || "",
       description: c.dataset.description || "",
@@ -1220,9 +1221,18 @@ function initEditorMode() {
     renderLb();
   }
 
-  function openLightbox(card) {
+  function openLightbox(cardEl) {
     lbItems = collectLbItems();
-    const idx = lbItems.findIndex((it) => it.image === card.dataset.image);
+    if (!lbItems.length) return;
+
+    const id = cardEl.dataset.id || "";
+    const image = cardEl.dataset.image || "";
+
+    let idx = lbItems.findIndex((it) => it && it.id && it.id === id);
+    if (idx < 0) {
+      idx = lbItems.findIndex((it) => it && it.image === image);
+    }
+
     lbIndex = idx >= 0 ? idx : 0;
     buildLbStrip();
     renderLb();

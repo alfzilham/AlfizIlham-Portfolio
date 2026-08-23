@@ -1287,6 +1287,7 @@
   border-color: var(--card-border, #999);
   transform: translateY(-4px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  z-index: 5;
 }
 
 .chroma-card::before {
@@ -1417,8 +1418,8 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  backdrop-filter: grayscale(1) brightness(0.78);
-  -webkit-backdrop-filter: grayscale(1) brightness(0.78);
+  backdrop-filter: grayscale(1);
+  -webkit-backdrop-filter: grayscale(1);
   background: rgba(0, 0, 0, 0.001);
 }
 
@@ -1671,10 +1672,27 @@ body.card-form-open .editor-toolbar {
   position: relative;
   width: 100%;
   max-width: 420px;
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   background: #fff;
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.editor-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.editor-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-modal::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 999px;
 }
 
 .editor-modal-wide {
@@ -1714,6 +1732,7 @@ body.card-form-open .editor-toolbar {
 }
 
 .editor-modal input[type="text"],
+.editor-modal input[type="url"],
 .editor-modal input[type="password"],
 .editor-modal textarea {
   width: 100%;
@@ -1743,6 +1762,67 @@ body.card-form-open .editor-toolbar {
   min-height: 16px;
   display: block;
   margin-top: 4px;
+}
+
+/* Delete confirmation modal */
+.editor-modal-sm {
+  max-width: 380px;
+  text-align: center;
+}
+
+.delete-icon {
+  width: 64px;
+  height: 64px;
+  margin: 4px auto 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.delete-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.delete-card-name {
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.delete-actions .btn {
+  flex: 1;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  box-shadow: var(--neu-shadow-out-sm);
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+  box-shadow: var(--neu-shadow-out);
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  box-shadow: var(--neu-shadow-in);
+  transform: scale(0.97);
 }
 
 /* Dropzone */

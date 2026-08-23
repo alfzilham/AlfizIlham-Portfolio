@@ -1,6 +1,12 @@
 <?php
 /** @var array $projects */
 /** @var array $showcase */
+
+// Skip cards whose image file is missing (prevents broken cards + 404s)
+$showcase = array_values(array_filter($showcase, function ($c) {
+    return !empty($c['image']) && is_file(PUBLIC_PATH . '/' . ltrim($c['image'], '/'));
+}));
+
 $galleryItems = array_values(array_map(function ($p) {
     return ['image' => $p['image'], 'text' => $p['name']];
 }, array_filter($projects, function ($p) {
