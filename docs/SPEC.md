@@ -56,17 +56,15 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 ---
 
-## 4. Projects Showcase (Depth Carousel)
+## 4. Projects Teaser
 
-**Data flow**: `Project::all()` → PHP filters out `website` category → cards rendered server-side → JS carousel enhancement.
+**Data flow**: static i18n strings — no database dependency.
 
 - Section `#project` (anchor target for navbar, mobile menu, footer, and hero "View My Work" CTA)
-- Two-column layout: left = eyebrow/heading/subtitle + 3 CTAs (Start a Project, WhatsApp Me, View Project placeholder); right = depth carousel of 27 design & calligraphy projects
-- Carousel: looped, drag with momentum projection, prev/next arrows, dot indicators, keyboard arrows; autoplay every 3.2s pausing on hover/focus
-- Wheel navigation intentionally omitted (avoids conflict with Lenis page scroll)
-- Respects `prefers-reduced-motion` (instant jumps, no autoplay)
+- Content: eyebrow "My Projects" + heading "Curious What I've Built?" + subtitle describing the current role (production websites, dashboards, AI-integrated applications)
+- No filter tabs, no project cards grid, no view-more button — the former grid section was removed; `/api/projects` endpoint remains available as a public API surface
 
-**Acceptance criteria**: dragging snaps to the nearest card; arrows/dots/keyboard navigate correctly with wrap-around; autoplay pauses while hovered or focused; all `#project` anchors scroll to the section.
+**Acceptance criteria**: all `#project` anchors scroll to the teaser; section renders identically in EN/ID.
 
 ---
 
