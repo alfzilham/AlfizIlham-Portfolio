@@ -62,10 +62,7 @@
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
     <!-- SECTION 7: PROJECTS TEASER -->
-    <?php echo View::section('projects-teaser', ['counts' => $projectCounts]); ?>
-
-    <!-- SECTION 8: PROJECTS GRID -->
-    <?php echo View::section('projects', ['projects' => $projects]); ?>
+    <?php echo View::section('projects-teaser'); ?>
 
     <!-- SECTION 9: SERVICES -->
     <?php echo View::section('services', ['services' => $services]); ?>

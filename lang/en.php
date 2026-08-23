@@ -87,22 +87,7 @@ return [
     // Projects Teaser
     'projects_teaser_eyebrow' => 'My Projects',
     'projects_teaser_heading' => 'Curious What I\'ve Built?',
-    'projects_teaser_subtitle' => 'Explore brand identities, UI/UX design, and frontend projects from my portfolio.',
-    'projects_teaser_cta' => 'VIEW ALL PROJECTS',
-    'projects_teaser_cat1_title' => '19 Websites Showcase',
-    'projects_teaser_cat1_desc' => 'From landing pages to dashboards — 19 real web projects built and deployed using AI-directed development.',
-    'projects_teaser_cat2_title' => '9 Design Works',
-    'projects_teaser_cat2_desc' => 'Posters, banners, and visual assets crafted with a sharp eye for layout, hierarchy, and brand communication.',
-    'projects_teaser_cat3_title' => '18 Calligraphy Pieces',
-    'projects_teaser_cat3_desc' => 'Every stroke made by hand. No AI, no shortcuts. Pure craft from a 7-time calligraphy champion.',
-
-    // Projects Grid
-    'projects_filter_all' => 'ALL',
-    'projects_filter_website' => 'WEBSITE',
-    'projects_filter_design' => 'DESIGN',
-    'projects_filter_calligraphy' => 'CALLIGRAPHY',
-    'projects_view_more' => 'VIEW MORE PROJECTS',
-    'projects_show_less' => 'SHOW LESS',
+    'projects_teaser_subtitle' => 'Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks.',
 
     // Services
     'services_heading' => 'HOW CAN I HELP YOU',

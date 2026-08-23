@@ -46,11 +46,6 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
-  /* Projects Grid */
-  .project-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   /* Services */
   .services-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -201,24 +196,6 @@
 
   .search-box {
     min-width: 100%;
-  }
-
-  /* Projects Teaser */
-  .project-categories {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  /* Projects Grid */
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filter-bar-center {
-    justify-content: flex-start;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
   }
 
   /* Services */

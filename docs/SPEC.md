@@ -39,7 +39,7 @@ All data previously hardcoded in JS arrays now lives in SQLite, accessed via PHP
 | Services | `Service::all()` | `services` | 4 |
 | Gallery | `Gallery::all()` | `gallery` | 16 |
 
-Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__PROJECTS`, etc.
+Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__FAQS`, etc.
 
 ---
 
@@ -56,16 +56,15 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__P
 
 ---
 
-## 4. Project Filter
+## 4. Projects Teaser
 
-**Data flow**: `Project::byCategory($category)` → PHP → JSON → JS rendering.
+**Data flow**: static i18n strings — no database dependency.
 
-- Filter tabs: `ALL / WEBSITE / DESIGN / CALLIGRAPHY`
-- Initial render: 6 cards (2 rows × 3 cols)
-- "VIEW MORE PROJECTS" reveals remaining cards with fade-in
-- Clicking again becomes "SHOW LESS"
+- Section `#project` (anchor target for navbar, mobile menu, footer, and hero "View My Work" CTA)
+- Content: eyebrow "My Projects" + heading "Curious What I've Built?" + subtitle describing the current role (production websites, dashboards, AI-integrated applications)
+- No filter tabs, no project cards grid, no view-more button — the former grid section was removed; `/api/projects` endpoint remains available as a public API surface
 
-**Acceptance criteria**: filter tabs correctly show/hide cards; "VIEW MORE" reveals remaining cards without page reload.
+**Acceptance criteria**: all `#project` anchors scroll to the teaser; section renders identically in EN/ID.
 
 ---
 

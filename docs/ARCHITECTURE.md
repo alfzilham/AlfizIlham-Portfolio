@@ -68,7 +68,7 @@ alfizilham/
 │   ├── sections/               ← 15 section views
 │   │   ├── intro.php, hero.php, curved-marquee.php
 │   │   ├── about.php, bio-stats.php, skills.php
-│   │   ├── projects-teaser.php, projects.php
+│   │   ├── projects-teaser.php
 │   │   ├── services.php, tech-marquee.php
 │   │   ├── gallery.php, testimonials.php, faq.php
 │   │   ├── contact.php, cta-closing.php

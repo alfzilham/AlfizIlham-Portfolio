@@ -12,8 +12,6 @@ class PageController
         // Gather all data
         $data = [
             'lang' => current_lang(),
-            'projects' => Project::all(),
-            'projectCounts' => Project::counts(),
             'tools' => Tool::all(),
             'faqs' => Faq::all(),
             'faqCategories' => Faq::categories(),

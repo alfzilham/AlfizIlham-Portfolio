@@ -288,46 +288,13 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 
 ### 4.7 Projects Teaser ("Curious What I've Built?")
 
-**Purpose**: Bridge into portfolio/projects with category counts.
+**Purpose**: Lightweight section anchor introducing the portfolio (the former filterable grid was removed).
 
+- Section id `#project` — anchor target for navbar, mobile menu, footer, and hero "View My Work" CTA
 - Small eyebrow label "My Projects" centered
 - Heading: "Curious What I've Built?" (`--fs-h1`, centered)
-- Subheading paragraph centered, muted: "Explore brand identities, UI/UX design, and frontend projects from my portfolio."
-- Primary button centered: "VIEW ALL PROJECTS"
-- Below: 4 image thumbnails in a row (project preview cards — poster designs, dashboard UI screenshots), each `border-radius: var(--radius-md)`, `aspect-ratio: 3/4` or `4/3`, `object-fit: cover`, subtle rotation alternating (`rotate(-3deg)`, `rotate(2deg)`) for a "scattered photos" effect, overlapping slightly.
-- Below thumbnails: 3-column stat/category row:
-  - "19 Websites Showcase" + description
-  - "9 Design Works" + description
-  - "18 Calligraphy Pieces" + description
-  - Each: bold heading (`--fs-h3`) + muted paragraph beneath, centered per column.
-
----
-
-### 4.8 Projects Grid (Filterable Portfolio)
-
-**Purpose**: Actual project case list.
-
-- Filter tab row (centered or left-aligned): "ALL / WEBSITE / DESIGN / CALLIGRAPHY" pill buttons, same style as skill filters.
-- Grid of **project cards**, 3 columns desktop → 1 column mobile, gap `24px`. Each card:
-  - Image/screenshot on top (`aspect-ratio: 4/3`, `border-radius: var(--radius-md) var(--radius-md) 0 0`, `object-fit: cover`, dark-mode UI screenshots for tech-styled projects e.g. "Deva", "Mekatron", "Xilham Dashboard")
-  - Below image, in a white padded footer strip: project name (bold, `--fs-h4`) + category label (muted, `--fs-body-sm`) e.g. "Website"
-  - Whole card: `border: 1px solid var(--color-border)`, `border-radius: var(--radius-md)`, `overflow: hidden`, hover: `transform: translateY(-4px)` + shadow increase.
-- "VIEW MORE PROJECTS" outline pill button centered below grid.
-
-```css
-.project-card {
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid var(--color-border);
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-.project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-}
-```
+- Subheading paragraph centered, muted: "Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks."
+- No buttons, thumbnails, category stats, or cards.
 
 ---
 
@@ -604,7 +571,7 @@ alfizilham/
 | -------------------------- | ---------------------------------------------------------------- |
 | Marquee strips (4.3, 4.10) | Infinite CSS `translateX` loop, `linear`, no pause on hover      |
 | FAQ accordion              | Click toggles `max-height` + rotates `+` icon to `×`             |
-| Skill/Project filter tabs  | Click sets active class, filters cards by `data-category`        |
+| Skill filter tabs          | Click sets active class, filters icons by `data-filter`          |
 | Search input (skills)      | `input` event filters visible cards by name match                |
 | Project/tool cards         | Hover: `translateY(-4px)` + shadow grow                          |
 | Buttons                    | Hover: opacity `0.9` + `scale(1.02)`, transition `0.2s ease`     |

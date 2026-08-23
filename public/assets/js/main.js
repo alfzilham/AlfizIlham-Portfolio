@@ -7,7 +7,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Data from PHP (passed via window.__* globals in views)
   window.TOOLS_DATA = window.__TOOLS || [];
-  window.PROJECTS_DATA = window.__PROJECTS || [];
   window.FAQS_DATA = window.__FAQS || [];
   window.SERVICES_DATA = window.__SERVICES || [];
   window.LANG = window.__LANG || 'en';
@@ -24,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollProgress();
   renderIconGrid();
   initSkillFilters();
-  renderProjectGrid();
-  initProjectFilters();
   renderServices();
   renderGallery();
   renderTestimonials();
@@ -449,79 +446,6 @@ function initSkillFilters() {
   if (searchInput) {
     searchInput.addEventListener("input", () => {
       renderIconGrid(activeFilter, searchInput.value);
-    });
-  }
-}
-
-/* --------------------------------------------------------------------------
-   PROJECT GRID (from PHP data)
-   -------------------------------------------------------------------------- */
-
-const INITIAL_PROJECT_COUNT = 6;
-let projectShowAll = false;
-let projectActiveFilter = "all";
-
-function renderProjectGrid() {
-  const grid = document.getElementById("projectGrid");
-  const viewMoreBtn = document.getElementById("viewMoreBtn");
-  if (!grid) return;
-
-  const projects = window.PROJECTS_DATA;
-  const filtered = projects.filter((p) => {
-    return projectActiveFilter === "all" || p.category === projectActiveFilter;
-  });
-
-  const visible = projectShowAll ? filtered : filtered.slice(0, INITIAL_PROJECT_COUNT);
-
-  grid.innerHTML = visible
-    .map(
-      (project) => `
-    <div class="project-card" data-category="${project.category}">
-      <img class="project-card-image" src="${project.image}" alt="${project.name}" loading="lazy" />
-      <div class="project-card-footer">
-        <div class="project-card-name">${project.name}</div>
-        <div class="project-card-category" style="text-transform:capitalize;">${project.category}</div>
-      </div>
-    </div>`
-    )
-    .join("");
-
-  if (filtered.length > INITIAL_PROJECT_COUNT && viewMoreBtn) {
-    viewMoreBtn.style.display = "";
-    viewMoreBtn.textContent = projectShowAll
-      ? (window.LANG === 'id' ? 'TAMPILKAN SEDIKIT' : 'SHOW LESS')
-      : (window.LANG === 'id' ? 'LIHAT LEBIH BANYAK' : 'VIEW MORE PROJECTS');
-  } else if (viewMoreBtn) {
-    viewMoreBtn.style.display = "none";
-  }
-}
-
-function initProjectFilters() {
-  const tabs = document.getElementById("projectTabs");
-  const viewMoreBtn = document.getElementById("viewMoreBtn");
-
-  if (tabs) {
-    tabs.addEventListener("click", (e) => {
-      const pill = e.target.closest(".filter-pill");
-      if (!pill) return;
-
-      tabs.querySelectorAll(".filter-pill").forEach((p) => {
-        p.classList.remove("active");
-        p.setAttribute("aria-pressed", "false");
-      });
-      pill.classList.add("active");
-      pill.setAttribute("aria-pressed", "true");
-
-      projectActiveFilter = pill.dataset.filter;
-      projectShowAll = false;
-      renderProjectGrid();
-    });
-  }
-
-  if (viewMoreBtn) {
-    viewMoreBtn.addEventListener("click", () => {
-      projectShowAll = !projectShowAll;
-      renderProjectGrid();
     });
   }
 }

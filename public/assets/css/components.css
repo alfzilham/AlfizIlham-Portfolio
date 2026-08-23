@@ -1113,10 +1113,6 @@
   flex-wrap: wrap;
 }
 
-.filter-bar-center {
-  justify-content: center;
-}
-
 .filter-tabs {
   display: flex;
   gap: var(--space-2);
@@ -1201,77 +1197,6 @@
 .projects-teaser h1 {
   margin-top: var(--space-3);
   margin-bottom: var(--space-4);
-}
-
-.project-categories {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
-  margin-top: var(--space-8);
-  text-align: left;
-}
-
-.project-category h3 {
-  font-size: var(--fs-h3);
-  margin-bottom: var(--space-3);
-}
-
-.project-category p {
-  font-size: var(--fs-body-sm);
-  color: var(--color-text-muted);
-}
-
-/* --------------------------------------------------------------------------
-   10. PROJECTS GRID
-   -------------------------------------------------------------------------- */
-
-.project-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-5);
-}
-
-.project-card {
-  border-radius: var(--neu-radius);
-  overflow: hidden;
-  border: none;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  background: var(--color-bg);
-  box-shadow: var(--neu-shadow-out-sm);
-}
-
-.project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--neu-shadow-out);
-}
-
-.project-card:active {
-  box-shadow: var(--neu-shadow-in-sm);
-}
-
-.project-card-image {
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-}
-
-.project-card-footer {
-  padding: 16px;
-}
-
-.project-card-name {
-  font-size: var(--fs-h4);
-  font-weight: var(--fw-semibold);
-}
-
-.project-card-category {
-  font-size: var(--fs-body-sm);
-  color: var(--color-text-muted);
-  margin-top: 2px;
-}
-
-.project-card.hidden {
-  display: none;
 }
 
 /* --------------------------------------------------------------------------

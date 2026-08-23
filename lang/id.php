@@ -87,22 +87,7 @@ return [
     // Projects Teaser
     'projects_teaser_eyebrow' => 'Proyek Saya',
     'projects_teaser_heading' => 'Penasaran Apa Yang Saya Bangun?',
-    'projects_teaser_subtitle' => 'Jelajahi identitas brand, UI/UX design, dan proyek frontend dari portofolio saya.',
-    'projects_teaser_cta' => 'LIHAT SEMUA PROYEK',
-    'projects_teaser_cat1_title' => '19 Showcase Website',
-    'projects_teaser_cat1_desc' => 'Dari landing page hingga dashboard — 19 proyek web nyata yang dibangun dan di-deploy menggunakan AI-directed development.',
-    'projects_teaser_cat2_title' => '9 Karya Desain',
-    'projects_teaser_cat2_desc' => 'Poster, banner, dan aset visual yang dibuat dengan perhatian tajam terhadap layout, hierarki, dan komunikasi brand.',
-    'projects_teaser_cat3_title' => '18 Karya Kaligrafi',
-    'projects_teaser_cat3_desc' => 'Setiap goresan dibuat dengan tangan. Tanpa AI, tanpa jalan pintas. Murni keahlian dari juara kaligrafi 7 kali.',
-
-    // Projects Grid
-    'projects_filter_all' => 'SEMUA',
-    'projects_filter_website' => 'WEBSITE',
-    'projects_filter_design' => 'DESAIN',
-    'projects_filter_calligraphy' => 'KALIGRAFI',
-    'projects_view_more' => 'LIHAT LEBIH BANYAK',
-    'projects_show_less' => 'TAMPILKAN SEDIKIT',
+    'projects_teaser_subtitle' => 'Jelajahi website produksi, dashboard, dan aplikasi terintegrasi AI yang dibangun end-to-end dengan stack modern.',
 
     // Services
     'services_heading' => 'BAGAIMANA SAYA BISA MEMBANTU',
