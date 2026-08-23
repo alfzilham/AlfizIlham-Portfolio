@@ -286,15 +286,23 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 
 ---
 
-### 4.7 Projects Teaser ("Curious What I've Built?")
+### 4.7 Projects Showcase ("Curious What I've Built?")
 
-**Purpose**: Lightweight section anchor introducing the portfolio (the former filterable grid was removed).
+**Purpose**: Two-column hero-style section pairing pitch copy with an interactive 3D depth carousel of design & calligraphy works.
 
 - Section id `#project` — anchor target for navbar, mobile menu, footer, and hero "View My Work" CTA
-- Small eyebrow label "My Projects" centered
-- Heading: "Curious What I've Built?" (`--fs-h1`, centered)
-- Subheading paragraph centered, muted: "Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks."
-- No buttons, thumbnails, category stats, or cards.
+- Layout: `.project-showcase` grid `1fr 1fr`, gap `48px`, `align-items: center`; stacks to a single column at ≤1024px (content first, visual below at reduced min-height)
+- **Left column (content)**:
+  - Eyebrow pill "My Projects"
+  - Heading: "Curious What I've Built?" (`--fs-h1`)
+  - Subtitle (muted, max-width `480px`): "Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks."
+  - CTA row: primary "Start a Project" → `#contact` · ghost "WhatsApp Me" → wa.me link (new tab) · secondary "View Project" → placeholder `#` (demo, to be wired later)
+- **Right column (visual)**: Depth Carousel (vanilla port of ReactBits DepthCarousel, GSAP) with 27 PHP-rendered cards — all non-website projects (9 design posters + 18 calligraphy pieces), sorted by `sort_order`
+  - Cards `300×380px`, radius `18px`, dark bg `#0b0d12`, tint overlay `#05060a` (multiply) brightening falloff per depth
+  - Depth config: perspective `1400px`, depth `220`, spread `90`, tilt `22°` right, visibleCards `4`, blur `6px`
+  - Interactions: pointer drag with velocity projection, prev/next glassy arrows, dot indicators (active dot widens), keyboard ← → (root focusable), autoplay every `3.2s` pausing on hover/focus; wheel navigation intentionally omitted to avoid conflict with Lenis page scroll
+  - Hint caption below: "DRAG TO EXPLORE" (uppercase, faint)
+  - Images use `loading="lazy"` + `decoding="async"`; respects `prefers-reduced-motion` (no tween/autoplay)
 
 ---
 
@@ -581,3 +589,4 @@ alfizilham/
 | Bio statement (4.5)        | "FoldText" word-by-word fold entrance (GSAP, top hinge, once)    |
 | Stat numbers (4.5)         | Count-up `0 → target` on scroll (GSAP, suffix preserved)         |
 | Skill icons (4.6)          | Hover: one-shot rotate wiggle + black pill tooltip (`category_label`) |
+| Projects carousel (4.7)    | Drag/arrows/keyboard/autoplay 3D depth carousel (GSAP, loop)     |

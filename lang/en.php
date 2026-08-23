@@ -88,6 +88,10 @@ return [
     'projects_teaser_eyebrow' => 'My Projects',
     'projects_teaser_heading' => 'Curious What I\'ve Built?',
     'projects_teaser_subtitle' => 'Explore production websites, dashboards, and AI-integrated applications built end-to-end with modern stacks.',
+    'projects_cta_start' => 'Start a Project',
+    'projects_cta_whatsapp' => 'WhatsApp Me',
+    'projects_cta_view' => 'View Project',
+    'projects_hint' => 'Drag to explore',
 
     // Services
     'services_heading' => 'HOW CAN I HELP YOU',

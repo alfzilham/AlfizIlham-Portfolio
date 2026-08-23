@@ -171,6 +171,20 @@
     gap: var(--space-6);
   }
 
+  /* Projects Showcase */
+  .project-showcase {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .project-showcase-visual {
+    min-height: 360px;
+  }
+
+  .depth-carousel {
+    min-height: 360px;
+  }
+
   .about-avatar {
     max-width: 320px;
     margin: 0 auto;

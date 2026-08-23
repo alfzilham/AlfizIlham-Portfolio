@@ -88,6 +88,10 @@ return [
     'projects_teaser_eyebrow' => 'Proyek Saya',
     'projects_teaser_heading' => 'Penasaran Apa Yang Saya Bangun?',
     'projects_teaser_subtitle' => 'Jelajahi website produksi, dashboard, dan aplikasi terintegrasi AI yang dibangun end-to-end dengan stack modern.',
+    'projects_cta_start' => 'Mulai Proyek',
+    'projects_cta_whatsapp' => 'Chat WhatsApp',
+    'projects_cta_view' => 'Lihat Proyek',
+    'projects_hint' => 'Geser untuk menjelajah',
 
     // Services
     'services_heading' => 'BAGAIMANA SAYA BISA MEMBANTU',
