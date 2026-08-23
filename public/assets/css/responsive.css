@@ -120,11 +120,6 @@
     height: 520px;
   }
 
-  .education-node-1 { left: 6%;  top: 82%; }
-  .education-node-2 { left: 34%; top: 34%; }
-  .education-node-3 { left: 62%; top: 68%; }
-  .education-node-4 { left: 86%; top: 18%; }
-
   .education-ghost-num {
     font-size: 90px;
   }
@@ -477,7 +472,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-    padding-left: 32px;
+    padding-left: 48px;
   }
 
   .education-diagram::before {
@@ -500,20 +495,6 @@
 
   .education-wave { display: none; }
   .education-ghost-num { display: none; }
-
-  .education-node {
-    position: relative;
-    left: 0 !important;
-    top: 0 !important;
-    margin-left: 0;
-    transform: rotate(45deg) scale(0.4);
-    margin-bottom: 14px;
-  }
-
-  .education-node-1 { animation-delay: 0.15s; }
-  .education-node-2 { animation-delay: 0.65s; }
-  .education-node-3 { animation-delay: 1.15s; }
-  .education-node-4 { animation-delay: 1.65s; }
 
   .education-step {
     position: relative;

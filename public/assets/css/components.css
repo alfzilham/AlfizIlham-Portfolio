@@ -2139,41 +2139,6 @@
   to { stroke-dashoffset: 0; }
 }
 
-.education-node {
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--neu-shadow-out);
-  z-index: 3;
-  transform: rotate(45deg) scale(0.4);
-  opacity: 0;
-  animation: edu-pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-.education-node svg {
-  transform: rotate(-45deg);
-  width: 24px;
-  height: 24px;
-}
-
-@keyframes edu-pop-in {
-  to {
-    opacity: 1;
-    transform: rotate(45deg) scale(1);
-  }
-}
-
-.education-node-1 { left: 9%;  top: 76%; animation-delay: 0.15s; }
-.education-node-2 { left: 36%; top: 26%; animation-delay: 0.8s; }
-.education-node-3 { left: 63%; top: 60%; animation-delay: 1.4s; }
-.education-node-4 { left: 88%; top: 30%; animation-delay: 2.0s; }
-
 .education-ghost-num {
   position: absolute;
   font-size: 110px;
