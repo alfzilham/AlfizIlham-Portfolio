@@ -13,7 +13,7 @@ Personal portfolio website for **Alfiz Ilham** — Software & AI Engineer, Co-Fo
 
 - 15-section single-page portfolio
 - Bilingual support (EN/ID) with PHP session-based toggle
-- Filterable skills directory (44 tools, 6 categories)
+- Filterable skills directory (56 tools, 8 categories)
 - Filterable projects grid (46 projects: 19 websites, 9 design, 18 calligraphy)
 - Contact form with EmailJS + PHP fallback
 - Real-time visitor counter (SQLite-based)

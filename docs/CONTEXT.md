@@ -13,7 +13,7 @@ The site is a single-page (`index.php`) PHP MVC portfolio combining:
 - Software/web development case studies (19 website projects)
 - Design work (9 pieces — posters, banners, brand assets)
 - Naskh calligraphy portfolio (18 pieces, 7-time calligraphy champion, 500+ commissions)
-- A full tech-stack directory (filterable, searchable — 44 tools)
+- A full tech-stack directory (filterable, searchable — 56 tools)
 - A working contact form + embedded map (Banda Aceh)
 - Community/organizational activity documentation (B&W photo gallery)
 
@@ -27,7 +27,7 @@ The site is bilingual (EN/ID toggle in navbar) — English is the default langua
 |------|---------------|
 | **Convert visitors into clients/leads** | Primary CTA repeats throughout ("Let's Build Something", "Start a Project", "Send Message") — this is a service-selling site, not just a resume. |
 | **Establish credibility across 3 disciplines** | Alfiz isn't just a developer — the site must convincingly present dev, design, _and_ calligraphy as serious, professional skill areas (500+ commissions, 7-time champion). |
-| **Show breadth of technical skill** | The full tech-stack grid + filterable tool directory (44 tools) exists to reassure technical clients/recruiters that stack knowledge is real and current. |
+| **Show breadth of technical skill** | The full tech-stack grid + filterable tool directory (56 tools) exists to reassure technical clients/recruiters that stack knowledge is real and current. |
 | **Feel personal and human, not templated** | Heavy use of a custom 3D mascot illustration, playful marquees, and a monochrome-but-bold visual identity — differentiates from generic portfolio templates. |
 | **Local + international reach** | Contact section centers on Banda Aceh (local market, UMKM clients via althentic.dev) while the overall English-first copy and "outside Indonesia" FAQ signal openness to international clients. |
 
