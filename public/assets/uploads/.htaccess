@@ -1,0 +1,6 @@
+# Uploads: images only — never execute scripts here
+php_flag engine off
+
+<FilesMatch "(?i)\.(php|phtml|phar|cgi|pl|py|asp|aspx|jsp)$">
+  Require all denied
+</FilesMatch>

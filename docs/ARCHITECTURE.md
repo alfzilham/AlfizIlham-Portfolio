@@ -219,6 +219,12 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 
 **Production:** Any PHP-compatible host (shared hosting, VPS, DigitalOcean App Platform). No build step required — pure PHP with SQLite.
 
+**Security hardening (active):**
+- Root `.htaccess` returns **404** for sensitive paths — `.git`, `.opencode`, `graphify-out`, `config/`, `data/`, `logs/`, `app/`, `views/`, `lang/`, `docs/`, `seed.php`, `bootstrap.php` — plus dangerous extensions (.sqlite/.ini/.bak/etc.), hidden dotfiles, and TRACE/TRACK methods
+- `public/assets/uploads/.htaccess` disables PHP execution inside the uploads directory
+- Security headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; `X-Powered-By` removed (`expose_php=Off` in php.ini)
+- Admin password stored as bcrypt hash in `config/config.php`; all editor endpoints session-gated (401 without login)
+
 **Note:** For production, consider:
 - Moving `data/database.sqlite` outside web root
 - Setting proper file permissions on `data/`

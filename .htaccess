@@ -1,11 +1,35 @@
-# Block web access to sensitive paths (server-side includes still work)
-RedirectMatch 403 (?i)/(config|data|logs|app|views|lang)/
-RedirectMatch 403 (?i)/(seed\.php|bootstrap\.php|composer\.(json|lock)|\.env)
+# ==========================================================
+# SECURITY HARDENING — sensitive paths return 404 (not found)
+# so they cannot be discovered by scanners
+# ==========================================================
 
-# Deny database & log files anywhere
-<FilesMatch "\.(sqlite|db|log)$">
+# --- Sensitive directories ---
+RedirectMatch 404 (?i)/(\.git|\.svn|\.hg|\.opencode|graphify-out)(/|$)
+RedirectMatch 404 (?i)/(config|data|logs|app|views|lang|docs)(/|$)
+
+# --- Sensitive root files ---
+RedirectMatch 404 (?i)/(seed\.php|bootstrap\.php|agent\.md|readme\.md|license|composer\.(json|lock)|\.env)$
+
+# --- Dangerous file extensions anywhere (mod_alias runs before FilesMatch) ---
+RedirectMatch 404 (?i)\.(sqlite|db|log|ini|sh|bat|yml|yaml|bak|orig|swp|dist|inc|sql|env)$
+
+# --- Hidden dotfiles (.gitignore, .DS_Store, etc.) ---
+<FilesMatch "(?i)^\.(?!well-known)">
   Require all denied
 </FilesMatch>
 
-# Prevent directory listing
+# --- Block TRACE/TRACK methods ---
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK) [NC]
+RewriteRule .* - [F]
+
+# --- Security headers ---
+<IfModule mod_headers.c>
+  Header always unset X-Powered-By
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- No directory listing ---
 Options -Indexes
