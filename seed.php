@@ -116,6 +116,7 @@ CREATE TABLE IF NOT EXISTS showcase_projects (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     image TEXT NOT NULL,
+    link TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )
 ");

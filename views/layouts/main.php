@@ -124,6 +124,10 @@
         <textarea id="cardDescription" name="description" rows="3" placeholder="<?= i18n::t('form_desc_placeholder') ?>" required></textarea>
         <span class="form-error" id="cardDescError"></span>
 
+        <label for="cardLink"><?= i18n::t('form_link_label') ?></label>
+        <input type="url" id="cardLink" name="link" placeholder="<?= i18n::t('form_link_placeholder') ?>" />
+        <span class="form-error" id="cardLinkError"></span>
+
         <label><?= i18n::t('form_image_label') ?></label>
         <div class="dropzone" id="dropzone">
           <input type="file" id="cardImage" name="image" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
@@ -144,16 +148,52 @@
     </div>
   </div>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" hidden>
-    <button type="button" class="modal-close lightbox-close" data-close-lightbox aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
-    <figure class="lightbox-figure">
+  <!-- Editor mode: delete confirmation modal -->
+  <div class="editor-overlay" id="deleteOverlay" hidden>
+    <div class="editor-modal editor-modal-sm" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+      <div class="delete-icon"><i data-lucide="triangle-alert"></i></div>
+      <h2 id="deleteModalTitle"><?= i18n::t('delete_modal_title') ?></h2>
+      <p class="delete-card-name" id="deleteCardName"></p>
+      <div class="delete-actions">
+        <button type="button" class="btn btn-secondary" data-close-delete><?= i18n::t('delete_cancel') ?></button>
+        <button type="button" class="btn btn-danger" id="deleteConfirmBtn"><?= i18n::t('editor_delete') ?></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox (macOS-style viewer) -->
+  <div class="lb-viewer" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Project viewer">
+    <div class="lb-counter" id="lbCounter">1 / 1</div>
+
+    <div class="lb-actions">
+      <a href="#" id="lbLinkBtn" class="lb-action" target="_blank" rel="noopener" hidden aria-label="Visit live site">
+        <i data-lucide="external-link"></i>
+      </a>
+      <button type="button" class="lb-action" data-close-lightbox aria-label="<?= i18n::t('lightbox_close') ?>">
+        <i data-lucide="x"></i>
+      </button>
+    </div>
+
+    <button type="button" class="lb-arrow lb-arrow--prev" id="lbPrev" aria-label="Previous">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <figure class="lb-stage">
       <img id="lightboxImage" src="" alt="" />
-      <figcaption>
+      <figcaption class="lb-scrim">
         <h3 id="lightboxTitle"></h3>
         <p id="lightboxDescription"></p>
+        <a href="#" id="lbVisitLink" target="_blank" rel="noopener" hidden>
+          <?= i18n::t('lb_visit') ?> <i data-lucide="external-link"></i>
+        </a>
       </figcaption>
     </figure>
+
+    <button type="button" class="lb-arrow lb-arrow--next" id="lbNext" aria-label="Next">
+      <i data-lucide="chevron-right"></i>
+    </button>
+
+    <div class="lb-filmstrip" id="lbFilmstrip"></div>
   </div>
 
   <!-- Editor mode floating toolbar -->
@@ -167,9 +207,6 @@
       <i data-lucide="plus"></i><?= i18n::t('editor_add_project') ?>
     </button>
     <span class="editor-toolbar-divider"></span>
-    <button type="button" id="editorExitBtn" class="editor-toolbar-btn">
-      <i data-lucide="log-out"></i><?= i18n::t('editor_exit') ?>
-    </button>
     <button type="button" id="editorLogoutBtn" class="editor-toolbar-btn editor-toolbar-muted">
       <i data-lucide="user-x"></i><?= i18n::t('editor_logout') ?>
     </button>

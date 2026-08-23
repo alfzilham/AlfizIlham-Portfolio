@@ -33,6 +33,7 @@ $chromaPalette = [
           data-title="<?= sanitize($card['title']) ?>"
           data-description="<?= sanitize($card['description']) ?>"
           data-image="<?= sanitize($card['image']) ?>"
+          data-link="<?= sanitize($card['link'] ?? '') ?>"
           style="--card-border: <?= $palette['border'] ?>; --card-gradient: <?= $palette['gradient'] ?>"
         >
           <button type="button" class="chroma-menu-btn" aria-label="<?= i18n::t('editor_card_menu') ?>">
@@ -53,6 +54,27 @@ $chromaPalette = [
       <?php endforeach; ?>
       <div class="chroma-overlay"></div>
       <div class="chroma-fade"></div>
+    </div>
+
+    <!-- Load more (public, when cards > 6) -->
+    <div class="chroma-load-more" id="chromaLoadMoreWrap" hidden>
+      <button type="button" id="chromaLoadMoreBtn" class="btn btn-outline"><?= i18n::t('projects_load_more') ?></button>
+    </div>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="container text-center showcase-stats">
+    <div class="showcase-stat">
+      <span class="stat-value"><?= count($showcase) ?></span>
+      <span class="stat-label"><?= i18n::t('stats_featured_label') ?></span>
+    </div>
+    <p class="showcase-strip-sentence">
+      <?= i18n::t('strip_sentence') ?>
+      <i data-lucide="arrow-down"></i>
+    </p>
+    <div class="showcase-stat">
+      <span class="stat-value"><?= count($galleryItems) ?></span>
+      <span class="stat-label"><?= i18n::t('stats_gallery_label') ?></span>
     </div>
   </div>
 

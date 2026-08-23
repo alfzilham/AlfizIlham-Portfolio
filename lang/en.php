@@ -207,4 +207,16 @@ return [
 
     // Lightbox
     'lightbox_close' => 'Close',
+    'lb_visit' => 'Visit Live Site',
+
+    // Showcase extras
+    'projects_load_more' => 'Load More Projects',
+    'stats_featured_label' => 'Featured Projects',
+    'stats_gallery_label' => 'In Circular Gallery',
+    'strip_sentence' => 'More creations await — glide into the living gallery below.',
+    'form_link_label' => 'Live URL (optional)',
+    'form_link_placeholder' => 'https://your-live-project.com',
+    'form_error_link' => 'Enter a valid URL (http/https)',
+    'delete_modal_title' => 'Delete this project?',
+    'delete_cancel' => 'Cancel',
 ];

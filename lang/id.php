@@ -207,4 +207,16 @@ return [
 
     // Lightbox
     'lightbox_close' => 'Tutup',
+    'lb_visit' => 'Lihat Situs Live',
+
+    // Showcase extras
+    'projects_load_more' => 'Muat Lebih Banyak Proyek',
+    'stats_featured_label' => 'Proyek Unggulan',
+    'stats_gallery_label' => 'Di Galeri Melingkar',
+    'strip_sentence' => 'Masih banyak karya menanti — jelajahi galeri hidup di bawah ini.',
+    'form_link_label' => 'URL Live (opsional)',
+    'form_link_placeholder' => 'https://proyek-anda.com',
+    'form_error_link' => 'Masukkan URL yang valid (http/https)',
+    'delete_modal_title' => 'Hapus proyek ini?',
+    'delete_cancel' => 'Batal',
 ];

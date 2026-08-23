@@ -911,20 +911,27 @@ function initEditorMode() {
   let editorOn = false;
   let editingId = null;
   let selectedFile = null;
+  let objectUrl = null;
 
   const loginOverlay = document.getElementById("editorLoginOverlay");
   const loginForm = document.getElementById("editorLoginForm");
   const passwordInput = document.getElementById("editorPassword");
   const loginError = document.getElementById("editorLoginError");
 
+  const deleteOverlay = document.getElementById("deleteOverlay");
+  const deleteCardName = document.getElementById("deleteCardName");
+  let pendingDeleteCard = null;
+
   const formOverlay = document.getElementById("cardFormOverlay");
   const cardForm = document.getElementById("cardForm");
   const cardFormTitle = document.getElementById("cardFormTitle");
   const titleInput = document.getElementById("cardTitle");
   const descInput = document.getElementById("cardDescription");
+  const linkInput = document.getElementById("cardLink");
   const titleError = document.getElementById("cardTitleError");
   const descError = document.getElementById("cardDescError");
   const imageError = document.getElementById("cardImageError");
+  const linkError = document.getElementById("cardLinkError");
   const submitBtn = document.getElementById("cardFormSubmit");
 
   const dropzone = document.getElementById("dropzone");
@@ -958,17 +965,30 @@ function initEditorMode() {
     if (!isDesktop()) return;
     editorOn = true;
     body.classList.add("editor-mode");
+    applyChromaVisibility();
     if (window.lucide) lucide.createIcons();
   }
 
   function exitEditor() {
     editorOn = false;
     body.classList.remove("editor-mode");
+    chromaShown = CHROMA_PAGE;
+    applyChromaVisibility();
     closeAllMenus();
   }
 
-  // ---------- shortcut Ctrl+Shift+E (desktop only) ----------
+  // ---------- keyboard ----------
   document.addEventListener("keydown", (e) => {
+    if (lightbox && !lightbox.hidden) {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        lbNav(-1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        lbNav(1);
+      }
+      return;
+    }
     if (e.ctrlKey && e.shiftKey && (e.key === "E" || e.key === "e")) {
       e.preventDefault();
       if (!isDesktop()) return;
@@ -981,7 +1001,10 @@ function initEditorMode() {
     }
     if (e.key === "Escape") {
       closeAllMenus();
-      if (loginOverlay && !loginOverlay.hidden) {
+      if (deleteOverlay && !deleteOverlay.hidden) {
+        pendingDeleteCard = null;
+        closeOverlay(deleteOverlay);
+      } else if (loginOverlay && !loginOverlay.hidden) {
         closeOverlay(loginOverlay);
         loginError.textContent = "";
         loginForm.reset();
@@ -1003,7 +1026,7 @@ function initEditorMode() {
     body.classList.remove("card-form-open");
   }
 
-  [loginOverlay, formOverlay].forEach((ov) => {
+  [loginOverlay, formOverlay, deleteOverlay].forEach((ov) => {
     if (!ov) return;
     ov.addEventListener("pointerdown", (e) => {
       if (e.target === ov) {
@@ -1047,13 +1070,25 @@ function initEditorMode() {
     }
   });
 
-  document.getElementById("editorExitBtn")?.addEventListener("click", exitEditor);
-
   document.getElementById("editorLogoutBtn")?.addEventListener("click", async () => {
     await fetch("index.php?/api/admin/logout", { method: "POST" }).catch(() => {});
     isAdmin = false;
     window.__IS_ADMIN = false;
     exitEditor();
+  });
+
+  // ---------- delete confirmation modal ----------
+  document.getElementById("deleteConfirmBtn")?.addEventListener("click", async () => {
+    if (!pendingDeleteCard) return;
+    const card = pendingDeleteCard;
+    pendingDeleteCard = null;
+    closeOverlay(deleteOverlay);
+    await deleteCard(card);
+  });
+
+  document.querySelector("[data-close-delete]")?.addEventListener("click", () => {
+    pendingDeleteCard = null;
+    closeOverlay(deleteOverlay);
   });
 
   // Auto-exit editor when viewport drops below desktop
@@ -1082,8 +1117,9 @@ function initEditorMode() {
       if (actionBtn.dataset.action === "edit") {
         openForm(card);
       } else if (actionBtn.dataset.action === "delete") {
-        const msg = isId() ? "Hapus proyek ini?" : "Delete this project?";
-        if (confirm(msg)) deleteCard(card);
+        pendingDeleteCard = card;
+        deleteCardName.textContent = card.dataset.title || "";
+        openOverlay(deleteOverlay);
       }
       return;
     }
@@ -1110,15 +1146,86 @@ function initEditorMode() {
     } catch (_) {}
   }
 
-  // ---------- lightbox ----------
-  function openLightbox(data) {
+  // ---------- lightbox (macOS-style viewer) ----------
+  const lbCounter = document.getElementById("lbCounter");
+  const lbLinkBtn = document.getElementById("lbLinkBtn");
+  const lbVisitLink = document.getElementById("lbVisitLink");
+  const lbFilmstrip = document.getElementById("lbFilmstrip");
+  const lbPrev = document.getElementById("lbPrev");
+  const lbNext = document.getElementById("lbNext");
+
+  let lbItems = [];
+  let lbIndex = 0;
+
+  function collectLbItems() {
+    return Array.from(grid.querySelectorAll(".chroma-card")).map((c) => ({
+      image: c.dataset.image || "",
+      title: c.dataset.title || "",
+      description: c.dataset.description || "",
+      link: c.dataset.link || "",
+    }));
+  }
+
+  function renderLb() {
+    if (!lbItems.length) return;
+    const item = lbItems[lbIndex];
     const img = document.getElementById("lightboxImage");
-    const t = document.getElementById("lightboxTitle");
-    const d = document.getElementById("lightboxDescription");
-    img.src = data.image || "";
-    img.alt = data.title || "";
-    t.textContent = data.title || "";
-    d.textContent = data.description || "";
+    img.src = item.image;
+    img.alt = item.title || "";
+    document.getElementById("lightboxTitle").textContent = item.title || "";
+    document.getElementById("lightboxDescription").textContent = item.description || "";
+    lbCounter.textContent = `${lbIndex + 1} / ${lbItems.length}`;
+
+    if (item.link) {
+      lbLinkBtn.href = item.link;
+      lbLinkBtn.hidden = false;
+      lbVisitLink.href = item.link;
+      lbVisitLink.hidden = false;
+    } else {
+      lbLinkBtn.hidden = true;
+      lbVisitLink.hidden = true;
+    }
+
+    lbFilmstrip.querySelectorAll(".lb-thumb").forEach((thumb, i) => {
+      thumb.classList.toggle("is-active", i === lbIndex);
+      if (i === lbIndex) {
+        thumb.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+      }
+    });
+  }
+
+  function buildLbStrip() {
+    lbFilmstrip.innerHTML = "";
+    lbItems.forEach((item, i) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "lb-thumb";
+      b.setAttribute("aria-label", item.title || `Slide ${i + 1}`);
+      const img = document.createElement("img");
+      img.src = item.image;
+      img.alt = "";
+      img.loading = "lazy";
+      b.appendChild(img);
+      b.addEventListener("click", () => {
+        lbIndex = i;
+        renderLb();
+      });
+      lbFilmstrip.appendChild(b);
+    });
+  }
+
+  function lbNav(delta) {
+    if (!lbItems.length) return;
+    lbIndex = (lbIndex + delta + lbItems.length) % lbItems.length;
+    renderLb();
+  }
+
+  function openLightbox(card) {
+    lbItems = collectLbItems();
+    const idx = lbItems.findIndex((it) => it.image === card.dataset.image);
+    lbIndex = idx >= 0 ? idx : 0;
+    buildLbStrip();
+    renderLb();
     openOverlay(lightbox);
   }
 
@@ -1126,6 +1233,8 @@ function initEditorMode() {
     closeOverlay(lightbox);
   }
 
+  lbPrev?.addEventListener("click", () => lbNav(-1));
+  lbNext?.addEventListener("click", () => lbNav(1));
   lightbox?.addEventListener("pointerdown", (e) => {
     if (e.target === lightbox) closeLightbox();
   });
@@ -1186,6 +1295,21 @@ function initEditorMode() {
     titleError.textContent = "";
     descError.textContent = "";
     imageError.textContent = "";
+    linkError.textContent = "";
+  }
+
+  function clearFormState() {
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+    }
+    editingId = null;
+    selectedFile = null;
+    fileInput.value = "";
+    dzPreviewImg.removeAttribute("src");
+    dzPreview.hidden = true;
+    dzEmpty.hidden = false;
+    cardForm.reset();
   }
 
   function showEmptyDropzone() {
@@ -1196,6 +1320,10 @@ function initEditorMode() {
   }
 
   function showPreviewFromUrl(url) {
+    if (objectUrl) {
+      URL.revokeObjectURL(objectUrl);
+      objectUrl = null;
+    }
     selectedFile = null;
     fileInput.value = "";
     dzPreviewImg.src = url;
@@ -1219,27 +1347,29 @@ function initEditorMode() {
       return;
     }
     imageError.textContent = "";
+    if (objectUrl) URL.revokeObjectURL(objectUrl);
+    objectUrl = URL.createObjectURL(file);
     selectedFile = file;
-    dzPreviewImg.src = URL.createObjectURL(file);
+    dzPreviewImg.src = objectUrl;
     dzName.textContent = file.name;
     dzEmpty.hidden = true;
     dzPreview.hidden = false;
   }
 
   function openForm(card) {
-    editingId = card ? Number(card.dataset.id) : null;
-    selectedFile = null;
+    clearFormState();
     resetErrors();
-    cardForm.reset();
 
     if (card) {
+      editingId = Number(card.dataset.id);
       cardFormTitle.textContent = isId() ? "Edit Proyek" : "Edit Project";
       titleInput.value = card.dataset.title || "";
       descInput.value = card.dataset.description || "";
+      linkInput.value = card.dataset.link || "";
       showPreviewFromUrl(card.dataset.image || "");
     } else {
       cardFormTitle.textContent = ADD_LABEL;
-      showEmptyDropzone();
+      linkInput.value = "";
     }
     openCardForm();
     setTimeout(() => titleInput.focus(), 50);
@@ -1290,11 +1420,19 @@ function initEditorMode() {
       imageError.textContent = isId() ? "Silakan pilih gambar" : "Please choose an image";
       valid = false;
     }
+    const linkVal = linkInput.value.trim();
+    if (linkVal && !/^https?:\/\//i.test(linkVal)) {
+      linkError.textContent = isId()
+        ? "Masukkan URL yang valid (http/https)"
+        : "Enter a valid URL (http/https)";
+      valid = false;
+    }
     if (!valid) return;
 
     const fd = new FormData();
     fd.append("title", titleInput.value.trim());
     fd.append("description", descInput.value.trim());
+    fd.append("link", linkVal);
     if (selectedFile) fd.append("image", selectedFile);
 
     const url = editingId
@@ -1307,10 +1445,12 @@ function initEditorMode() {
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success && data.card) {
         upsertCardNode(data.card);
+        clearFormState();
         closeCardForm();
       } else if (data.errors) {
         titleError.textContent = data.errors.title || "";
         descError.textContent = data.errors.description || "";
+        linkError.textContent = data.errors.link || "";
       } else {
         imageError.textContent = data.error || "Error";
       }
@@ -1322,6 +1462,28 @@ function initEditorMode() {
   });
 
   // ---------- DOM node builder ----------
+  // ---------- load more pagination (+6, public view only) ----------
+  const CHROMA_PAGE = 6;
+  let chromaShown = CHROMA_PAGE;
+  const loadWrap = document.getElementById("chromaLoadMoreWrap");
+  const loadBtn = document.getElementById("chromaLoadMoreBtn");
+
+  function applyChromaVisibility() {
+    const cards = Array.from(grid.querySelectorAll(".chroma-card"));
+    let hiddenCount = 0;
+    cards.forEach((card, i) => {
+      const hide = !editorOn && i >= chromaShown;
+      card.classList.toggle("chroma-extra", hide);
+      if (hide) hiddenCount++;
+    });
+    if (loadWrap) loadWrap.hidden = editorOn || hiddenCount === 0;
+  }
+
+  loadBtn?.addEventListener("click", () => {
+    chromaShown += CHROMA_PAGE;
+    applyChromaVisibility();
+  });
+
   function buildCardNode(card) {
     const article = document.createElement("article");
     article.className = "chroma-card";
@@ -1329,18 +1491,10 @@ function initEditorMode() {
     article.dataset.title = card.title;
     article.dataset.description = card.description;
     article.dataset.image = card.image;
+    article.dataset.link = card.link || "";
 
-    const palette = [
-      ["#4F46E5", "linear-gradient(145deg, #4F46E5, #000)"],
-      ["#10B981", "linear-gradient(210deg, #10B981, #000)"],
-      ["#F59E0B", "linear-gradient(165deg, #F59E0B, #000)"],
-      ["#EF4444", "linear-gradient(195deg, #EF4444, #000)"],
-      ["#8B5CF6", "linear-gradient(225deg, #8B5CF6, #000)"],
-      ["#06B6D4", "linear-gradient(135deg, #06B6D4, #000)"],
-    ];
-    const p = palette[Number(card.id) % palette.length];
-    article.style.setProperty("--card-border", p[0]);
-    article.style.setProperty("--card-gradient", p[1]);
+    const borders = ["#4F46E5", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"];
+    article.style.setProperty("--card-border", borders[Number(card.id) % borders.length]);
 
     article.innerHTML = `
       <button type="button" class="chroma-menu-btn" aria-label="Card menu">
@@ -1375,7 +1529,10 @@ function initEditorMode() {
       grid.insertBefore(node, anchor);
     }
     if (window.lucide) lucide.createIcons();
+    applyChromaVisibility();
   }
+
+  applyChromaVisibility();
 }
 
 /* --------------------------------------------------------------------------

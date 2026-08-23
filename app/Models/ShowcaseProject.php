@@ -18,9 +18,23 @@ class ShowcaseProject
                 title TEXT NOT NULL,
                 description TEXT NOT NULL,
                 image TEXT NOT NULL,
+                link TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+
+        // Migration: add link column to pre-existing tables
+        $hasLink = false;
+        foreach ($db->fetchAll("PRAGMA table_info(showcase_projects)") as $col) {
+            if ($col['name'] === 'link') {
+                $hasLink = true;
+                break;
+            }
+        }
+        if (!$hasLink) {
+            $db->exec("ALTER TABLE showcase_projects ADD COLUMN link TEXT");
+        }
+
         $done = true;
     }
 
@@ -47,7 +61,7 @@ class ShowcaseProject
     /**
      * Create a new showcase project
      */
-    public static function create($title, $description, $image)
+    public static function create($title, $description, $image, $link = null)
     {
         self::ensureTable();
         $db = Database::getInstance();
@@ -55,6 +69,7 @@ class ShowcaseProject
             'title' => $title,
             'description' => $description,
             'image' => $image,
+            'link' => $link,
             'created_at' => date('Y-m-d H:i:s'),
         ]);
     }
@@ -62,18 +77,18 @@ class ShowcaseProject
     /**
      * Update an existing showcase project
      */
-    public static function update($id, $title, $description, $image = null)
+    public static function update($id, $title, $description, $image = null, $link = null)
     {
         self::ensureTable();
         $db = Database::getInstance();
         if ($image !== null) {
             return $db->getPdo()->prepare(
-                "UPDATE showcase_projects SET title = ?, description = ?, image = ? WHERE id = ?"
-            )->execute([$title, $description, $image, (int) $id]);
+                "UPDATE showcase_projects SET title = ?, description = ?, image = ?, link = ? WHERE id = ?"
+            )->execute([$title, $description, $image, $link, (int) $id]);
         }
         return $db->getPdo()->prepare(
-            "UPDATE showcase_projects SET title = ?, description = ? WHERE id = ?"
-        )->execute([$title, $description, (int) $id]);
+            "UPDATE showcase_projects SET title = ?, description = ?, link = ? WHERE id = ?"
+        )->execute([$title, $description, $link, (int) $id]);
     }
 
     /**

@@ -216,11 +216,14 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 **Upload rules**: finfo MIME whitelist (jpeg/png/webp/gif), max 5 MB, resized to max 1600px, converted to WebP quality 85 via GD, random filename stored in `public/assets/uploads/showcase/`.
 
 **UI behaviors**:
-- ChromaGrid (3×320px columns, dark gradient cards with rotating accent palette) sits between the subtitle and the circular gallery; hidden when empty
+- ChromaGrid (3×320px columns, **white cards** with rotating colored hover-border accents) sits between the subtitle and the circular gallery; hidden when empty
 - Card hover: image scales ×1.06 + per-card radial spotlight; grid-level grayscale mask follows cursor (GSAP)
-- Kebab ⋮ button (editor mode only): Edit reopens prefilled form modal; Delete uses native `confirm()`
-- Click card outside editor mode → lightbox (image + title + description); disabled while editor mode is on
-- `Ctrl+Shift+E` toggles editor UI when already authenticated; floating glass toolbar shows status dot · Add Project · Exit · Logout
+- Kebab ⋮ button (editor mode only): Edit reopens prefilled form modal; Delete opens a **custom confirmation modal** (Cancel / Delete)
+- Optional **Live URL** field in the form (auto-prepends https://, validated); surfaced in the lightbox as an external-link action + inline caption link
+- Public view paginates: first 6 cards visible, **Load More Projects** reveals +6 per click; editor mode always shows all cards
+- Stats strip below the grid (3 columns): featured-card count · linking sentence toward the gallery · circular-gallery works count
+- Click card outside editor mode → **macOS-style lightbox**: black immersive backdrop, index counter, external-link + close actions, wrap-around prev/next arrows, bottom filmstrip with active highlight, title/description scrim on the image; keyboard ← → navigates
+- `Ctrl+Shift+E` toggles editor UI when already authenticated; floating glass toolbar shows status dot · Add Project · Logout
 - **Editor mode is desktop-only (viewport > 1024px)**: the shortcut is ignored on smaller viewports, all editor UI is hidden via CSS, and resizing below the threshold auto-exits editor mode; public features (cards, hover, lightbox) remain fully available
 
 **Acceptance criteria**: unauthenticated writes get 401; created cards persist in SQLite (`showcase_projects`, newest first) and appear for all visitors after reload; uploaded images are served as `.webp`; deleting a card removes its image file.

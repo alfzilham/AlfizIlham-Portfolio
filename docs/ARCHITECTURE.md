@@ -168,6 +168,7 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 | title | TEXT | Card title |
 | description | TEXT | Card description |
 | image | TEXT | WebP path (assets/uploads/showcase/) |
+| link | TEXT NULL | Optional live project URL |
 | created_at | DATETIME | Timestamp |
 
 ---

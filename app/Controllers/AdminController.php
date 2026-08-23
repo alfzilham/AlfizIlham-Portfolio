@@ -66,8 +66,9 @@ class AdminController
 
         $title = sanitize($_POST['title'] ?? '');
         $description = sanitize($_POST['description'] ?? '');
+        $link = self::normalizeLink($_POST['link'] ?? '');
 
-        $errors = self::validateFields($title, $description);
+        $errors = self::validateFields($title, $description, $link);
         if ($errors) {
             json_response(['success' => false, 'errors' => $errors], 422);
         }
@@ -77,7 +78,7 @@ class AdminController
             json_response(['success' => false, 'error' => $upload['error']], 422);
         }
 
-        $id = ShowcaseProject::create($title, $description, $upload['path']);
+        $id = ShowcaseProject::create($title, $description, $upload['path'], $link);
         json_response(['success' => true, 'card' => ShowcaseProject::find($id)], 201);
     }
 
@@ -96,8 +97,9 @@ class AdminController
 
         $title = sanitize($_POST['title'] ?? '');
         $description = sanitize($_POST['description'] ?? '');
+        $link = self::normalizeLink($_POST['link'] ?? '');
 
-        $errors = self::validateFields($title, $description);
+        $errors = self::validateFields($title, $description, $link);
         if ($errors) {
             json_response(['success' => false, 'errors' => $errors], 422);
         }
@@ -112,7 +114,7 @@ class AdminController
             $imagePath = $upload['path'];
         }
 
-        ShowcaseProject::update($id, $title, $description, $imagePath);
+        ShowcaseProject::update($id, $title, $description, $imagePath, $link);
         json_response(['success' => true, 'card' => ShowcaseProject::find($id)]);
     }
 
@@ -135,9 +137,9 @@ class AdminController
     }
 
     /**
-     * Validate title/description fields
+     * Validate title/description/link fields
      */
-    private static function validateFields($title, $description)
+    private static function validateFields($title, $description, $link = null)
     {
         $errors = [];
         if (mb_strlen(trim($title)) < 2) {
@@ -146,7 +148,23 @@ class AdminController
         if (mb_strlen(trim($description)) < 10) {
             $errors['description'] = i18n::t('form_error_description');
         }
+        if ($link !== null && !filter_var($link, FILTER_VALIDATE_URL)) {
+            $errors['link'] = i18n::t('form_error_link');
+        }
         return $errors;
+    }
+
+    /**
+     * Normalize optional link: empty → null, auto-prepend https://
+     */
+    private static function normalizeLink($raw)
+    {
+        $link = trim((string) $raw);
+        if ($link === '') return null;
+        if (!preg_match('#^https?://#i', $link)) {
+            $link = 'https://' . $link;
+        }
+        return sanitize($link);
     }
 
     /**
