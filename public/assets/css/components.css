@@ -2170,12 +2170,8 @@
 }
 
 .education-step-location {
-  display: block;
   font-size: var(--fs-caption);
   color: var(--color-text-faint);
-  margin-bottom: 8px;
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
 }
 
 .education-step p {
