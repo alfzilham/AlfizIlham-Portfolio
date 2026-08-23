@@ -132,13 +132,9 @@
             <p><?= i18n::t('upload_drop_text') ?></p>
             <span class="dropzone-browse"><?= i18n::t('upload_browse') ?></span>
           </div>
-          <div class="dropzone-preview" id="dropzonePreview" hidden>
+          <div class="dropzone-preview" id="dropzonePreview" title="<?= i18n::t('upload_change_hint') ?>" hidden>
             <img id="dropzonePreviewImg" alt="" />
-            <div class="dropzone-preview-info">
-              <span class="dropzone-name" id="dropzoneName"></span>
-              <span class="dropzone-badge">.webp</span>
-            </div>
-            <button type="button" class="dropzone-remove" id="dropzoneRemove" aria-label="Remove image">&times;</button>
+            <span class="dropzone-name" id="dropzoneName"></span>
           </div>
         </div>
         <span class="form-error" id="cardImageError"></span>

@@ -933,7 +933,6 @@ function initEditorMode() {
   const dzPreview = document.getElementById("dropzonePreview");
   const dzPreviewImg = document.getElementById("dropzonePreviewImg");
   const dzName = document.getElementById("dropzoneName");
-  const dzRemove = document.getElementById("dropzoneRemove");
 
   const lightbox = document.getElementById("lightbox");
 
@@ -987,24 +986,39 @@ function initEditorMode() {
         loginError.textContent = "";
         loginForm.reset();
       } else if (formOverlay && !formOverlay.hidden) {
-        closeOverlay(formOverlay);
+        closeCardForm();
       } else if (lightbox && !lightbox.hidden) {
         closeLightbox();
       }
     }
   });
 
+  function openCardForm() {
+    openOverlay(formOverlay);
+    body.classList.add("card-form-open");
+  }
+
+  function closeCardForm() {
+    closeOverlay(formOverlay);
+    body.classList.remove("card-form-open");
+  }
+
   [loginOverlay, formOverlay].forEach((ov) => {
     if (!ov) return;
     ov.addEventListener("pointerdown", (e) => {
-      if (e.target === ov) closeOverlay(ov);
+      if (e.target === ov) {
+        if (ov === formOverlay) closeCardForm();
+        else closeOverlay(ov);
+      }
     });
   });
 
   document.querySelectorAll("[data-close-modal]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const ov = btn.closest(".editor-overlay");
-      if (ov) closeOverlay(ov);
+      if (!ov) return;
+      if (ov.id === "cardFormOverlay") closeCardForm();
+      else closeOverlay(ov);
     });
   });
 
@@ -1024,7 +1038,7 @@ function initEditorMode() {
         window.__IS_ADMIN = true;
         loginForm.reset();
         closeOverlay(loginOverlay);
-        enterEditor();
+        setTimeout(() => enterEditor(), 280);
       } else {
         loginError.textContent = data.error || "Login failed";
       }
@@ -1227,7 +1241,7 @@ function initEditorMode() {
       cardFormTitle.textContent = ADD_LABEL;
       showEmptyDropzone();
     }
-    openOverlay(formOverlay);
+    openCardForm();
     setTimeout(() => titleInput.focus(), 50);
   }
 
@@ -1250,9 +1264,9 @@ function initEditorMode() {
   dropzone.addEventListener("drop", (e) => {
     if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
   });
-  dzRemove.addEventListener("click", (e) => {
+  dzPreview.addEventListener("click", (e) => {
     e.stopPropagation();
-    showEmptyDropzone();
+    fileInput.click();
   });
 
   cardForm.addEventListener("submit", async (e) => {
@@ -1293,7 +1307,7 @@ function initEditorMode() {
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success && data.card) {
         upsertCardNode(data.card);
-        closeOverlay(formOverlay);
+        closeCardForm();
       } else if (data.errors) {
         titleError.textContent = data.errors.title || "";
         descError.textContent = data.errors.description || "";

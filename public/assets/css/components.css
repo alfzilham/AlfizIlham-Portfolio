@@ -1481,9 +1481,9 @@ body.editor-mode .chroma-menu-btn {
   position: fixed;
   bottom: 24px;
   left: 50%;
-  transform: translateX(-50%) translateY(16px);
+  transform: translateX(-50%) translateY(calc(100% + 80px));
   z-index: 9000;
-  display: none;
+  display: flex;
   align-items: center;
   gap: 6px;
   background: rgba(10, 10, 10, 0.85);
@@ -1494,13 +1494,23 @@ body.editor-mode .chroma-menu-btn {
   padding: 8px 10px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
   opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 body.editor-mode .editor-toolbar {
-  display: flex;
   transform: translateX(-50%) translateY(0);
   opacity: 1;
+  pointer-events: auto;
+}
+
+/* Toolbar slides away while the card form modal is open */
+body.card-form-open .editor-toolbar {
+  transform: translateX(-50%) translateY(calc(100% + 80px));
+  opacity: 0;
+  pointer-events: none;
 }
 
 .editor-toolbar-status {
@@ -1715,6 +1725,7 @@ body.editor-mode .editor-toolbar {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
 }
 
 .dropzone-preview img {
@@ -1724,39 +1735,12 @@ body.editor-mode .editor-toolbar {
   border-radius: 10px;
 }
 
-.dropzone-preview-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
 .dropzone-name {
   font-size: var(--fs-caption);
   color: var(--color-text-muted);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.dropzone-badge {
-  align-self: flex-start;
-  background: #0a0a0a;
-  color: #fff;
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  letter-spacing: 0.05em;
-}
-
-.dropzone-remove {
-  margin-left: auto;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--color-bg-soft);
-  border: none;
-  cursor: pointer;
 }
 
 /* Lightbox */

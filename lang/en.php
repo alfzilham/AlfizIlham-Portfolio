@@ -200,6 +200,7 @@ return [
     'form_error_description' => 'Description is required (min 10 characters)',
     'upload_drop_text' => 'Drag & drop an image here, or',
     'upload_browse' => 'browse files',
+    'upload_change_hint' => 'Click to change image',
     'upload_error_required' => 'Please choose an image',
     'upload_error_size' => 'Image exceeds 5 MB limit',
     'upload_error_type' => 'Only JPG, PNG, WebP, or GIF allowed',

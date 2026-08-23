@@ -200,6 +200,7 @@ return [
     'form_error_description' => 'Deskripsi wajib diisi (min 10 karakter)',
     'upload_drop_text' => 'Tarik & lepas gambar di sini, atau',
     'upload_browse' => 'pilih file',
+    'upload_change_hint' => 'Klik untuk mengganti gambar',
     'upload_error_required' => 'Silakan pilih gambar',
     'upload_error_size' => 'Ukuran gambar melebihi 5 MB',
     'upload_error_type' => 'Hanya JPG, PNG, WebP, atau GIF yang diizinkan',
