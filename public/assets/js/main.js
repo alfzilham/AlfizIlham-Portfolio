@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderIconGrid();
   initSkillFilters();
   renderServices();
+  initCircularGallery();
   renderGallery();
   renderTestimonials();
   renderFaqPanel();
@@ -468,6 +469,431 @@ function renderServices() {
       <p class="service-desc">${service.description}</p>
     </div>`
   ).join("");
+}
+
+/* --------------------------------------------------------------------------
+   CIRCULAR GALLERY (vanilla port of ReactBits CircularGallery — OGL via esm.sh)
+   -------------------------------------------------------------------------- */
+
+function initCircularGallery() {
+  const container = document.getElementById("circularGallery");
+  const items = window.__GALLERY_ITEMS;
+  if (!container || !Array.isArray(items) || !items.length) return;
+
+  function showFallback() {
+    container.classList.add("gallery-fallback");
+    container.innerHTML = "";
+    items.forEach((it) => {
+      const img = document.createElement("img");
+      img.src = it.image;
+      img.alt = it.text || "";
+      img.loading = "lazy";
+      img.decoding = "async";
+      container.appendChild(img);
+    });
+  }
+
+  try {
+    const testCanvas = document.createElement("canvas");
+    if (!testCanvas.getContext("webgl") && !testCanvas.getContext("experimental-webgl")) {
+      showFallback();
+      return;
+    }
+  } catch (_) {
+    showFallback();
+    return;
+  }
+
+  const FONT = 'bold 30px "Plus Jakarta Sans"';
+  const TEXT_COLOR = "#0a0a0a";
+  const BEND = 3;
+  const BORDER_RADIUS = 0.05;
+  const SCROLL_SPEED = 2;
+  const SCROLL_EASE = 0.05;
+
+  const fontReady =
+    document.fonts && document.fonts.load
+      ? Promise.all([
+          document.fonts.load(FONT).catch(() => {}),
+          document.fonts.ready.catch(() => {}),
+        ])
+      : Promise.resolve();
+
+  Promise.all([fontReady, import("https://esm.sh/ogl@1.0.11")])
+    .then(([, OGL]) => {
+      createCircularGallery(container, items, OGL, {
+        font: FONT,
+        textColor: TEXT_COLOR,
+        bend: BEND,
+        borderRadius: BORDER_RADIUS,
+        scrollSpeed: SCROLL_SPEED,
+        scrollEase: SCROLL_EASE,
+        onFatal: showFallback,
+      });
+    })
+    .catch(() => showFallback());
+}
+
+function createCircularGallery(container, items, OGL, opts) {
+  const { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } = OGL;
+  const lerp = (p1, p2, t) => p1 + (p2 - p1) * t;
+
+  let renderer;
+  try {
+    renderer = new Renderer({
+      alpha: true,
+      antialias: true,
+      dpr: Math.min(window.devicePixelRatio || 1, 2),
+    });
+  } catch (_) {
+    opts.onFatal();
+    return;
+  }
+  const gl = renderer.gl;
+  gl.clearColor(0, 0, 0, 0);
+  container.appendChild(gl.canvas);
+
+  const camera = new Camera(gl);
+  camera.fov = 45;
+  camera.position.z = 20;
+
+  const scene = new Transform();
+  const planeGeometry = new Plane(gl, { heightSegments: 50, widthSegments: 100 });
+
+  let screen = { width: container.clientWidth, height: container.clientHeight };
+  let viewport = { width: 1, height: 1 };
+
+  function computeViewport() {
+    screen = { width: container.clientWidth, height: container.clientHeight };
+    renderer.setSize(screen.width, screen.height);
+    camera.perspective({ aspect: screen.width / screen.height });
+    const fov = (camera.fov * Math.PI) / 180;
+    const h = 2 * Math.tan(fov / 2) * camera.position.z;
+    viewport = { width: h * camera.aspect, height: h };
+  }
+
+  computeViewport();
+
+  function createTextTexture(text) {
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    context.font = opts.font;
+    const metrics = context.measureText(text);
+    const textWidth = Math.ceil(metrics.width);
+    const fontSize = 30;
+    const textHeight = Math.ceil(fontSize * 1.2);
+    canvas.width = textWidth + 20;
+    canvas.height = textHeight + 20;
+    context.font = opts.font;
+    context.fillStyle = opts.textColor;
+    context.textBaseline = "middle";
+    context.textAlign = "center";
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.fillText(text, canvas.width / 2, canvas.height / 2);
+    const texture = new Texture(gl, { generateMipmaps: false });
+    texture.image = canvas;
+    return { texture, width: canvas.width, height: canvas.height };
+  }
+
+  function addTitle(plane, text) {
+    const { texture, width, height } = createTextTexture(text);
+    const geometry = new Plane(gl);
+    const program = new Program(gl, {
+      vertex: `
+        attribute vec3 position;
+        attribute vec2 uv;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragment: `
+        precision highp float;
+        uniform sampler2D tMap;
+        varying vec2 vUv;
+        void main() {
+          vec4 color = texture2D(tMap, vUv);
+          if (color.a < 0.1) discard;
+          gl_FragColor = color;
+        }
+      `,
+      uniforms: { tMap: { value: texture } },
+      transparent: true,
+    });
+    const mesh = new Mesh(gl, { geometry, program });
+    const aspect = width / height;
+    const textHeightScaled = plane.scale.y * 0.15;
+    const textWidthScaled = textHeightScaled * aspect;
+    mesh.scale.set(textWidthScaled, textHeightScaled, 1);
+    mesh.position.y = -plane.scale.y * 0.5 - textHeightScaled * 0.5 - 0.05;
+    mesh.setParent(plane);
+  }
+
+  function createMedia(index, length, item) {
+    const texture = new Texture(gl, { generateMipmaps: true });
+    const program = new Program(gl, {
+      depthTest: false,
+      depthWrite: false,
+      vertex: `
+        precision highp float;
+        attribute vec3 position;
+        attribute vec2 uv;
+        uniform mat4 modelViewMatrix;
+        uniform mat4 projectionMatrix;
+        uniform float uTime;
+        uniform float uSpeed;
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          vec3 p = position;
+          p.z = (sin(p.x * 4.0 + uTime) * 1.5 + cos(p.y * 2.0 + uTime) * 1.5) * (0.1 + uSpeed * 0.5);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+        }
+      `,
+      fragment: `
+        precision highp float;
+        uniform vec2 uImageSizes;
+        uniform vec2 uPlaneSizes;
+        uniform sampler2D tMap;
+        uniform float uBorderRadius;
+        varying vec2 vUv;
+
+        float roundedBoxSDF(vec2 p, vec2 b, float r) {
+          vec2 d = abs(p) - b;
+          return length(max(d, vec2(0.0))) + min(max(d.x, d.y), 0.0) - r;
+        }
+
+        void main() {
+          vec2 ratio = vec2(
+            min((uPlaneSizes.x / uPlaneSizes.y) / (uImageSizes.x / uImageSizes.y), 1.0),
+            min((uPlaneSizes.y / uPlaneSizes.x) / (uImageSizes.y / uImageSizes.x), 1.0)
+          );
+          vec2 uv = vec2(
+            vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+            vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+          );
+          vec4 color = texture2D(tMap, uv);
+
+          float d = roundedBoxSDF(vUv - 0.5, vec2(0.5 - uBorderRadius), uBorderRadius);
+
+          float edgeSmooth = 0.002;
+          float alpha = 1.0 - smoothstep(-edgeSmooth, edgeSmooth, d);
+
+          gl_FragColor = vec4(color.rgb, alpha);
+        }
+      `,
+      uniforms: {
+        tMap: { value: texture },
+        uPlaneSizes: { value: [0, 0] },
+        uImageSizes: { value: [0, 0] },
+        uSpeed: { value: 0 },
+        uTime: { value: 100 * Math.random() },
+        uBorderRadius: { value: opts.borderRadius },
+      },
+      transparent: true,
+    });
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = item.image;
+    img.onload = () => {
+      texture.image = img;
+      program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
+    };
+
+    const plane = new Mesh(gl, { geometry: planeGeometry, program });
+    plane.setParent(scene);
+
+    const media = {
+      extra: 0,
+      speed: 0,
+      isBefore: false,
+      isAfter: false,
+      index,
+      length,
+      plane,
+      program,
+      padding: 2,
+      width: 0,
+      widthTotal: 0,
+      x: 0,
+      viewport: viewport,
+      screen: screen,
+    };
+
+    media.addTitle = () => addTitle(media.plane, item.text);
+
+    media.update = (scroll, direction) => {
+      media.plane.position.x = media.x - scroll.current - media.extra;
+
+      const x = media.plane.position.x;
+      const H = media.viewport.width / 2;
+
+      if (opts.bend === 0) {
+        media.plane.position.y = 0;
+        media.plane.rotation.z = 0;
+      } else {
+        const B_abs = Math.abs(opts.bend);
+        const R = (H * H + B_abs * B_abs) / (2 * B_abs);
+        const effectiveX = Math.min(Math.abs(x), H);
+
+        const arc = R - Math.sqrt(R * R - effectiveX * effectiveX);
+        if (opts.bend > 0) {
+          media.plane.position.y = -arc;
+          media.plane.rotation.z = -Math.sign(x) * Math.asin(effectiveX / R);
+        } else {
+          media.plane.position.y = arc;
+          media.plane.rotation.z = Math.sign(x) * Math.asin(effectiveX / R);
+        }
+      }
+
+      media.speed = scroll.current - scroll.last;
+      media.program.uniforms.uTime.value += 0.04;
+      media.program.uniforms.uSpeed.value = media.speed;
+
+      const planeOffset = media.plane.scale.x / 2;
+      const viewportOffset = media.viewport.width / 2;
+      media.isBefore = media.plane.position.x + planeOffset < -viewportOffset;
+      media.isAfter = media.plane.position.x - planeOffset > viewportOffset;
+      if (direction === "right" && media.isBefore) {
+        media.extra -= media.widthTotal;
+        media.isBefore = media.isAfter = false;
+      }
+      if (direction === "left" && media.isAfter) {
+        media.extra += media.widthTotal;
+        media.isBefore = media.isAfter = false;
+      }
+    };
+
+    media.onResize = (o = {}) => {
+      if (o.screen) media.screen = o.screen;
+      if (o.viewport) {
+        media.viewport = o.viewport;
+        if (media.plane.program.uniforms.uViewportSizes) {
+          media.plane.program.uniforms.uViewportSizes.value = [
+            media.viewport.width,
+            media.viewport.height,
+          ];
+        }
+      }
+      const sc = media.screen.height / 1500;
+      media.plane.scale.y = (media.viewport.height * (900 * sc)) / media.screen.height;
+      media.plane.scale.x = (media.viewport.width * (700 * sc)) / media.screen.width;
+      media.plane.program.uniforms.uPlaneSizes.value = [
+        media.plane.scale.x,
+        media.plane.scale.y,
+      ];
+      media.padding = 2;
+      media.width = media.plane.scale.x + media.padding;
+      media.widthTotal = media.width * media.length;
+      media.x = media.width * media.index;
+    };
+
+    media.onResize();
+    return media;
+  }
+
+  const galleryItems = items.concat(items);
+  const medias = galleryItems.map((item, i) => {
+    const m = createMedia(i, galleryItems.length, item);
+    m.addTitle();
+    return m;
+  });
+
+  function onResize() {
+    computeViewport();
+    medias.forEach((m) => m.onResize({ screen, viewport }));
+  }
+  window.addEventListener("resize", onResize);
+
+  const scroll = { ease: opts.scrollEase, current: 0, target: 0, last: 0 };
+  let isDown = false;
+  let startX = 0;
+  let downPos = 0;
+  let checkTimer = null;
+
+  function onCheck() {
+    if (!medias.length || !medias[0].width) return;
+    const w = medias[0].width;
+    const itemIndex = Math.round(Math.abs(scroll.target) / w);
+    const item = w * itemIndex;
+    scroll.target = scroll.target < 0 ? -item : item;
+  }
+
+  function onCheckDebounced() {
+    clearTimeout(checkTimer);
+    checkTimer = setTimeout(onCheck, 200);
+  }
+
+  container.addEventListener("pointerdown", (e) => {
+    isDown = true;
+    downPos = scroll.current;
+    startX = e.clientX;
+    try {
+      container.setPointerCapture(e.pointerId);
+    } catch (_) {}
+  });
+
+  container.addEventListener("pointermove", (e) => {
+    if (!isDown) return;
+    const distance = (startX - e.clientX) * (opts.scrollSpeed * 0.025);
+    scroll.target = downPos + distance;
+  });
+
+  const onPointerUp = () => {
+    if (!isDown) return;
+    isDown = false;
+    onCheck();
+  };
+  container.addEventListener("pointerup", onPointerUp);
+  container.addEventListener("pointercancel", onPointerUp);
+
+  container.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      scroll.target += opts.scrollSpeed * 5;
+      onCheckDebounced();
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      scroll.target -= opts.scrollSpeed * 5;
+      onCheckDebounced();
+    }
+  });
+
+  let rafId = null;
+  let visible = false;
+
+  function update() {
+    scroll.current = lerp(scroll.current, scroll.target, scroll.ease);
+    const direction = scroll.current > scroll.last ? "right" : "left";
+    medias.forEach((m) => m.update(scroll, direction));
+    renderer.render({ scene, camera });
+    scroll.last = scroll.current;
+    rafId = requestAnimationFrame(update);
+  }
+
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !visible) {
+            visible = true;
+            rafId = requestAnimationFrame(update);
+          } else if (!entry.isIntersecting && visible) {
+            visible = false;
+            cancelAnimationFrame(rafId);
+          }
+        });
+      },
+      { threshold: 0 }
+    );
+    io.observe(container);
+  } else {
+    rafId = requestAnimationFrame(update);
+  }
 }
 
 /* --------------------------------------------------------------------------

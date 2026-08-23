@@ -56,15 +56,18 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 ---
 
-## 4. Projects Teaser
+## 4. Projects Teaser + Circular Gallery
 
-**Data flow**: static i18n strings — no database dependency.
+**Data flow**: `Project::all()` → PHP filters out `website` category → items JSON (`window.__GALLERY_ITEMS`) → WebGL gallery (OGL via dynamic `import()` from esm.sh).
 
 - Section `#project` (anchor target for navbar, mobile menu, footer, and hero "View My Work" CTA)
-- Content: eyebrow "My Projects" + heading "Curious What I've Built?" + subtitle describing the current role (production websites, dashboards, AI-integrated applications)
-- No filter tabs, no project cards grid, no view-more button — the former grid section was removed; `/api/projects` endpoint remains available as a public API surface
+- Content: eyebrow "My Projects" + heading "Curious What I've Built?" + role-based subtitle
+- Circular gallery: 27 design & calligraphy projects, infinite loop, drag to scroll, keyboard arrows; labels rendered as canvas textures in Plus Jakarta Sans
+- Wheel navigation intentionally omitted (avoids conflict with Lenis page scroll)
+- Fallback: static horizontal image strip when WebGL is unavailable or the OGL module fails to load
+- Render loop pauses when the section is offscreen
 
-**Acceptance criteria**: all `#project` anchors scroll to the teaser; section renders identically in EN/ID.
+**Acceptance criteria**: gallery renders with bend arc and rounded cards; dragging scrolls infinitely with snap-back easing; keyboard ← → navigates; fallback strip appears without WebGL; all `#project` anchors scroll to the section.
 
 ---
 

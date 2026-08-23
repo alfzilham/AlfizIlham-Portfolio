@@ -46,6 +46,15 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
+  /* Circular Gallery */
+  .circular-gallery {
+    height: 320px;
+  }
+
+  .gallery-fallback img {
+    height: 200px;
+  }
+
   /* Services */
   .services-grid {
     grid-template-columns: repeat(2, 1fr);

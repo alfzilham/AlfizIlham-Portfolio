@@ -62,7 +62,7 @@
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
     <!-- SECTION 7: PROJECTS TEASER -->
-    <?php echo View::section('projects-teaser'); ?>
+    <?php echo View::section('projects-teaser', ['projects' => $projects]); ?>
 
     <!-- SECTION 9: SERVICES -->
     <?php echo View::section('services', ['services' => $services]); ?>

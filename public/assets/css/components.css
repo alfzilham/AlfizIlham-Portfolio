@@ -1199,6 +1199,49 @@
   margin-bottom: var(--space-4);
 }
 
+/* Circular WebGL Gallery (vanilla port of ReactBits CircularGallery) */
+.circular-gallery-wrap {
+  margin-top: var(--space-8);
+}
+
+.circular-gallery {
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.circular-gallery:active {
+  cursor: grabbing;
+}
+
+.circular-gallery:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.5);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+
+.circular-gallery canvas {
+  display: block;
+}
+
+.gallery-fallback {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.gallery-fallback img {
+  height: 280px;
+  width: auto;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
 /* --------------------------------------------------------------------------
    11. SERVICES
    -------------------------------------------------------------------------- */
