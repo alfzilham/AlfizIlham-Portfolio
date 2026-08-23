@@ -506,7 +506,7 @@ function initCircularGallery() {
 
   const FONT = 'bold 30px "Plus Jakarta Sans"';
   const TEXT_COLOR = "#0a0a0a";
-  const BEND = 3;
+  const BEND = -3;
   const BORDER_RADIUS = 0.05;
   const SCROLL_SPEED = 2;
   const SCROLL_EASE = 0.05;

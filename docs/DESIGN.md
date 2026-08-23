@@ -297,7 +297,7 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 - **Circular WebGL Gallery** below the subtitle, **full-bleed** (outside the container — no side padding/max-width; header text stays centered inside the container). Vanilla port of ReactBits CircularGallery, OGL loaded via dynamic `import()` from esm.sh:
   - Items: all non-website projects (9 design posters + 18 calligraphy pieces) with project name as canvas-texture label under each card
   - Label font: `bold 30px "Plus Jakarta Sans"`, color `#0a0a0a` (adapted from the component's white default for our light background)
-  - Config: bend `3`, border radius `0.05`, scrollSpeed `2`, scrollEase `0.05`; items duplicated ×2 for seamless infinite loop
+  - Config: bend `-3` (curves downward — vertically mirrored valley), border radius `0.05`, scrollSpeed `2`, scrollEase `0.05`; items duplicated ×2 for seamless infinite loop
   - Interactions: drag (pointer events scoped to the gallery), keyboard ← → ; wheel navigation intentionally omitted to avoid conflict with Lenis page scroll
   - Performance: render loop pauses via IntersectionObserver when offscreen; dpr capped at 2
   - Fallback: if WebGL is unavailable or the OGL module fails to load, a simple horizontal scrolling image strip renders instead
