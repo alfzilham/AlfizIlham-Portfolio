@@ -182,7 +182,7 @@ return [
     'editor_mode_badge' => 'MODE EDITOR',
     'editor_exit' => 'Keluar Mode',
     'editor_logout' => 'Logout',
-    'editor_add_project' => '+ Tambah Proyek',
+    'editor_add_project' => 'Tambah Proyek',
     'editor_card_menu' => 'Menu kartu',
     'editor_edit' => 'Edit',
     'editor_delete' => 'Hapus',

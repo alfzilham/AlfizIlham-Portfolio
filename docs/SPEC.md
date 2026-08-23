@@ -220,7 +220,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 - Card hover: image scales ×1.06 + per-card radial spotlight; grid-level grayscale mask follows cursor (GSAP)
 - Kebab ⋮ button (editor mode only): Edit reopens prefilled form modal; Delete uses native `confirm()`
 - Click card outside editor mode → lightbox (image + title + description); disabled while editor mode is on
-- `Ctrl+Shift+E` toggles editor UI when already authenticated; floating badge shows Exit/Logout
+- `Ctrl+Shift+E` toggles editor UI when already authenticated; floating glass toolbar shows status dot · Add Project · Exit · Logout
+- **Editor mode is desktop-only (viewport > 1024px)**: the shortcut is ignored on smaller viewports, all editor UI is hidden via CSS, and resizing below the threshold auto-exits editor mode; public features (cards, hover, lightbox) remain fully available
 
 **Acceptance criteria**: unauthenticated writes get 401; created cards persist in SQLite (`showcase_projects`, newest first) and appear for all visitors after reload; uploaded images are served as `.webp`; deleting a card removes its image file.
 

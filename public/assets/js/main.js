@@ -938,6 +938,7 @@ function initEditorMode() {
   const lightbox = document.getElementById("lightbox");
 
   const isId = () => window.LANG === "id";
+  const isDesktop = () => window.innerWidth > 1024;
   const ADD_LABEL = cardFormTitle ? cardFormTitle.textContent : "Add Project";
 
   function openOverlay(el) {
@@ -955,6 +956,7 @@ function initEditorMode() {
   }
 
   function enterEditor() {
+    if (!isDesktop()) return;
     editorOn = true;
     body.classList.add("editor-mode");
     if (window.lucide) lucide.createIcons();
@@ -966,10 +968,11 @@ function initEditorMode() {
     closeAllMenus();
   }
 
-  // ---------- shortcut Ctrl+Shift+E ----------
+  // ---------- shortcut Ctrl+Shift+E (desktop only) ----------
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.shiftKey && (e.key === "E" || e.key === "e")) {
       e.preventDefault();
+      if (!isDesktop()) return;
       if (!isAdmin) {
         openOverlay(loginOverlay);
         setTimeout(() => passwordInput.focus(), 50);
@@ -1037,6 +1040,11 @@ function initEditorMode() {
     isAdmin = false;
     window.__IS_ADMIN = false;
     exitEditor();
+  });
+
+  // Auto-exit editor when viewport drops below desktop
+  window.addEventListener("resize", () => {
+    if (editorOn && !isDesktop()) exitEditor();
   });
 
   // ---------- card interactions (delegation) ----------

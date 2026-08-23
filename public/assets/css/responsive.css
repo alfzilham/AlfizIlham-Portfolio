@@ -24,6 +24,12 @@
     padding-bottom: 96px;
   }
 
+  /* Editor mode is desktop-only */
+  .editor-toolbar,
+  body.editor-mode .chroma-menu-btn {
+    display: none !important;
+  }
+
   /* Navbar */
   .navbar-links {
     display: none;

@@ -160,12 +160,23 @@
     </figure>
   </div>
 
-  <!-- Editor mode floating badge -->
-  <div class="editor-badge" id="editorBadge">
-    <span class="dot"></span>
-    <span><?= i18n::t('editor_mode_badge') ?></span>
-    <button type="button" id="editorExitBtn"><?= i18n::t('editor_exit') ?></button>
-    <button type="button" id="editorLogoutBtn"><?= i18n::t('editor_logout') ?></button>
+  <!-- Editor mode floating toolbar -->
+  <div class="editor-toolbar" id="editorToolbar">
+    <div class="editor-toolbar-status">
+      <span class="dot"></span>
+      <span class="editor-toolbar-label"><?= i18n::t('editor_mode_badge') ?></span>
+    </div>
+    <span class="editor-toolbar-divider"></span>
+    <button type="button" id="addProjectBtn" class="editor-toolbar-cta">
+      <i data-lucide="plus"></i><?= i18n::t('editor_add_project') ?>
+    </button>
+    <span class="editor-toolbar-divider"></span>
+    <button type="button" id="editorExitBtn" class="editor-toolbar-btn">
+      <i data-lucide="log-out"></i><?= i18n::t('editor_exit') ?>
+    </button>
+    <button type="button" id="editorLogoutBtn" class="editor-toolbar-btn editor-toolbar-muted">
+      <i data-lucide="user-x"></i><?= i18n::t('editor_logout') ?>
+    </button>
   </div>
 
   <!-- Scripts -->

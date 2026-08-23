@@ -24,9 +24,6 @@ $chromaPalette = [
 
   <!-- ChromaGrid Showcase (admin-curated) -->
   <div class="chroma-grid-wrap" id="chromaGridWrap" <?= $showcase ? '' : 'hidden' ?>>
-    <div class="chroma-grid-actions">
-      <button type="button" id="addProjectBtn" class="btn btn-primary"><?= i18n::t('editor_add_project') ?></button>
-    </div>
     <div class="chroma-grid" id="chromaGrid">
       <?php foreach ($showcase as $i => $card): ?>
         <?php $palette = $chromaPalette[$i % count($chromaPalette)]; ?>

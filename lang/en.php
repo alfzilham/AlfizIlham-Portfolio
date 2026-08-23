@@ -182,7 +182,7 @@ return [
     'editor_mode_badge' => 'EDITOR MODE',
     'editor_exit' => 'Exit',
     'editor_logout' => 'Logout',
-    'editor_add_project' => '+ Add Project',
+    'editor_add_project' => 'Add Project',
     'editor_card_menu' => 'Card menu',
     'editor_edit' => 'Edit',
     'editor_delete' => 'Delete',
