@@ -7,21 +7,21 @@ $galleryItems = array_values(array_map(function ($p) {
 })));
 ?>
 <section class="projects-teaser section-padding" id="project">
-  <div class="container">
+  <div class="container text-center">
     <p class="eyebrow"><?= i18n::t('projects_teaser_eyebrow') ?></p>
     <h1><?= i18n::t('projects_teaser_heading') ?></h1>
     <p class="section-subtitle"><?= i18n::t('projects_teaser_subtitle') ?></p>
+  </div>
 
-    <!-- Circular WebGL Gallery -->
-    <div class="circular-gallery-wrap">
-      <div
-        id="circularGallery"
-        class="circular-gallery"
-        tabindex="0"
-        role="region"
-        aria-label="Circular image gallery. Use Left and Right Arrow keys to navigate."
-      ></div>
-    </div>
+  <!-- Circular WebGL Gallery -->
+  <div class="circular-gallery-wrap">
+    <div
+      id="circularGallery"
+      class="circular-gallery"
+      tabindex="0"
+      role="region"
+      aria-label="Circular image gallery. Use Left and Right Arrow keys to navigate."
+    ></div>
   </div>
 </section>
 
