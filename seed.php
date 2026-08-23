@@ -173,6 +173,19 @@ $projects = [
     ['Yasin', 'calligraphy', 'Brown-toned illuminated Quran page.', 'assets/image/projects/calligraphy/project-46.webp', 46],
 ];
 
+// Ensure 'image' column exists (lazy migration for older databases)
+$hasImage = false;
+foreach ($db->fetchAll("PRAGMA table_info(services)") as $col) {
+    if ($col['name'] === 'image') {
+        $hasImage = true;
+        break;
+    }
+}
+if (!$hasImage) {
+    $db->exec("ALTER TABLE services ADD COLUMN image TEXT");
+    echo "Added 'image' column to services table.\n";
+}
+
 // Clear existing data
 $db->exec("DELETE FROM projects");
 
