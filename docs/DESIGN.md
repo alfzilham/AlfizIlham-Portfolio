@@ -278,6 +278,7 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 - **Filter bar (top)**: pill tab row "ALL / LANGUAGES / FRONTEND / BACKEND / DATABASE / DEVOPS / AI & ML / DESIGN / TOOLS" (active = black bg/white text, inactive = white bg neumorphic shadow) + search input on the right (Lucide search icon, placeholder "Search tools...", `border-radius: var(--radius-full)`). Wraps below `--space-4` gap; stacks vertically on tablet/mobile.
 - **Icon grid (below filter bar)**: responsive grid, 7 columns desktop → 5 tablet → 4 mobile → 3 mobile-small, `row-gap: 40px; column-gap: 24px`. Each cell = **plain icon glyph only** (no colored box/badge background) at `48px` (36px on small screens), native brand SVG in its own brand color, sitting directly on the white page background. Below each icon: uppercase label (`--fs-caption`, weight 600, letter-spacing `0.05em`, centered).
 - **No tool cards** — the former card grid was removed; the icon grid itself is the filtered surface.
+- **Hover interaction**: each icon wiggles once on hover (rotate keyframes ±6°, `0.5s ease-in-out`, no loop) and a black pill tooltip fades in above the cell showing the tool's micro category label (`category_label`, e.g. "Library", "Runtime", "AI Platform") — implemented pure-CSS via `data-tooltip` attribute + `::after`; both respect `prefers-reduced-motion`.
 - Empty state message ("No tools match your search.") centered below the grid when a filter/search combination yields nothing.
 
 JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`; typing in search narrows by name via `input` event + `.toLowerCase().includes()`. Both combine (category AND search).
@@ -611,3 +612,4 @@ alfizilham/
 | Scroll reveal (optional)   | `IntersectionObserver` adds `.in-view` class → fade+slide-up     |
 | Bio statement (4.5)        | "FoldText" word-by-word fold entrance (GSAP, top hinge, once)    |
 | Stat numbers (4.5)         | Count-up `0 → target` on scroll (GSAP, suffix preserved)         |
+| Skill icons (4.6)          | Hover: one-shot rotate wiggle + black pill tooltip (`category_label`) |

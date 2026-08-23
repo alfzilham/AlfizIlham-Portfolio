@@ -52,7 +52,7 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__P
 - Single icon grid (7 columns desktop) renders the filtered tools — no separate card grid
 - Empty state shows "No tools match your search." when a filter/search combination yields nothing
 
-**Acceptance criteria**: clicking a category tab re-renders the icon grid with only matching icons; typing in search further narrows visible icons live; empty state appears when nothing matches.
+**Acceptance criteria**: clicking a category tab re-renders the icon grid with only matching icons; typing in search further narrows visible icons live; empty state appears when nothing matches; hovering an icon plays a one-shot wiggle animation and shows a tooltip with its `category_label`.
 
 ---
 

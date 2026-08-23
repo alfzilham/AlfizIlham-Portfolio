@@ -415,7 +415,7 @@ function renderIconGrid(filter = "all", search = "") {
 
   const gridHTML = filtered.map(
     (tool) => `
-    <div class="icon-grid-item">
+    <div class="icon-grid-item"${tool.category_label ? ` data-tooltip="${tool.category_label}"` : ""}>
       <img src="${tool.icon}" alt="${tool.name}" loading="lazy" />
       <span>${tool.name}</span>
     </div>`
