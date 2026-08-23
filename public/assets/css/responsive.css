@@ -154,6 +154,12 @@
     padding-bottom: 64px;
   }
 
+  /* Feature highlights — stack on mobile */
+  .feature-highlights {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
   /* Bio Stats — keep mobile rhythm */
   .bio-stats.section-padding {
     padding-top: 64px;

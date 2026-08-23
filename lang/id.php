@@ -211,9 +211,10 @@ return [
 
     // Showcase extras
     'projects_load_more' => 'Muat Lebih Banyak Proyek',
-    'stats_featured_label' => 'Proyek Unggulan',
-    'stats_gallery_label' => 'Di Galeri Melingkar',
-    'strip_sentence' => 'Masih banyak karya menanti — jelajahi galeri hidup di bawah ini.',
+    'highlight_dev_title' => 'Full-Stack + AI Terpasang Langsung',
+    'highlight_dev_desc' => 'Website dan aplikasi produksi dengan AI yang terpasang langsung di dalam produknya — bukan tempelan setelahnya.',
+    'highlight_craft_title' => 'Desain & Kaligrafi',
+    'highlight_craft_desc' => 'Lebih dari 500 commissions diselesaikan dengan mata detail juara, lintas desain dan kaligrafi Naskh.',
     'form_link_label' => 'URL Live (opsional)',
     'form_link_placeholder' => 'https://proyek-anda.com',
     'form_error_link' => 'Masukkan URL yang valid (http/https)',

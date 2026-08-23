@@ -211,9 +211,10 @@ return [
 
     // Showcase extras
     'projects_load_more' => 'Load More Projects',
-    'stats_featured_label' => 'Featured Projects',
-    'stats_gallery_label' => 'In Circular Gallery',
-    'strip_sentence' => 'More creations await — glide into the living gallery below.',
+    'highlight_dev_title' => 'Full-Stack + AI Built-In',
+    'highlight_dev_desc' => 'Production websites and apps with AI wired directly into the product — not bolted on after.',
+    'highlight_craft_title' => 'Design & Calligraphy Craft',
+    'highlight_craft_desc' => '500+ commissions delivered with a champion\'s eye for detail across design and Naskh calligraphy.',
     'form_link_label' => 'Live URL (optional)',
     'form_link_placeholder' => 'https://your-live-project.com',
     'form_error_link' => 'Enter a valid URL (http/https)',

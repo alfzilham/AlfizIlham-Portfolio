@@ -58,19 +58,15 @@ $galleryItems = array_values(array_map(function ($p) {
     </div>
   </div>
 
-  <!-- Stats strip -->
-  <div class="container text-center showcase-stats">
-    <div class="showcase-stat">
-      <span class="stat-value"><?= count($showcase) ?></span>
-      <span class="stat-label"><?= i18n::t('stats_featured_label') ?></span>
+  <!-- Feature highlights -->
+  <div class="container feature-highlights">
+    <div class="feature-highlight">
+      <h3 class="feature-highlight-title"><?= i18n::t('highlight_dev_title') ?></h3>
+      <p class="feature-highlight-desc"><?= i18n::t('highlight_dev_desc') ?></p>
     </div>
-    <p class="showcase-strip-sentence">
-      <?= i18n::t('strip_sentence') ?>
-      <i data-lucide="arrow-down"></i>
-    </p>
-    <div class="showcase-stat">
-      <span class="stat-value"><?= count($galleryItems) ?></span>
-      <span class="stat-label"><?= i18n::t('stats_gallery_label') ?></span>
+    <div class="feature-highlight">
+      <h3 class="feature-highlight-title"><?= i18n::t('highlight_craft_title') ?></h3>
+      <p class="feature-highlight-desc"><?= i18n::t('highlight_craft_desc') ?></p>
     </div>
   </div>
 
