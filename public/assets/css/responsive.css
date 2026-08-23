@@ -46,11 +46,6 @@
     grid-template-columns: repeat(5, 1fr);
   }
 
-  /* Tool Grid */
-  .tool-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
   /* Projects Grid */
   .project-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -190,11 +185,6 @@
   .icon-grid {
     grid-template-columns: repeat(4, 1fr);
     row-gap: var(--space-5);
-  }
-
-  /* Tool Grid */
-  .tool-grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .filter-bar {
@@ -383,11 +373,6 @@
   .icon-grid-item img {
     width: 36px;
     height: 36px;
-  }
-
-  /* Tool Grid */
-  .tool-grid {
-    grid-template-columns: 1fr;
   }
 
   /* Stats Row */

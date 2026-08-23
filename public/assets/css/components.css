@@ -1036,19 +1036,14 @@
   text-align: center;
 }
 
-/* Filter Bar (hidden — icon grid only) */
+/* Filter Bar */
 .filter-bar {
-  display: none;
-}
-
-/* Tool Cards Grid (hidden — icon grid only) */
-.tool-grid {
-  display: none;
-}
-
-/* Empty State (hidden) */
-.empty-state {
-  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
 }
 
 .filter-bar-center {
@@ -1123,57 +1118,6 @@
 
 .search-box input::placeholder {
   color: var(--color-text-faint);
-}
-
-/* Tool Cards */
-.tool-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-4);
-}
-
-.tool-card {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: 16px;
-  border: none;
-  border-radius: var(--neu-radius);
-  background: var(--color-bg);
-  box-shadow: var(--neu-shadow-out-sm);
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
-}
-
-.tool-card:hover {
-  box-shadow: var(--neu-shadow-out);
-  transform: translateY(-2px);
-}
-
-.tool-card:active {
-  box-shadow: var(--neu-shadow-in-sm);
-  transform: scale(0.98);
-}
-
-.tool-card img {
-  width: 32px;
-  height: 32px;
-  flex-shrink: 0;
-}
-
-.tool-card-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.tool-card-name {
-  font-size: var(--fs-body-sm);
-  font-weight: var(--fw-semibold);
-}
-
-.tool-card-category {
-  font-size: var(--fs-caption);
-  color: var(--color-text-muted);
 }
 
 .empty-state {

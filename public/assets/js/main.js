@@ -23,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroReveal();
   initScrollProgress();
   renderIconGrid();
-  renderToolGrid();
   initSkillFilters();
   renderProjectGrid();
   initProjectFilters();
@@ -393,12 +392,28 @@ function initScrollProgress() {
    ICON GRID (from PHP data)
    -------------------------------------------------------------------------- */
 
-function renderIconGrid() {
+function renderIconGrid(filter = "all", search = "") {
   const grid = document.getElementById("iconGrid");
   if (!grid) return;
 
   const tools = window.TOOLS_DATA;
-  const gridHTML = tools.map(
+  const emptyState = document.getElementById("skillEmptyState");
+
+  const filtered = tools.filter((tool) => {
+    const matchFilter = filter === "all" || tool.category === filter;
+    const matchSearch = tool.name.toLowerCase().includes(search.toLowerCase());
+    return matchFilter && matchSearch;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = "";
+    if (emptyState) emptyState.hidden = false;
+    return;
+  }
+
+  if (emptyState) emptyState.hidden = true;
+
+  const gridHTML = filtered.map(
     (tool) => `
     <div class="icon-grid-item">
       <img src="${tool.icon}" alt="${tool.name}" loading="lazy" />
@@ -407,44 +422,6 @@ function renderIconGrid() {
   ).join("");
 
   grid.innerHTML = gridHTML;
-}
-
-/* --------------------------------------------------------------------------
-   TOOL GRID (from PHP data)
-   -------------------------------------------------------------------------- */
-
-function renderToolGrid(filter = "all", search = "") {
-  const grid = document.getElementById("toolGrid");
-  const emptyState = document.getElementById("skillEmptyState");
-  if (!grid) return;
-
-  const tools = window.TOOLS_DATA;
-
-  const filtered = tools.filter((tool) => {
-    const matchFilter = filter === "all" || tool.category === filter;
-    const matchSearch = tool.name.toLowerCase().includes(search.toLowerCase());
-    return matchFilter && matchSearch;
-  });
-
-  if (filtered.length === 0) {
-    grid.innerHTML = "";
-    emptyState.hidden = false;
-    return;
-  }
-
-  emptyState.hidden = true;
-  grid.innerHTML = filtered
-    .map(
-      (tool) => `
-    <div class="tool-card" data-category="${tool.category}">
-      <img src="${tool.icon}" alt="${tool.name}" loading="lazy" />
-      <div class="tool-card-info">
-        <span class="tool-card-name">${tool.name}</span>
-        <span class="tool-card-category">${tool.category_label || ''}</span>
-      </div>
-    </div>`
-    )
-    .join("");
 }
 
 function initSkillFilters() {
@@ -466,12 +443,12 @@ function initSkillFilters() {
     pill.setAttribute("aria-pressed", "true");
 
     activeFilter = pill.dataset.filter;
-    renderToolGrid(activeFilter, searchInput ? searchInput.value : "");
+    renderIconGrid(activeFilter, searchInput ? searchInput.value : "");
   });
 
   if (searchInput) {
     searchInput.addEventListener("input", () => {
-      renderToolGrid(activeFilter, searchInput.value);
+      renderIconGrid(activeFilter, searchInput.value);
     });
   }
 }

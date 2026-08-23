@@ -272,31 +272,15 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 ### 4.6 My Skill Set
 
-**Purpose**: Full technology showcase grid + filterable tool directory.
+**Purpose**: Filterable technology showcase — a single icon grid driven by category tabs + search.
 
 - Section heading centered: "My Skill Set" (`--fs-h1`) + subheading paragraph centered, muted, max-width `560px`: "A curated collection of tools and technologies I work with — from frontend and backend to AI, design, and deployment."
-- **Icon grid** (top part): responsive grid, 7 columns desktop → 4 columns tablet → 3 columns mobile, `row-gap: 40px; column-gap: 24px;`. Each cell = **plain icon glyph only** (no colored box/badge background) at `48px`, using each tool's **native brand SVG in its own brand color** (HTML orange `#e34f26`, CSS blue `#1572b6`, JS yellow `#f7df1e` bg with black "JS", Python blue/yellow snake mark, React cyan atom outline, Next.js solid black circle with white "N", Tailwind cyan, Docker blue whale, Claude orange sunburst/asterisk, TensorFlow orange flame, etc.) sitting directly on the white page background — **no border, no shadow, no container shape** around the icon itself. Below each icon: uppercase label text (`--fs-caption`, weight 600, `--color-text`, letter-spacing `0.05em`, centered, margin-top `12px`) e.g. "HTML", "CSS", "JAVASCRIPT", "REACT", "NEXT.JS", "CLAUDE". Icons use native brand SVGs (Simple Icons style) where available; a few square-badge icons (JS, TS, C#, Next.js, VS Code) keep their native square/circle brand mark as part of the SVG itself — this is inherent to those brand logos, not an added container.
-- **Filterable tool list** (bottom part):
-  - Filter tab row: pill buttons "ALL / LANGUAGES / FRONTEND / BACKEND & DEVOPS / AI & ML / DESIGN / TOOLS & PLATFORM" (active = black bg/white text, inactive = white bg/border) + a search input on the right (`<input>` with Lucide search icon, placeholder "Search tools...", `border-radius: var(--radius-full)`).
-  - Below: grid of tool **cards** (4 columns desktop, 2 tablet, 1 mobile), each card = icon (32px) + name (bold) + category subtitle (muted, small), white bg card, `border: 1px solid var(--color-border)`, `border-radius: var(--radius-md)`, padding `16px`, hover: `border-color: #0a0a0a`.
+- **Filter bar (top)**: pill tab row "ALL / LANGUAGES / FRONTEND / BACKEND / DATABASE / DEVOPS / AI & ML / DESIGN / TOOLS" (active = black bg/white text, inactive = white bg neumorphic shadow) + search input on the right (Lucide search icon, placeholder "Search tools...", `border-radius: var(--radius-full)`). Wraps below `--space-4` gap; stacks vertically on tablet/mobile.
+- **Icon grid (below filter bar)**: responsive grid, 7 columns desktop → 5 tablet → 4 mobile → 3 mobile-small, `row-gap: 40px; column-gap: 24px`. Each cell = **plain icon glyph only** (no colored box/badge background) at `48px` (36px on small screens), native brand SVG in its own brand color, sitting directly on the white page background. Below each icon: uppercase label (`--fs-caption`, weight 600, letter-spacing `0.05em`, centered).
+- **No tool cards** — the former card grid was removed; the icon grid itself is the filtered surface.
+- Empty state message ("No tools match your search.") centered below the grid when a filter/search combination yields nothing.
 
-```css
-.tool-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: #fff;
-  transition: border-color 0.2s ease;
-}
-.tool-card:hover {
-  border-color: #0a0a0a;
-}
-```
-
-JS behavior: clicking a filter tab shows/hides cards by `data-category` attribute; search input filters cards by name via `input` event + `.toLowerCase().includes()`.
+JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`; typing in search narrows by name via `input` event + `.toLowerCase().includes()`. Both combine (category AND search).
 
 ---
 

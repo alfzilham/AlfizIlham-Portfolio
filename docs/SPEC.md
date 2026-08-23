@@ -45,14 +45,14 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__P
 
 ## 3. Skill Filter + Search
 
-**Data flow**: `Tool::filtered($category, $search)` → PHP → JSON → JS rendering.
+**Data flow**: `Tool::all()` → PHP → `window.__TOOLS` → JS client-side filtering.
 
-- Categories: `all`, `languages`, `frontend`, `backend-devops`, `ai-ml`, `design`, `tools-platform`
-- Search: case-insensitive substring match on tool name
-- Top icon grid: decorative (all 44 tools), rendered from `window.__TOOLS`
-- Bottom tool cards: filterable/searchable, rendered by JS
+- Categories (8, matching `tools.category` in SQLite): `all`, `languages`, `frontend`, `backend`, `database`, `devops`, `ai-ml`, `design`, `tools`
+- Search: case-insensitive substring match on tool name; combines with active category (AND)
+- Single icon grid (7 columns desktop) renders the filtered tools — no separate card grid
+- Empty state shows "No tools match your search." when a filter/search combination yields nothing
 
-**Acceptance criteria**: clicking a category tab shows only matching cards + resets search; typing in search further narrows visible cards; empty state shows "No tools match your search."
+**Acceptance criteria**: clicking a category tab re-renders the icon grid with only matching icons; typing in search further narrows visible icons live; empty state appears when nothing matches.
 
 ---
 
