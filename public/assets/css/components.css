@@ -1356,11 +1356,11 @@
 /* Feature highlights (below ChromaGrid) */
 .feature-highlights {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-7);
-  margin-top: var(--space-8);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--color-border);
+  max-width: 720px;
+  margin: var(--space-8) auto 0;
+  text-align: center;
 }
 
 .feature-highlight-title {
@@ -1374,6 +1374,7 @@
   color: var(--color-text-muted);
   line-height: var(--lh-relaxed);
   max-width: 46ch;
+  margin-inline: auto;
 }
 
 .chroma-overlay,
