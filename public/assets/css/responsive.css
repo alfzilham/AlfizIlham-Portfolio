@@ -479,7 +479,7 @@
     content: "";
     position: absolute;
     left: 32px;
-    top: 32px;
+    top: 0;
     bottom: 32px;
     width: 2px;
     background: var(--color-border-dark);
