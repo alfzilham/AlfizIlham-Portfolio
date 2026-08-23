@@ -950,11 +950,13 @@ function initEditorMode() {
   function openOverlay(el) {
     el.hidden = false;
     body.style.overflow = "hidden";
+    if (window.__lenis) window.__lenis.stop();
   }
 
   function closeOverlay(el) {
     el.hidden = true;
     body.style.overflow = "";
+    if (window.__lenis) window.__lenis.start();
   }
 
   function closeAllMenus() {

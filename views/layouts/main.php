@@ -97,7 +97,7 @@
   ]); ?>
 
   <!-- Editor mode: login modal -->
-  <div class="editor-overlay" id="editorLoginOverlay" hidden>
+  <div class="editor-overlay" id="editorLoginOverlay" data-lenis-prevent hidden>
     <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorLoginTitle">
       <button type="button" class="modal-close" data-close-modal aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
       <h2 id="editorLoginTitle"><?= i18n::t('editor_login_title') ?></h2>
@@ -111,7 +111,7 @@
   </div>
 
   <!-- Editor mode: card form modal (create/edit) -->
-  <div class="editor-overlay" id="cardFormOverlay" hidden>
+  <div class="editor-overlay" id="cardFormOverlay" data-lenis-prevent hidden>
     <div class="editor-modal editor-modal-wide" role="dialog" aria-modal="true" aria-labelledby="cardFormTitle">
       <button type="button" class="modal-close" data-close-modal aria-label="<?= i18n::t('lightbox_close') ?>">&times;</button>
       <h2 id="cardFormTitle"><?= i18n::t('form_add_title') ?></h2>
@@ -149,7 +149,7 @@
   </div>
 
   <!-- Editor mode: delete confirmation modal -->
-  <div class="editor-overlay" id="deleteOverlay" hidden>
+  <div class="editor-overlay" id="deleteOverlay" data-lenis-prevent hidden>
     <div class="editor-modal editor-modal-sm" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
       <div class="delete-icon"><i data-lucide="triangle-alert"></i></div>
       <h2 id="deleteModalTitle"><?= i18n::t('delete_modal_title') ?></h2>
@@ -162,7 +162,7 @@
   </div>
 
   <!-- Lightbox (macOS-style viewer) -->
-  <div class="lb-viewer" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Project viewer">
+  <div class="lb-viewer" id="lightbox" data-lenis-prevent hidden role="dialog" aria-modal="true" aria-label="Project viewer">
     <div class="lb-counter" id="lbCounter">1 / 1</div>
 
     <div class="lb-actions">

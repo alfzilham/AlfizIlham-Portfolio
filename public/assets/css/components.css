@@ -1670,6 +1670,8 @@ body.card-form-open .editor-toolbar {
   max-height: calc(100dvh - 48px);
   overflow-y: auto;
   overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   background: #fff;
   border-radius: 20px;
   padding: 28px;
@@ -1677,16 +1679,7 @@ body.card-form-open .editor-toolbar {
 }
 
 .editor-modal::-webkit-scrollbar {
-  width: 6px;
-}
-
-.editor-modal::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.editor-modal::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 999px;
+  display: none;
 }
 
 .editor-modal-wide {
