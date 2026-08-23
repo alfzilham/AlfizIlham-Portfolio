@@ -96,7 +96,7 @@ return [
     'services_caption' => 'Need a website, an AI workflow, or just a sharp logo? Here\'s how I can help.',
 
     // Tech Marquee
-    'tech_marquee_row1' => 'AI & AUTOMATION ✦ TECH CONSULTATION ✦ DESIGN & CALLIGRAPHY ✦ FULL-STACK DEVELOPMENT',
+    'tech_marquee_row1' => 'FULL-STACK WEB DEVELOPMENT ✦ AI-INTEGRATED APPLICATIONS ✦ WORKFLOW AUTOMATION ✦ API & DATABASE ENGINEERING ✦ TECH CONSULTATION',
     'tech_marquee_row2' => 'PYTHON ✦ NODE.JS ✦ DOCKER ✦ TENSORFLOW ✦ CLAUDE API ✦ POSTGRESQL ✦ TAILWIND CSS ✦ GIT ✦ FRAMER MOTION ✦ REACT ✦ NEXT.JS ✦ TYPESCRIPT',
 
     // Gallery

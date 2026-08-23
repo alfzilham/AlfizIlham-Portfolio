@@ -324,10 +324,10 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 
 **Purpose**: Secondary scrolling ticker, dark-themed, listing services + tech stack.
 
-- Full-width **black background** bar, two stacked rows of scrolling text, each row scrolling in **opposite directions** (row 1 left→right, row 2 right→left) infinitely.
-- Row 1 text: "AI & AUTOMATION ✦ TECH CONSULTATION ✦ DESIGN & CALLIGRAPHY ✦ FULL-STACK DEVELOPMENT ✦ AI & AUTOMATION ✦ TECH CONSUL..." — white text, uppercase, bold, small-caps feel, `--fs-body` size (~16-18px), letter-spacing wide.
+- Full-width **black background** bar with a **3° upward slant** (`transform: rotate(-3deg)`), two stacked rows of scrolling text, each row scrolling in **opposite directions** (row 1 left→right, row 2 right→left) infinitely.
+- Row 1 text: "FULL-STACK WEB DEVELOPMENT ✦ AI-INTEGRATED APPLICATIONS ✦ WORKFLOW AUTOMATION ✦ API & DATABASE ENGINEERING ✦ TECH CONSULTATION ✦ ..." — white text, uppercase, bold, `--fs-body` size (~16-18px), letter-spacing wide.
 - Row 2 text: "PYTHON ✦ NODE.JS ✦ DOCKER ✦ TENSORFLOW ✦ CLAUDE API ✦ POSTGRESQL ✦ TAILWIND CSS ✦ GIT ✦ FRAMER MOTION ✦ REACT ✦ NEXT..." — same style.
-- Padding `16px 0` per row, `background: #0a0a0a`, `color: #fff`.
+- Padding `40px 0` per row to accommodate rotation, `background: #0a0a0a`, `color: #fff`, negative margin `-28px 0` to compensate vertical shift.
 
 ---
 

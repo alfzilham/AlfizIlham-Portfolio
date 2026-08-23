@@ -96,7 +96,7 @@ return [
     'services_caption' => 'Butuh website, alur kerja AI, atau sekadar logo yang tajam? Begini cara saya bisa membantu.',
 
     // Tech Marquee
-    'tech_marquee_row1' => 'AI & OTOMASI ✦ KONSULTASI TEKNIS ✦ DESAIN & KALIGRAFI ✦ FULL-STACK DEVELOPMENT',
+    'tech_marquee_row1' => 'FULL-STACK WEB DEVELOPMENT ✦ AI-INTEGRATED APPLICATIONS ✦ WORKFLOW AUTOMATION ✦ API & DATABASE ENGINEERING ✦ TECH CONSULTATION',
     'tech_marquee_row2' => 'PYTHON ✦ NODE.JS ✦ DOCKER ✦ TENSORFLOW ✦ CLAUDE API ✦ POSTGRESQL ✦ TAILWIND CSS ✦ GIT ✦ FRAMER MOTION ✦ REACT ✦ NEXT.JS ✦ TYPESCRIPT',
 
     // Gallery

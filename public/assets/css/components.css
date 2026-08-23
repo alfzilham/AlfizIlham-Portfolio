@@ -2317,7 +2317,10 @@ body.card-form-open .editor-toolbar {
 .tech-marquee {
   background: var(--color-bg-dark);
   overflow: hidden;
-  padding: 0;
+  padding: 40px 0;
+  transform: rotate(-3deg);
+  transform-origin: center;
+  margin: -28px 0;
 }
 
 .tech-marquee-row {
