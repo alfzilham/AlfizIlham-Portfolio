@@ -566,7 +566,7 @@ function initServicesAccordion() {
     });
 
     panel.dataset.index = i;
-    root.appendChild(panel);
+    root.insertBefore(panel, descEl);
   });
 
   function setActive(index) {

@@ -2271,11 +2271,13 @@ body.card-form-open .editor-toolbar {
 
 /* Services active description */
 .services-active-desc {
+  flex: 0 0 auto;
+  width: 100%;
   font-size: var(--fs-body);
   color: var(--color-text-muted);
   text-align: center;
   min-height: 1.6em;
-  margin-top: var(--space-6);
+  margin-top: var(--space-4);
 }
 
 /* Accordion gallery: mobile stacking */

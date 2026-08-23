@@ -14,8 +14,10 @@
     </div>
     <div class="divider"></div>
     <div class="services-accordion-wrap">
-      <div id="servicesAccordion" class="accordion-gallery" role="list" aria-label="Services"></div>
-      <p class="services-active-desc" id="servicesActiveDesc"></p>
+      <div id="servicesAccordion" class="accordion-gallery" role="list" aria-label="Services">
+        <!-- panels rendered by JS -->
+        <p class="services-active-desc" id="servicesActiveDesc"></p>
+      </div>
     </div>
   </div>
 </section>
