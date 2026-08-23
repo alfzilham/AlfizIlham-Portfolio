@@ -2165,6 +2165,7 @@ body.card-form-open .editor-toolbar {
 
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: var(--ag-gap);
   width: 100%;
   max-width: 100%;

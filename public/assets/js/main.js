@@ -486,7 +486,7 @@ function initServicesAccordion() {
   const TEXT_COLOR = "#ffffff";
   const ACCENT_COLOR = "#ffffff";
 
-  root.style.height = HEIGHT + "px";
+  root.style.minHeight = HEIGHT + "px";
   root.style.setProperty("--ag-gap", GAP + "px");
   root.style.setProperty("--ag-radius", RADIUS + "px");
   root.style.setProperty("--ag-accent", ACCENT_COLOR);
