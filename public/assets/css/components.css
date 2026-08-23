@@ -2177,12 +2177,14 @@
 .education-step h3 {
   font-size: var(--fs-h4);
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .education-step-location {
+  display: block;
   font-size: var(--fs-caption);
   color: var(--color-text-faint);
+  margin-bottom: 8px;
 }
 
 .education-step p {

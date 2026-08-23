@@ -23,22 +23,26 @@
 
     <!-- Step content -->
     <div class="education-step education-step-1">
-      <h3><?php echo i18n::t('education_step1_title'); ?> <span class="education-step-location">(<?php echo i18n::t('education_step1_location'); ?>)</span></h3>
+      <h3><?php echo i18n::t('education_step1_title'); ?></h3>
+      <span class="education-step-location">(<?php echo i18n::t('education_step1_location'); ?>)</span>
       <p><?php echo i18n::t('education_step1_desc'); ?></p>
     </div>
 
     <div class="education-step education-step-2">
-      <h3><?php echo i18n::t('education_step2_title'); ?> <span class="education-step-location">(<?php echo i18n::t('education_step2_location'); ?>)</span></h3>
+      <h3><?php echo i18n::t('education_step2_title'); ?></h3>
+      <span class="education-step-location">(<?php echo i18n::t('education_step2_location'); ?>)</span>
       <p><?php echo i18n::t('education_step2_desc'); ?></p>
     </div>
 
     <div class="education-step education-step-3">
-      <h3><?php echo i18n::t('education_step3_title'); ?> <span class="education-step-location">(<?php echo i18n::t('education_step3_location'); ?>)</span></h3>
+      <h3><?php echo i18n::t('education_step3_title'); ?></h3>
+      <span class="education-step-location">(<?php echo i18n::t('education_step3_location'); ?>)</span>
       <p><?php echo i18n::t('education_step3_desc'); ?></p>
     </div>
 
     <div class="education-step education-step-4">
-      <h3><?php echo i18n::t('education_step4_title'); ?> <span class="education-step-location">(<?php echo i18n::t('education_step4_location'); ?>)</span></h3>
+      <h3><?php echo i18n::t('education_step4_title'); ?></h3>
+      <span class="education-step-location">(<?php echo i18n::t('education_step4_location'); ?>)</span>
       <p><?php echo i18n::t('education_step4_desc'); ?></p>
     </div>
 
