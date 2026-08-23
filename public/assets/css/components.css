@@ -914,7 +914,7 @@
    -------------------------------------------------------------------------- */
 
 .bio-statement {
-  font-size: var(--fs-h3);
+  font-size: var(--fs-h2);
   font-weight: var(--fw-bold);
   line-height: var(--lh-relaxed);
   max-width: 900px;
