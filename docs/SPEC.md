@@ -216,8 +216,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 **Upload rules**: finfo MIME whitelist (jpeg/png/webp/gif), max 5 MB, resized to max 1600px, converted to WebP quality 85 via GD, random filename stored in `public/assets/uploads/showcase/`.
 
 **UI behaviors**:
-- ChromaGrid (3×320px columns, **white cards**, borderless with hard offset shadow `8px 8px 0 #0a0a0a`) sits between the subtitle and the circular gallery; hidden when empty; cards whose image file is missing on disk are filtered out server-side (prevents broken cards + 404s)
-- Card hover: lifts `translateY(-4px)`, shadow grows to `12px`, raised above the grayscale mask (`z-index: 5`) so it shows full color anywhere in the grid; no image zoom, no border-color change
+- ChromaGrid (3×320px columns, **white cards**, thin border `1px var(--color-border)`, neumorphic shadow `--neu-shadow-out`) sits between the subtitle and the circular gallery; hidden when empty; cards whose image file is missing on disk are filtered out server-side (prevents broken cards + 404s)
+- Card hover: lifts `translateY(-4px)`, shadow deepens to `--neu-shadow-out-lg`; the grid-level grayscale spotlight remains the sole colorization mechanism (hovered cards do not bypass the mask); no image zoom, no border-color change
 - Kebab ⋮ button (editor mode only): Edit reopens prefilled form modal; Delete opens a **custom confirmation modal** (centered layout, red warning badge, card name, Cancel / Delete actions with `.btn-danger`)
 - Optional **Live URL** field in the form (auto-prepends https://, validated); styled identically to other inputs (`input[type="url"]`); surfaced in the lightbox as an external-link action + inline caption link
 - Editor modals are viewport-clamped (`max-height: calc(100dvh - 48px)`) and scroll internally when content overflows
