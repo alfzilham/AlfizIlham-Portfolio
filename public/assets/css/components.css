@@ -2590,7 +2590,7 @@ body.card-form-open .editor-toolbar {
   padding: 0 24px;
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: var(--space-6);
+  margin-top: var(--space-8);
 }
 
 .certificates-grid {
@@ -2604,7 +2604,7 @@ body.card-form-open .editor-toolbar {
   position: relative;
   overflow: hidden;
   border-radius: 16px;
-  background: #0a0a0a;
+  background: transparent;
 }
 
 .cert-carousel-wrap {

@@ -2455,7 +2455,7 @@ function initCertificates() {
   carouselRoot.style.display = "flex";
   carouselRoot.style.alignItems = "center";
   carouselRoot.style.justifyContent = "center";
-  carouselRoot.style.touchAction = "pan-y";
+  carouselRoot.style.touchAction = "none";
   carouselRoot.style.outline = "none";
   carouselRoot.style.userSelect = "none";
   carouselRoot.style.cursor = "grab";
