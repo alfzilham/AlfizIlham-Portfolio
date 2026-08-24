@@ -2202,6 +2202,195 @@ function initCertificates() {
   var carouselRoot = document.getElementById("certDepthCarousel");
   var gridWrap = document.querySelector(".certificates-grid-wrap");
 
+  // ── EDITOR MODE: Certificate CRUD (always runs) ──
+  var certFormOverlay = document.getElementById("certFormOverlay");
+  var certForm = document.getElementById("certForm");
+  var certFormTitle = document.getElementById("certFormTitle");
+  var certTitleInput = document.getElementById("certTitle");
+  var certCredIdInput = document.getElementById("certCredentialId");
+  var certCredLinkInput = document.getElementById("certCredentialLink");
+  var certImageInput = document.getElementById("certImage");
+  var certDropzone = document.getElementById("certDropzone");
+  var certDropzoneEmpty = document.getElementById("certDropzoneEmpty");
+  var certDropzonePreview = document.getElementById("certDropzonePreview");
+  var certDropzonePreviewImg = document.getElementById("certDropzonePreviewImg");
+  var certDropzoneName = document.getElementById("certDropzoneName");
+  var certFormSubmit = document.getElementById("certFormSubmit");
+  var certTitleError = document.getElementById("certTitleError");
+  var certImageError = document.getElementById("certImageError");
+  var certCredIdError = document.getElementById("certCredentialIdError");
+  var certCredLinkError = document.getElementById("certCredentialLinkError");
+
+  var certEditingId = null;
+  var certSelectedFile = null;
+  var certObjectUrl = null;
+
+  function certOpenOverlay(el) {
+    el.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("card-form-open");
+    if (window.__lenis) window.__lenis.stop();
+  }
+
+  function certCloseOverlay(el) {
+    el.hidden = true;
+    document.body.style.overflow = "";
+    document.body.classList.remove("card-form-open");
+    if (window.__lenis) window.__lenis.start();
+  }
+
+  function certResetErrors() {
+    certTitleError.textContent = "";
+    certImageError.textContent = "";
+    certCredIdError.textContent = "";
+    certCredLinkError.textContent = "";
+  }
+
+  function certClearForm() {
+    if (certObjectUrl) { URL.revokeObjectURL(certObjectUrl); certObjectUrl = null; }
+    certEditingId = null;
+    certSelectedFile = null;
+    certImageInput.value = "";
+    certDropzonePreviewImg.removeAttribute("src");
+    certDropzonePreview.hidden = true;
+    certDropzoneEmpty.hidden = false;
+    certForm.reset();
+  }
+
+  function certOpenForm(cert) {
+    certClearForm();
+    certResetErrors();
+    if (cert) {
+      certEditingId = Number(cert.dataset.id);
+      certFormTitle.textContent = window.LANG === "id" ? "Edit Sertifikat" : "Edit Certificate";
+      certTitleInput.value = cert.dataset.title || "";
+      certCredIdInput.value = cert.dataset.credentialId || "";
+      certCredLinkInput.value = cert.dataset.credentialLink || "";
+      if (cert.dataset.image) {
+        certDropzonePreviewImg.src = cert.dataset.image;
+        certDropzoneName.textContent = cert.dataset.image.split("/").pop();
+        certDropzoneEmpty.hidden = true;
+        certDropzonePreview.hidden = false;
+      }
+    } else {
+      certFormTitle.textContent = window.LANG === "id" ? "Tambah Sertifikat" : "Add Certificate";
+    }
+    certOpenOverlay(certFormOverlay);
+    setTimeout(function () { certTitleInput.focus(); }, 50);
+  }
+
+  function certSetFile(file) {
+    var okTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (okTypes.indexOf(file.type) === -1) {
+      certImageError.textContent = "Only JPG, PNG, WebP, or GIF allowed";
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      certImageError.textContent = "Image exceeds 5 MB limit";
+      return;
+    }
+    certImageError.textContent = "";
+    if (certObjectUrl) URL.revokeObjectURL(certObjectUrl);
+    certObjectUrl = URL.createObjectURL(file);
+    certSelectedFile = file;
+    certDropzonePreviewImg.src = certObjectUrl;
+    certDropzoneName.textContent = file.name;
+    certDropzoneEmpty.hidden = true;
+    certDropzonePreview.hidden = false;
+  }
+
+  // Add Certificate button
+  var addCertBtn = document.getElementById("addCertBtn");
+  if (addCertBtn) {
+    addCertBtn.addEventListener("click", function () { certOpenForm(null); });
+  }
+
+  // Dropzone
+  if (certDropzone) {
+    certDropzone.addEventListener("click", function () { certImageInput.click(); });
+    certImageInput.addEventListener("change", function () {
+      if (certImageInput.files[0]) certSetFile(certImageInput.files[0]);
+    });
+    ["dragover", "dragenter"].forEach(function (ev) {
+      certDropzone.addEventListener(ev, function (e) { e.preventDefault(); certDropzone.classList.add("dragover"); });
+    });
+    ["dragleave", "drop"].forEach(function (ev) {
+      certDropzone.addEventListener(ev, function (e) { e.preventDefault(); certDropzone.classList.remove("dragover"); });
+    });
+    certDropzone.addEventListener("drop", function (e) {
+      if (e.dataTransfer.files[0]) certSetFile(e.dataTransfer.files[0]);
+    });
+  }
+
+  // Submit form
+  if (certForm) {
+    certForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      certResetErrors();
+      var valid = true;
+
+      if (certTitleInput.value.trim().length < 2) {
+        certTitleError.textContent = "Title is required (min 2 characters)";
+        valid = false;
+      }
+      if (!certEditingId && !certSelectedFile) {
+        certImageError.textContent = "Please choose an image";
+        valid = false;
+      }
+      if (!valid) return;
+
+      var fd = new FormData();
+      fd.append("title", certTitleInput.value.trim());
+      fd.append("credential_id", certCredIdInput.value.trim());
+      fd.append("credential_link", certCredLinkInput.value.trim());
+      if (certSelectedFile) fd.append("image", certSelectedFile);
+
+      var url = certEditingId
+        ? "index.php?/api/admin/certificates/" + certEditingId
+        : "index.php?/api/admin/certificates";
+
+      certFormSubmit.disabled = true;
+      try {
+        var res = await fetch(url, { method: "POST", body: fd });
+        var data = await res.json().catch(function () { return {}; });
+        if (res.ok && data.success && data.certificate) {
+          certClearForm();
+          certCloseOverlay(certFormOverlay);
+          location.reload();
+        } else if (data.errors) {
+          certTitleError.textContent = data.errors.title || "";
+          certImageError.textContent = data.errors.image || "";
+        } else {
+          certImageError.textContent = data.error || "Error";
+        }
+      } catch (_) {
+        certImageError.textContent = "Network error";
+      } finally {
+        certFormSubmit.disabled = false;
+      }
+    });
+  }
+
+  // Close modal
+  if (certFormOverlay) {
+    certFormOverlay.addEventListener("pointerdown", function (e) {
+      if (e.target === certFormOverlay) certCloseOverlay(certFormOverlay);
+    });
+  }
+  document.querySelectorAll("[data-close-modal]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var ov = btn.closest(".editor-overlay");
+      if (ov && ov.id === "certFormOverlay") certCloseOverlay(certFormOverlay);
+    });
+  });
+
+  // Escape key for cert modal
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && certFormOverlay && !certFormOverlay.hidden) {
+      certCloseOverlay(certFormOverlay);
+    }
+  });
+
   // Empty state: no certificates uploaded yet
   if (!items.length) {
     if (gridWrap) gridWrap.style.display = "none";
@@ -2714,194 +2903,4 @@ function initCertificates() {
   });
 
   startAutoSlide();
-
-  // ── EDITOR MODE: Certificate CRUD ──
-  var certFormOverlay = document.getElementById("certFormOverlay");
-  var certForm = document.getElementById("certForm");
-  var certFormTitle = document.getElementById("certFormTitle");
-  var certTitleInput = document.getElementById("certTitle");
-  var certCredIdInput = document.getElementById("certCredentialId");
-  var certCredLinkInput = document.getElementById("certCredentialLink");
-  var certImageInput = document.getElementById("certImage");
-  var certDropzone = document.getElementById("certDropzone");
-  var certDropzoneEmpty = document.getElementById("certDropzoneEmpty");
-  var certDropzonePreview = document.getElementById("certDropzonePreview");
-  var certDropzonePreviewImg = document.getElementById("certDropzonePreviewImg");
-  var certDropzoneName = document.getElementById("certDropzoneName");
-  var certFormSubmit = document.getElementById("certFormSubmit");
-  var certTitleError = document.getElementById("certTitleError");
-  var certImageError = document.getElementById("certImageError");
-  var certCredIdError = document.getElementById("certCredentialIdError");
-  var certCredLinkError = document.getElementById("certCredentialLinkError");
-
-  var certEditingId = null;
-  var certSelectedFile = null;
-  var certObjectUrl = null;
-
-  function certOpenOverlay(el) {
-    el.hidden = false;
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("card-form-open");
-    if (window.__lenis) window.__lenis.stop();
-  }
-
-  function certCloseOverlay(el) {
-    el.hidden = true;
-    document.body.style.overflow = "";
-    document.body.classList.remove("card-form-open");
-    if (window.__lenis) window.__lenis.start();
-  }
-
-  function certResetErrors() {
-    certTitleError.textContent = "";
-    certImageError.textContent = "";
-    certCredIdError.textContent = "";
-    certCredLinkError.textContent = "";
-  }
-
-  function certClearForm() {
-    if (certObjectUrl) { URL.revokeObjectURL(certObjectUrl); certObjectUrl = null; }
-    certEditingId = null;
-    certSelectedFile = null;
-    certImageInput.value = "";
-    certDropzonePreviewImg.removeAttribute("src");
-    certDropzonePreview.hidden = true;
-    certDropzoneEmpty.hidden = false;
-    certForm.reset();
-  }
-
-  function certOpenForm(cert) {
-    certClearForm();
-    certResetErrors();
-    if (cert) {
-      certEditingId = Number(cert.dataset.id);
-      certFormTitle.textContent = window.LANG === "id" ? "Edit Sertifikat" : "Edit Certificate";
-      certTitleInput.value = cert.dataset.title || "";
-      certCredIdInput.value = cert.dataset.credentialId || "";
-      certCredLinkInput.value = cert.dataset.credentialLink || "";
-      if (cert.dataset.image) {
-        certDropzonePreviewImg.src = cert.dataset.image;
-        certDropzoneName.textContent = cert.dataset.image.split("/").pop();
-        certDropzoneEmpty.hidden = true;
-        certDropzonePreview.hidden = false;
-      }
-    } else {
-      certFormTitle.textContent = window.LANG === "id" ? "Tambah Sertifikat" : "Add Certificate";
-    }
-    certOpenOverlay(certFormOverlay);
-    setTimeout(function () { certTitleInput.focus(); }, 50);
-  }
-
-  function certSetFile(file) {
-    var okTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (okTypes.indexOf(file.type) === -1) {
-      certImageError.textContent = "Only JPG, PNG, WebP, or GIF allowed";
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      certImageError.textContent = "Image exceeds 5 MB limit";
-      return;
-    }
-    certImageError.textContent = "";
-    if (certObjectUrl) URL.revokeObjectURL(certObjectUrl);
-    certObjectUrl = URL.createObjectURL(file);
-    certSelectedFile = file;
-    certDropzonePreviewImg.src = certObjectUrl;
-    certDropzoneName.textContent = file.name;
-    certDropzoneEmpty.hidden = true;
-    certDropzonePreview.hidden = false;
-  }
-
-  // Add Certificate button
-  var addCertBtn = document.getElementById("addCertBtn");
-  if (addCertBtn) {
-    addCertBtn.addEventListener("click", function () { certOpenForm(null); });
-  }
-
-  // Dropzone
-  if (certDropzone) {
-    certDropzone.addEventListener("click", function () { certImageInput.click(); });
-    certImageInput.addEventListener("change", function () {
-      if (certImageInput.files[0]) certSetFile(certImageInput.files[0]);
-    });
-    ["dragover", "dragenter"].forEach(function (ev) {
-      certDropzone.addEventListener(ev, function (e) { e.preventDefault(); certDropzone.classList.add("dragover"); });
-    });
-    ["dragleave", "drop"].forEach(function (ev) {
-      certDropzone.addEventListener(ev, function (e) { e.preventDefault(); certDropzone.classList.remove("dragover"); });
-    });
-    certDropzone.addEventListener("drop", function (e) {
-      if (e.dataTransfer.files[0]) certSetFile(e.dataTransfer.files[0]);
-    });
-  }
-
-  // Submit form
-  if (certForm) {
-    certForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      certResetErrors();
-      var valid = true;
-
-      if (certTitleInput.value.trim().length < 2) {
-        certTitleError.textContent = "Title is required (min 2 characters)";
-        valid = false;
-      }
-      if (!certEditingId && !certSelectedFile) {
-        certImageError.textContent = "Please choose an image";
-        valid = false;
-      }
-      if (!valid) return;
-
-      var fd = new FormData();
-      fd.append("title", certTitleInput.value.trim());
-      fd.append("credential_id", certCredIdInput.value.trim());
-      fd.append("credential_link", certCredLinkInput.value.trim());
-      if (certSelectedFile) fd.append("image", certSelectedFile);
-
-      var url = certEditingId
-        ? "index.php?/api/admin/certificates/" + certEditingId
-        : "index.php?/api/admin/certificates";
-
-      certFormSubmit.disabled = true;
-      try {
-        var res = await fetch(url, { method: "POST", body: fd });
-        var data = await res.json().catch(function () { return {}; });
-        if (res.ok && data.success && data.certificate) {
-          // Reload page to refresh certificates
-          certClearForm();
-          certCloseOverlay(certFormOverlay);
-          location.reload();
-        } else if (data.errors) {
-          certTitleError.textContent = data.errors.title || "";
-          certImageError.textContent = data.errors.image || "";
-        } else {
-          certImageError.textContent = data.error || "Error";
-        }
-      } catch (_) {
-        certImageError.textContent = "Network error";
-      } finally {
-        certFormSubmit.disabled = false;
-      }
-    });
-  }
-
-  // Close modal
-  if (certFormOverlay) {
-    certFormOverlay.addEventListener("pointerdown", function (e) {
-      if (e.target === certFormOverlay) certCloseOverlay(certFormOverlay);
-    });
-  }
-  document.querySelectorAll("[data-close-modal]").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var ov = btn.closest(".editor-overlay");
-      if (ov && ov.id === "certFormOverlay") certCloseOverlay(certFormOverlay);
-    });
-  });
-
-  // Escape key for cert modal
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && certFormOverlay && !certFormOverlay.hidden) {
-      certCloseOverlay(certFormOverlay);
-    }
-  });
 }
