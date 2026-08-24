@@ -230,4 +230,6 @@ return [
     'form_credential_id_placeholder' => 'e.g. GCP-2024-XXXXX',
     'form_credential_link_label' => 'Credential Link (optional)',
     'form_credential_link_placeholder' => 'https://credential-url.com',
+    'form_company_label' => 'Company',
+    'form_company_placeholder' => 'e.g. Google, AWS, Meta',
 ];

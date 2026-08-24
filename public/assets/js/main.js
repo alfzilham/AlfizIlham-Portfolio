@@ -2193,20 +2193,180 @@ function initLucideIcons() {
 }
 
 /* --------------------------------------------------------------------------
-   CERTIFICATES — OptionWheel + DepthCarousel + Sync + Auto-slide + Editor CRUD
+   CERTIFICATES — Grid + Hover Expand + Load More + Editor CRUD
    -------------------------------------------------------------------------- */
 
 function initCertificates() {
   var items = window.__CERTIFICATES || [];
-  var wheelRoot = document.getElementById("certOptionWheel");
-  var carouselRoot = document.getElementById("certDepthCarousel");
-  var gridWrap = document.querySelector(".certificates-grid-wrap");
+  var grid = document.getElementById("certGrid");
+  var loadWrap = document.getElementById("certLoadMoreWrap");
+  var loadBtn = document.getElementById("certLoadMoreBtn");
+  if (!grid) return;
 
-  // ── EDITOR MODE: Certificate CRUD (always runs) ──
+  var CERT_PAGE = 8;
+  var certShown = CERT_PAGE;
+
+  // ── Render grid cards ──
+  function renderCards() {
+    grid.innerHTML = "";
+    items.forEach(function (item, i) {
+      var card = document.createElement("div");
+      card.className = "cert-card";
+      card.dataset.id = item.id || "";
+      card.dataset.title = item.title || "";
+      card.dataset.company = item.company || "";
+      card.dataset.credentialId = item.credential_id || "";
+      card.dataset.credentialLink = item.credential_link || "";
+      card.dataset.image = item.image || "";
+      card.dataset.index = i;
+
+      var img = document.createElement("img");
+      img.src = item.image || "";
+      img.alt = item.title || "";
+      img.loading = "lazy";
+      img.draggable = false;
+
+      var info = document.createElement("div");
+      info.className = "cert-card-info";
+
+      var titleEl = document.createElement("h4");
+      titleEl.className = "cert-card-title";
+      titleEl.textContent = item.title || "";
+
+      info.appendChild(titleEl);
+
+      if (item.company) {
+        var companyEl = document.createElement("p");
+        companyEl.className = "cert-card-company";
+        companyEl.textContent = item.company;
+        info.appendChild(companyEl);
+      }
+
+      if (item.credential_id) {
+        var credEl = document.createElement("p");
+        credEl.className = "cert-card-credential";
+        if (item.credential_link) {
+          var link = document.createElement("a");
+          link.href = item.credential_link;
+          link.target = "_blank";
+          link.rel = "noopener";
+          link.textContent = item.credential_id;
+          credEl.appendChild(link);
+        } else {
+          credEl.textContent = item.credential_id;
+        }
+        info.appendChild(credEl);
+      }
+
+      // Kebab menu (editor mode only)
+      var menuBtn = document.createElement("button");
+      menuBtn.type = "button";
+      menuBtn.className = "cert-menu-btn";
+      menuBtn.setAttribute("aria-label", "Card menu");
+      menuBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>';
+
+      var menu = document.createElement("div");
+      menu.className = "cert-menu";
+      var editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.dataset.action = "edit";
+      editBtn.textContent = "Edit";
+      var deleteBtn = document.createElement("button");
+      deleteBtn.type = "button";
+      deleteBtn.dataset.action = "delete";
+      deleteBtn.className = "danger";
+      deleteBtn.textContent = "Delete";
+      menu.appendChild(editBtn);
+      menu.appendChild(deleteBtn);
+
+      card.appendChild(img);
+      card.appendChild(info);
+      card.appendChild(menuBtn);
+      card.appendChild(menu);
+
+      grid.appendChild(card);
+    });
+  }
+
+  // ── Load More / Visibility ──
+  function applyVisibility() {
+    var cards = grid.querySelectorAll(".cert-card");
+    var hiddenCount = 0;
+    cards.forEach(function (card, i) {
+      var hide = !document.body.classList.contains("editor-mode") && i >= certShown;
+      card.classList.toggle("cert-extra", hide);
+      if (hide) hiddenCount++;
+    });
+    if (loadWrap) loadWrap.hidden = document.body.classList.contains("editor-mode") || hiddenCount === 0;
+  }
+
+  if (loadBtn) {
+    loadBtn.addEventListener("click", function () {
+      certShown += CERT_PAGE;
+      applyVisibility();
+    });
+  }
+
+  // ── Card interactions (delegation) ──
+  var pendingDeleteCert = null;
+
+  grid.addEventListener("click", function (e) {
+    // Kebab menu button
+    var menuBtnEl = e.target.closest(".cert-menu-btn");
+    if (menuBtnEl) {
+      if (!document.body.classList.contains("editor-mode")) return;
+      e.stopPropagation();
+      var menuEl = menuBtnEl.parentElement.querySelector(".cert-menu");
+      var wasOpen = menuEl.classList.contains("open");
+      grid.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
+      if (!wasOpen) menuEl.classList.add("open");
+      return;
+    }
+
+    // Menu action buttons
+    var actionBtn = e.target.closest(".cert-menu button");
+    if (actionBtn) {
+      e.stopPropagation();
+      grid.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
+      var card = actionBtn.closest(".cert-card");
+      if (actionBtn.dataset.action === "edit") {
+        certOpenForm(card);
+      } else if (actionBtn.dataset.action === "delete") {
+        pendingDeleteCert = card;
+        deleteCardName.textContent = card.dataset.title || "";
+        openOverlay(deleteOverlay);
+      }
+      return;
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".cert-card")) {
+      grid.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
+    }
+  });
+
+  // Delete confirmation handler
+  var deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+  if (deleteConfirmBtn) {
+    deleteConfirmBtn.addEventListener("click", async function () {
+      if (!pendingDeleteCert) return;
+      var cert = pendingDeleteCert;
+      pendingDeleteCert = null;
+      closeOverlay(deleteOverlay);
+      try {
+        var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE" });
+        if (res.ok) location.reload();
+      } catch (_) {}
+    });
+  }
+
+  // ── EDITOR MODE: Certificate CRUD ──
   var certFormOverlay = document.getElementById("certFormOverlay");
   var certForm = document.getElementById("certForm");
   var certFormTitle = document.getElementById("certFormTitle");
   var certTitleInput = document.getElementById("certTitle");
+  var certCompanyInput = document.getElementById("certCompany");
   var certCredIdInput = document.getElementById("certCredentialId");
   var certCredLinkInput = document.getElementById("certCredentialLink");
   var certImageInput = document.getElementById("certImage");
@@ -2218,8 +2378,6 @@ function initCertificates() {
   var certFormSubmit = document.getElementById("certFormSubmit");
   var certTitleError = document.getElementById("certTitleError");
   var certImageError = document.getElementById("certImageError");
-  var certCredIdError = document.getElementById("certCredentialIdError");
-  var certCredLinkError = document.getElementById("certCredentialLinkError");
 
   var certEditingId = null;
   var certSelectedFile = null;
@@ -2242,8 +2400,6 @@ function initCertificates() {
   function certResetErrors() {
     certTitleError.textContent = "";
     certImageError.textContent = "";
-    certCredIdError.textContent = "";
-    certCredLinkError.textContent = "";
   }
 
   function certClearForm() {
@@ -2264,6 +2420,7 @@ function initCertificates() {
       certEditingId = Number(cert.dataset.id);
       certFormTitle.textContent = window.LANG === "id" ? "Edit Sertifikat" : "Edit Certificate";
       certTitleInput.value = cert.dataset.title || "";
+      certCompanyInput.value = cert.dataset.company || "";
       certCredIdInput.value = cert.dataset.credentialId || "";
       certCredLinkInput.value = cert.dataset.credentialLink || "";
       if (cert.dataset.image) {
@@ -2341,6 +2498,7 @@ function initCertificates() {
 
       var fd = new FormData();
       fd.append("title", certTitleInput.value.trim());
+      fd.append("company", certCompanyInput.value.trim());
       fd.append("credential_id", certCredIdInput.value.trim());
       fd.append("credential_link", certCredLinkInput.value.trim());
       if (certSelectedFile) fd.append("image", certSelectedFile);
@@ -2391,595 +2549,7 @@ function initCertificates() {
     }
   });
 
-  // Empty state: no certificates uploaded yet
-  if (!items.length) {
-    if (gridWrap) gridWrap.style.display = "none";
-    return;
-  }
-
-  if (!wheelRoot || !carouselRoot || typeof gsap === "undefined") return;
-
-  var prefersReduced =
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  // ── Shared state ──
-  var activeIndex = 0;
-  var autoTimer = null;
-  var AUTO_DELAY = 5000;
-  var isHovering = false;
-
-  // ── OPTION WHEEL (left grid) ──
-  var OW_TEXT_COLOR = "#ffffff";
-  var OW_ACTIVE_COLOR = "#ffffff";
-  var OW_FONT_SIZE_REM = 2.2;
-  var OW_SPACING = 1.4;
-  var OW_CURVE = 1;
-  var OW_TILT = 6;
-  var OW_BLUR = 2;
-  var OW_FADE = 0.25;
-  var OW_MIN_OPACITY = 0.05;
-  var OW_SMOOTHING = 200;
-  var OW_INSET = 40;
-
-  var owRemPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-  var owRowH = Math.max(OW_FONT_SIZE_REM * OW_SPACING * owRemPx, 1);
-  var owPos = 0;
-  var owTarget = 0;
-  var owRaf = null;
-  var owLast = 0;
-  var owItems = [];
-
-  wheelRoot.style.setProperty("--ow-text-color", OW_TEXT_COLOR);
-  wheelRoot.style.setProperty("--ow-active-color", OW_ACTIVE_COLOR);
-  wheelRoot.style.setProperty("--ow-font-size", OW_FONT_SIZE_REM + "rem");
-  wheelRoot.style.setProperty("--ow-inset", OW_INSET + "px");
-  wheelRoot.style.cursor = "grab";
-  wheelRoot.style.overflow = "hidden";
-  wheelRoot.style.position = "relative";
-  wheelRoot.style.width = "100%";
-  wheelRoot.style.height = "100%";
-  wheelRoot.style.userSelect = "none";
-  wheelRoot.style.touchAction = "none";
-
-  items.forEach(function (item, i) {
-    var el = document.createElement("div");
-    el.textContent = item.title || "";
-    el.style.position = "absolute";
-    el.style.top = "50%";
-    el.style.left = OW_INSET + "px";
-    el.style.whiteSpace = "nowrap";
-    el.style.fontSize = OW_FONT_SIZE_REM + "rem";
-    el.style.lineHeight = "1";
-    el.style.fontWeight = "200";
-    el.style.transformOrigin = "left center";
-    el.style.cursor = "pointer";
-    el.style.willChange = "transform, opacity, filter";
-    el.setAttribute("role", "option");
-    el.setAttribute("aria-selected", "false");
-    el.dataset.index = i;
-
-    var p = Math.max(0, 1 - Math.min(0, 1));
-    el.style.color = "color-mix(in srgb, " + OW_ACTIVE_COLOR + " " + (p * 100) + "%, " + OW_TEXT_COLOR + ")";
-
-    el.addEventListener("click", function () {
-      var d = i - Math.round(owTarget);
-      owTarget += d;
-      owSnap();
-    });
-
-    wheelRoot.appendChild(el);
-    owItems.push(el);
-  });
-
-  function owFrame(now) {
-    var dt = Math.min((now - owLast) / 1000, 0.05);
-    owLast = now;
-    var tau = Math.max(OW_SMOOTHING, 1) / 1000;
-    var k = 1 - Math.exp(-dt / tau);
-    var next = owPos + (owTarget - owPos) * k;
-    if (Math.abs(owTarget - next) < 0.001) next = owTarget;
-    owPos = next;
-
-    var tiltRad = (OW_TILT * Math.PI) / 180;
-    var R = tiltRad > 0.0005 ? owRowH / tiltRad : 0;
-    var n = owItems.length;
-
-    for (var i = 0; i < n; i++) {
-      var el = owItems[i];
-      var d = i - owPos;
-      var dist = Math.abs(d);
-      var x = 0, y = d * owRowH, rot = 0;
-      if (R > 0) {
-        var ang = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, d * tiltRad));
-        y = R * Math.sin(ang);
-        x = -OW_CURVE * R * (1 - Math.cos(ang));
-        rot = (ang * 180) / Math.PI;
-      }
-      el.style.transform = "translate(" + x.toFixed(2) + "px, calc(" + y.toFixed(2) + "px - 50%)) rotate(" + rot.toFixed(3) + "deg)";
-      el.style.opacity = String(Math.max(OW_MIN_OPACITY, 1 - dist * OW_FADE));
-      el.style.filter = OW_BLUR > 0 ? "blur(" + (dist * OW_BLUR).toFixed(2) + "px)" : "none";
-      var pp = Math.max(0, 1 - Math.min(dist, 1));
-      el.style.color = "color-mix(in srgb, " + OW_ACTIVE_COLOR + " " + (pp * 100) + "%, " + OW_TEXT_COLOR + ")";
-      el.style.fontWeight = dist < 0.5 ? "500" : "200";
-      el.setAttribute("aria-selected", dist < 0.5 ? "true" : "false");
-    }
-
-    owRaf = Math.abs(owTarget - owPos) < 0.001 ? null : requestAnimationFrame(owFrame);
-  }
-
-  function owStartLoop() {
-    if (owRaf != null) cancelAnimationFrame(owRaf);
-    owLast = performance.now();
-    owRaf = requestAnimationFrame(owFrame);
-  }
-
-  function owSnap() {
-    var n = items.length;
-    var idx = ((Math.round(owTarget) % n) + n) % n;
-    if (idx !== activeIndex) {
-      activeIndex = idx;
-      dcSetFocus(idx, true);
-    }
-    owStartLoop();
-  }
-
-  // Wheel on option wheel
-  var owWheelTimer = null;
-  wheelRoot.addEventListener("wheel", function (e) {
-    e.preventDefault();
-    var delta = e.deltaMode === 1 ? e.deltaY * 24 : e.deltaY;
-    var step = Math.max(-1, Math.min(1, delta / owRowH));
-    owTarget += step;
-    owStartLoop();
-    if (owWheelTimer) clearTimeout(owWheelTimer);
-    owWheelTimer = setTimeout(function () {
-      owTarget = Math.round(owTarget);
-      owSnap();
-    }, 140);
-  }, { passive: false });
-
-  // Drag on option wheel
-  var owDrag = null;
-  var owDragMoved = false;
-  wheelRoot.addEventListener("pointerdown", function (e) {
-    owDrag = { y: e.clientY, start: owTarget, id: e.pointerId };
-    owDragMoved = false;
-    wheelRoot.style.cursor = "grabbing";
-  });
-  wheelRoot.addEventListener("pointermove", function (e) {
-    if (!owDrag) return;
-    var dy = e.clientY - owDrag.y;
-    if (!owDragMoved && Math.abs(dy) > 4) {
-      owDragMoved = true;
-      wheelRoot.setPointerCapture(owDrag.id);
-    }
-    if (owDragMoved) {
-      owTarget = owDrag.start - dy / owRowH;
-      owStartLoop();
-    }
-  });
-  wheelRoot.addEventListener("pointerup", function () {
-    if (!owDrag) return;
-    owDrag = null;
-    wheelRoot.style.cursor = "grab";
-    if (owDragMoved) {
-      owTarget = Math.round(owTarget);
-      owSnap();
-    }
-  });
-  wheelRoot.addEventListener("pointercancel", function () {
-    owDrag = null;
-    wheelRoot.style.cursor = "grab";
-  });
-
-  // Keyboard on option wheel
-  wheelRoot.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-      e.preventDefault();
-      owTarget = Math.round(owTarget) - 1;
-      owSnap();
-    } else if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-      e.preventDefault();
-      owTarget = Math.round(owTarget) + 1;
-      owSnap();
-    }
-  });
-
-  owStartLoop();
-
-  // ── DEPTH CAROUSEL (right grid) ──
-  var DC_MAX_W = 320;
-  var DC_RADIUS = 18;
-  var DC_TINT = "#05060a";
-  var DC_DEPTH = 220;
-  var DC_SPREAD = 90;
-  var DC_TILT = 22;
-  var DC_VISIBLE = 4;
-  var DC_FALLOFF = 0.2;
-  var DC_BLUR = 6;
-  var DC_DURATION = 700;
-  var DC_EASE = "power3.out";
-
-  var dcCards = [];
-  var dcOverlays = [];
-  var dcPos = 0;
-  var dcFocus = 0;
-  var dcTween = null;
-  var dcScale = 1;
-  var dcCardW = DC_MAX_W;
-
-  carouselRoot.style.perspective = "1400px";
-  carouselRoot.style.perspectiveOrigin = "50% 50%";
-  carouselRoot.style.position = "relative";
-  carouselRoot.style.width = "100%";
-  carouselRoot.style.height = "100%";
-  carouselRoot.style.minHeight = "320px";
-  carouselRoot.style.display = "flex";
-  carouselRoot.style.alignItems = "center";
-  carouselRoot.style.justifyContent = "center";
-  carouselRoot.style.touchAction = "none";
-  carouselRoot.style.outline = "none";
-  carouselRoot.style.userSelect = "none";
-  carouselRoot.style.cursor = "grab";
-
-  var dcStage = document.createElement("div");
-  dcStage.style.position = "absolute";
-  dcStage.style.inset = "0";
-  dcStage.style.transformStyle = "preserve-3d";
-
-  items.forEach(function (item, i) {
-    var card = document.createElement("div");
-    card.style.position = "absolute";
-    card.style.top = "50%";
-    card.style.left = "50%";
-    card.style.maxWidth = DC_MAX_W + "px";
-    card.style.width = "100%";
-    card.style.height = "auto";
-    card.style.borderRadius = DC_RADIUS + "px";
-    card.style.overflow = "hidden";
-    card.style.background = "#0b0d12";
-    card.style.boxShadow = "0 30px 60px -20px rgba(0,0,0,0.65), 0 8px 20px -10px rgba(0,0,0,0.5)";
-    card.style.willChange = "transform, opacity, filter";
-    card.style.cursor = "pointer";
-    card.style.transformOrigin = "center center";
-
-    var img = document.createElement("img");
-    img.src = item.image || "";
-    img.alt = item.title || "";
-    img.draggable = false;
-    img.style.width = "100%";
-    img.style.height = "auto";
-    img.style.objectFit = "cover";
-    img.style.display = "block";
-    img.style.pointerEvents = "none";
-
-    var tint = document.createElement("span");
-    tint.style.position = "absolute";
-    tint.style.inset = "0";
-    tint.style.opacity = "0";
-    tint.style.pointerEvents = "none";
-    tint.style.background = DC_TINT;
-    tint.style.mixBlendMode = "multiply";
-
-    // Hover overlay for certificate data
-    var overlay = document.createElement("div");
-    overlay.style.position = "absolute";
-    overlay.style.left = "0";
-    overlay.style.right = "0";
-    overlay.style.bottom = "0";
-    overlay.style.padding = "46px 20px 20px";
-    overlay.style.background = "linear-gradient(0deg, rgba(0,0,0,0.85), transparent)";
-    overlay.style.opacity = "0";
-    overlay.style.transition = "opacity 0.3s ease";
-    overlay.style.pointerEvents = "none";
-    overlay.style.zIndex = "2";
-
-    var titleEl = document.createElement("h4");
-    titleEl.textContent = item.title || "";
-    titleEl.style.color = "#fff";
-    titleEl.style.fontSize = "1.1rem";
-    titleEl.style.fontWeight = "600";
-    titleEl.style.marginBottom = "4px";
-
-    overlay.appendChild(titleEl);
-
-    if (item.credential_id) {
-      var credEl = document.createElement("p");
-      if (item.credential_link) {
-        var link = document.createElement("a");
-        link.href = item.credential_link;
-        link.target = "_blank";
-        link.rel = "noopener";
-        link.textContent = item.credential_id;
-        link.style.color = "#fff";
-        link.style.textDecoration = "underline";
-        link.style.fontSize = "0.85rem";
-        credEl.appendChild(link);
-      } else {
-        credEl.textContent = item.credential_id;
-        credEl.style.color = "#fff";
-        credEl.style.fontSize = "0.85rem";
-      }
-      overlay.appendChild(credEl);
-    }
-
-    card.appendChild(img);
-    card.appendChild(tint);
-    card.appendChild(overlay);
-
-    // Kebab menu (editor mode only)
-    card.dataset.id = item.id || "";
-    card.dataset.title = item.title || "";
-    card.dataset.credentialId = item.credential_id || "";
-    card.dataset.credentialLink = item.credential_link || "";
-    card.dataset.image = item.image || "";
-
-    var menuBtn = document.createElement("button");
-    menuBtn.type = "button";
-    menuBtn.className = "cert-menu-btn";
-    menuBtn.setAttribute("aria-label", "Card menu");
-    menuBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>';
-
-    var menu = document.createElement("div");
-    menu.className = "cert-menu";
-    var editBtn = document.createElement("button");
-    editBtn.type = "button";
-    editBtn.dataset.action = "edit";
-    editBtn.textContent = "Edit";
-    var deleteBtn = document.createElement("button");
-    deleteBtn.type = "button";
-    deleteBtn.dataset.action = "delete";
-    deleteBtn.className = "danger";
-    deleteBtn.textContent = "Delete";
-    menu.appendChild(editBtn);
-    menu.appendChild(deleteBtn);
-
-    card.appendChild(menuBtn);
-    card.appendChild(menu);
-
-    card.addEventListener("mouseenter", function () {
-      overlay.style.opacity = "1";
-    });
-    card.addEventListener("mouseleave", function () {
-      overlay.style.opacity = "0";
-    });
-
-    dcStage.appendChild(card);
-    dcCards.push(card);
-    dcOverlays.push(tint);
-  });
-
-  carouselRoot.appendChild(dcStage);
-
-  function dcLayout(pos) {
-    var n = items.length;
-    if (!n) return;
-    for (var i = 0; i < n; i++) {
-      var el = dcCards[i];
-      var d = i - pos;
-      d = ((d % n) + n) % n;
-      if (d > n / 2) d -= n;
-
-      var back = Math.max(0, d);
-      var az = Math.abs(d);
-      var shown = az <= DC_VISIBLE + 0.5;
-
-      var tz = -DC_DEPTH * d;
-      var tx = DC_SPREAD * d;
-      var ry = DC_TILT * Math.min(Math.max(d, 0), 1);
-      var opacity = d < 0 ? Math.max(0, 1 + d) : 1;
-      if (!shown) opacity = 0;
-
-      var brightness = Math.max(0.15, 1 - back * DC_FALLOFF);
-      var blurPx = DC_BLUR > 0 ? Math.min(DC_BLUR, (back / Math.max(1, DC_VISIBLE)) * DC_BLUR) : 0;
-      var zi = Math.round(2000 - d * 20);
-
-      el.style.transform = "translate(-50%, -50%) scale(" + dcScale + ") translateX(" + tx.toFixed(2) + "px) translateZ(" + tz.toFixed(2) + "px) rotateY(" + ry.toFixed(3) + "deg)";
-      el.style.opacity = opacity.toFixed(3);
-      el.style.filter = "brightness(" + brightness.toFixed(3) + ") blur(" + blurPx.toFixed(2) + "px)";
-      el.style.zIndex = String(zi);
-      el.style.pointerEvents = shown && opacity > 0.05 ? "auto" : "none";
-
-      var ov = dcOverlays[i];
-      if (ov) ov.style.opacity = Math.min(back * DC_FALLOFF * 1.25, 0.86).toFixed(3);
-    }
-  }
-
-  function dcTweenTo(target, animate) {
-    if (dcTween) dcTween.kill();
-    var proxy = { p: dcPos };
-    var dur = animate && !prefersReduced ? DC_DURATION / 1000 : 0;
-    dcTween = gsap.to(proxy, {
-      p: target,
-      duration: dur,
-      ease: DC_EASE,
-      onUpdate: function () {
-        dcPos = proxy.p;
-        dcLayout(dcPos);
-      },
-      onComplete: function () {
-        var n = items.length;
-        if (n > 0) dcPos = ((dcPos % n) + n) % n;
-        dcLayout(dcPos);
-      },
-    });
-  }
-
-  function dcSetFocus(rawIndex, animate) {
-    var n = items.length;
-    if (!n) return;
-    var idx = ((rawIndex % n) + n) % n;
-    var delta = idx - dcPos;
-    delta = ((delta % n) + n) % n;
-    if (delta > n / 2) delta -= n;
-    dcTweenTo(dcPos + delta, animate);
-
-    if (idx !== dcFocus) {
-      dcFocus = idx;
-      // Sync option wheel
-      owTarget = idx;
-      owStartLoop();
-    }
-  }
-
-  // Drag on carousel
-  var dcDrag = null;
-  var dcWheelTimer = null;
-
-  carouselRoot.addEventListener("pointerdown", function (e) {
-    if (items.length < 2) return;
-    if (dcTween) dcTween.kill();
-    dcDrag = { x: e.clientX, startPos: dcPos, lastX: e.clientX, lastT: performance.now(), v: 0, moved: false, id: e.pointerId };
-  });
-
-  carouselRoot.addEventListener("pointermove", function (e) {
-    if (!dcDrag) return;
-    var stepPx = Math.max(dcCardW * 0.55 * dcScale, 40);
-    var dx = e.clientX - dcDrag.x;
-    if (!dcDrag.moved && Math.abs(dx) > 4) {
-      dcDrag.moved = true;
-      carouselRoot.setPointerCapture(dcDrag.id);
-    }
-    if (!dcDrag.moved) return;
-    var now = performance.now();
-    var dt = Math.max(now - dcDrag.lastT, 1);
-    dcDrag.v = (e.clientX - dcDrag.lastX) / dt;
-    dcDrag.lastX = e.clientX;
-    dcDrag.lastT = now;
-    dcPos = dcDrag.startPos - dx / stepPx;
-    dcLayout(dcPos);
-  });
-
-  carouselRoot.addEventListener("pointerup", function () {
-    if (!dcDrag) return;
-    var wasDragged = dcDrag.moved;
-    dcDrag = null;
-    if (!wasDragged) return;
-    var stepPx = Math.max(dcCardW * 0.55 * dcScale, 40);
-    var projected = dcPos - (dcDrag ? dcDrag.v : 0) * 180 / stepPx;
-    dcSetFocus(Math.round(projected), true);
-  });
-
-  carouselRoot.addEventListener("pointercancel", function () { dcDrag = null; });
-
-  // Wheel on carousel
-  carouselRoot.addEventListener("wheel", function (e) {
-    if (items.length < 2) return;
-    e.preventDefault();
-    if (dcTween) dcTween.kill();
-    var raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    var delta = e.deltaMode === 1 ? raw * 24 : raw;
-    var step = Math.min(0.6, Math.max(-0.6, delta / (dcCardW * 0.9)));
-    dcPos += step;
-    dcLayout(dcPos);
-    if (dcWheelTimer) clearTimeout(dcWheelTimer);
-    dcWheelTimer = setTimeout(function () { dcSetFocus(Math.round(dcPos), true); }, 130);
-  }, { passive: false });
-
-  // Click on card (with kebab menu delegation)
-  var pendingDeleteCert = null;
-
-  dcCards.forEach(function (card, i) {
-    card.addEventListener("click", function (e) {
-      if (dcDrag && dcDrag.moved) return;
-
-      // Kebab menu button
-      var menuBtnEl = e.target.closest(".cert-menu-btn");
-      if (menuBtnEl) {
-        if (!document.body.classList.contains("editor-mode")) return;
-        e.stopPropagation();
-        var menuEl = menuBtnEl.parentElement.querySelector(".cert-menu");
-        var wasOpen = menuEl.classList.contains("open");
-        // Close all open menus first
-        carouselRoot.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
-        if (!wasOpen) menuEl.classList.add("open");
-        return;
-      }
-
-      // Menu action buttons
-      var actionBtn = e.target.closest(".cert-menu button");
-      if (actionBtn) {
-        e.stopPropagation();
-        carouselRoot.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
-        if (actionBtn.dataset.action === "edit") {
-          certOpenForm(card);
-        } else if (actionBtn.dataset.action === "delete") {
-          pendingDeleteCert = card;
-          deleteCardName.textContent = card.dataset.title || "";
-          openOverlay(deleteOverlay);
-        }
-        return;
-      }
-
-      // Normal card click → set focus
-      dcSetFocus(i, true);
-    });
-  });
-
-  // Delete confirmation handler for certificates
-  var deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
-  if (deleteConfirmBtn) {
-    deleteConfirmBtn.addEventListener("click", async function () {
-      if (!pendingDeleteCert) return;
-      var cert = pendingDeleteCert;
-      pendingDeleteCert = null;
-      closeOverlay(deleteOverlay);
-      try {
-        var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE" });
-        if (res.ok) location.reload();
-      } catch (_) {}
-    });
-  }
-
-  // Keyboard on carousel
-  carouselRoot.addEventListener("keydown", function (e) {
-    if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
-      e.preventDefault();
-      dcSetFocus(dcFocus - 1, true);
-    } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
-      e.preventDefault();
-      dcSetFocus(dcFocus + 1, true);
-    }
-  });
-
-  // ResizeObserver for scaling
-  var dcRo = new ResizeObserver(function (entries) {
-    var w = entries[0].contentRect.width;
-    // Measure actual card width from first card
-    if (dcCards.length && dcCards[0].offsetWidth) {
-      dcCardW = dcCards[0].offsetWidth;
-    }
-    var needed = dcCardW + Math.abs(DC_SPREAD) * 2 + 120;
-    dcScale = Math.min(1, Math.max(0.4, w / needed));
-    dcLayout(dcPos);
-  });
-  dcRo.observe(carouselRoot);
-
-  dcLayout(0);
-
-  // ── AUTO-SLIDE (5s) ──
-  function startAutoSlide() {
-    stopAutoSlide();
-    autoTimer = setInterval(function () {
-      if (!isHovering && !document.body.classList.contains("editor-mode")) {
-        dcSetFocus(dcFocus + 1, true);
-      }
-    }, AUTO_DELAY);
-  }
-
-  function stopAutoSlide() {
-    if (autoTimer) clearInterval(autoTimer);
-    autoTimer = null;
-  }
-
-  carouselRoot.addEventListener("mouseenter", function () {
-    isHovering = true;
-    stopAutoSlide();
-  });
-  carouselRoot.addEventListener("mouseleave", function () {
-    isHovering = false;
-    startAutoSlide();
-  });
-
-  startAutoSlide();
+  // ── Init ──
+  renderCards();
+  applyVisibility();
 }

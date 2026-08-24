@@ -8,13 +8,9 @@
     <p class="certificates-subtitle"><?= i18n::t('certificates_subtitle') ?></p>
   </div>
   <div class="certificates-grid-wrap">
-    <div class="certificates-grid">
-      <div class="certificates-wheel-wrap">
-        <div id="certOptionWheel" class="option-wheel" data-lenis-prevent role="listbox" aria-label="Certificate list" tabindex="0"></div>
-      </div>
-      <div class="cert-carousel-wrap">
-        <div id="certDepthCarousel" class="depth-carousel" data-lenis-prevent role="group" aria-roledescription="carousel" aria-label="Certificate carousel" tabindex="0"></div>
-      </div>
+    <div class="certificates-grid" id="certGrid"></div>
+    <div class="cert-load-more" id="certLoadMoreWrap" hidden>
+      <button type="button" id="certLoadMoreBtn" class="btn btn-outline"><?= i18n::t('projects_load_more') ?></button>
     </div>
   </div>
 </section>

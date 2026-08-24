@@ -2580,22 +2580,80 @@ body.card-form-open .editor-toolbar {
 
 .certificates-grid {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: var(--space-6);
-  height: 460px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
 }
 
-.certificates-wheel-wrap {
+/* Certificate card */
+.cert-card {
   position: relative;
-  overflow: hidden;
   border-radius: 16px;
-  background: transparent;
+  overflow: hidden;
+  background: #0a0a0a;
+  cursor: default;
+  transition: transform 0.3s ease;
 }
 
-.cert-carousel-wrap {
-  position: relative;
+.cert-card:hover {
+  transform: translateY(-4px);
+}
+
+.cert-card img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+}
+
+/* Expand info on hover */
+.cert-card-info {
+  max-height: 0;
   overflow: hidden;
-  border-radius: 16px;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+  padding: 0 16px;
+  background: #0a0a0a;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cert-card:hover .cert-card-info {
+  max-height: 140px;
+  padding: 16px;
+}
+
+.cert-card-title {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: #fff;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cert-card-company {
+  font-size: var(--fs-body-sm);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 4px;
+}
+
+.cert-card-credential {
+  font-size: var(--fs-caption);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.cert-card-credential a {
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: underline;
+}
+
+.cert-card-credential a:hover {
+  color: #fff;
+}
+
+/* Load more */
+.cert-load-more {
+  text-align: center;
+  margin-top: var(--space-6);
 }
 
 /* Certificate kebab menu (editor mode only) */

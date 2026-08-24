@@ -5,7 +5,7 @@
 class Certificate
 {
     /**
-     * Ensure table exists (lazy migration)
+     * Ensure table exists with all columns (lazy migration)
      */
     public static function ensureTable()
     {
@@ -16,6 +16,7 @@ class Certificate
             CREATE TABLE IF NOT EXISTS certificates (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
+                company TEXT,
                 credential_id TEXT,
                 credential_link TEXT,
                 image TEXT NOT NULL,
@@ -23,6 +24,14 @@ class Certificate
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
+        // Add company column if missing (for older databases)
+        $hasCompany = false;
+        foreach ($db->fetchAll("PRAGMA table_info(certificates)") as $col) {
+            if ($col['name'] === 'company') { $hasCompany = true; break; }
+        }
+        if (!$hasCompany) {
+            $db->exec("ALTER TABLE certificates ADD COLUMN company TEXT");
+        }
         $done = true;
     }
 
@@ -49,12 +58,13 @@ class Certificate
     /**
      * Create a new certificate
      */
-    public static function create($title, $credentialId, $credentialLink, $image)
+    public static function create($title, $company, $credentialId, $credentialLink, $image)
     {
         self::ensureTable();
         $db = Database::getInstance();
         return $db->insert('certificates', [
             'title' => $title,
+            'company' => $company,
             'credential_id' => $credentialId,
             'credential_link' => $credentialLink,
             'image' => $image,
@@ -65,18 +75,18 @@ class Certificate
     /**
      * Update an existing certificate
      */
-    public static function update($id, $title, $credentialId, $credentialLink, $image = null)
+    public static function update($id, $title, $company, $credentialId, $credentialLink, $image = null)
     {
         self::ensureTable();
         $db = Database::getInstance();
         if ($image !== null) {
             return $db->getPdo()->prepare(
-                "UPDATE certificates SET title = ?, credential_id = ?, credential_link = ?, image = ? WHERE id = ?"
-            )->execute([$title, $credentialId, $credentialLink, $image, (int) $id]);
+                "UPDATE certificates SET title = ?, company = ?, credential_id = ?, credential_link = ?, image = ? WHERE id = ?"
+            )->execute([$title, $company, $credentialId, $credentialLink, $image, (int) $id]);
         }
         return $db->getPdo()->prepare(
-            "UPDATE certificates SET title = ?, credential_id = ?, credential_link = ? WHERE id = ?"
-        )->execute([$title, $credentialId, $credentialLink, (int) $id]);
+            "UPDATE certificates SET title = ?, company = ?, credential_id = ?, credential_link = ? WHERE id = ?"
+        )->execute([$title, $company, $credentialId, $credentialLink, (int) $id]);
     }
 
     /**

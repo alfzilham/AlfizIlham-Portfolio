@@ -150,19 +150,9 @@
     gap: var(--space-5);
   }
 
-  /* Certificates — stack on mobile */
+  /* Certificates — 2 columns on tablet */
   .certificates-grid {
-    grid-template-columns: 1fr;
-    height: auto;
-    gap: var(--space-4);
-  }
-
-  .certificates-wheel-wrap {
-    height: 200px;
-  }
-
-  .cert-carousel-wrap {
-    height: 320px;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   /* Bio Stats — keep mobile rhythm */
@@ -334,6 +324,11 @@
   .section-padding {
     padding-top: 48px;
     padding-bottom: 48px;
+  }
+
+  /* Certificates — 1 column on mobile */
+  .certificates-grid {
+    grid-template-columns: 1fr;
   }
 
   /* Navbar */

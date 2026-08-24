@@ -174,6 +174,10 @@
         <input type="text" id="certTitle" name="title" placeholder="<?= i18n::t('form_title_placeholder') ?>" required />
         <span class="form-error" id="certTitleError"></span>
 
+        <label for="certCompany"><?= i18n::t('form_company_label') ?></label>
+        <input type="text" id="certCompany" name="company" placeholder="<?= i18n::t('form_company_placeholder') ?>" />
+        <span class="form-error" id="certCompanyError"></span>
+
         <label for="certCredentialId"><?= i18n::t('form_credential_id_label') ?></label>
         <input type="text" id="certCredentialId" name="credential_id" placeholder="<?= i18n::t('form_credential_id_placeholder') ?>" />
         <span class="form-error" id="certCredentialIdError"></span>

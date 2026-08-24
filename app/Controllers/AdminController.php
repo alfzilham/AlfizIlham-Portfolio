@@ -157,6 +157,7 @@ class AdminController
         self::requireAdmin();
 
         $title = sanitize($_POST['title'] ?? '');
+        $company = sanitize($_POST['company'] ?? '');
         $credentialId = sanitize($_POST['credential_id'] ?? '');
         $credentialLink = self::normalizeLink($_POST['credential_link'] ?? '');
 
@@ -170,7 +171,7 @@ class AdminController
             json_response(['success' => false, 'error' => $upload['error']], 422);
         }
 
-        $id = Certificate::create($title, $credentialId, $credentialLink, $upload['path']);
+        $id = Certificate::create($title, $company, $credentialId, $credentialLink, $upload['path']);
         json_response(['success' => true, 'certificate' => Certificate::find($id)], 201);
     }
 
@@ -188,6 +189,7 @@ class AdminController
         }
 
         $title = sanitize($_POST['title'] ?? '');
+        $company = sanitize($_POST['company'] ?? '');
         $credentialId = sanitize($_POST['credential_id'] ?? '');
         $credentialLink = self::normalizeLink($_POST['credential_link'] ?? '');
 
@@ -206,7 +208,7 @@ class AdminController
             $imagePath = $upload['path'];
         }
 
-        Certificate::update($id, $title, $credentialId, $credentialLink, $imagePath);
+        Certificate::update($id, $title, $company, $credentialId, $credentialLink, $imagePath);
         json_response(['success' => true, 'certificate' => Certificate::find($id)]);
     }
 
