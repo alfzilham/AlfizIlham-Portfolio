@@ -223,7 +223,7 @@ return [
     'delete_cancel' => 'Cancel',
 
     // Certificates
-    'certificates_eyebrow' => '- Credentials',
+    'certificates_eyebrow' => 'Credentials',
     'certificates_heading' => 'Certificate',
     'certificates_subtitle' => 'Verified achievements and professional certifications that validate my expertise.',
     'form_credential_id_label' => 'Credential ID (optional)',

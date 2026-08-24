@@ -2333,8 +2333,9 @@ function initCertificates() {
         certOpenForm(card);
       } else if (actionBtn.dataset.action === "delete") {
         pendingDeleteCert = card;
-        deleteCardName.textContent = card.dataset.title || "";
-        openOverlay(deleteOverlay);
+        var certDeleteCardNameEl = document.getElementById("deleteCardName");
+        if (certDeleteCardNameEl) certDeleteCardNameEl.textContent = card.dataset.title || "";
+        certOpenOverlay(document.getElementById("deleteOverlay"));
       }
       return;
     }
@@ -2347,17 +2348,39 @@ function initCertificates() {
   });
 
   // Delete confirmation handler
-  var deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
-  if (deleteConfirmBtn) {
-    deleteConfirmBtn.addEventListener("click", async function () {
+  var certDeleteOverlay = document.getElementById("deleteOverlay");
+  var certDeleteCardName = document.getElementById("deleteCardName");
+  var certDeleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+
+  if (certDeleteConfirmBtn) {
+    certDeleteConfirmBtn.addEventListener("click", async function () {
       if (!pendingDeleteCert) return;
       var cert = pendingDeleteCert;
       pendingDeleteCert = null;
-      closeOverlay(deleteOverlay);
+      certCloseOverlay(certDeleteOverlay);
       try {
         var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE" });
         if (res.ok) location.reload();
       } catch (_) {}
+    });
+  }
+
+  // Cancel delete
+  var certDeleteCancelBtn = document.querySelector("[data-close-delete]");
+  if (certDeleteCancelBtn) {
+    certDeleteCancelBtn.addEventListener("click", function () {
+      pendingDeleteCert = null;
+      certCloseOverlay(certDeleteOverlay);
+    });
+  }
+
+  // Click outside delete overlay to close
+  if (certDeleteOverlay) {
+    certDeleteOverlay.addEventListener("pointerdown", function (e) {
+      if (e.target === certDeleteOverlay) {
+        pendingDeleteCert = null;
+        certCloseOverlay(certDeleteOverlay);
+      }
     });
   }
 

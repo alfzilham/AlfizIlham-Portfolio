@@ -2575,6 +2575,10 @@ body.card-form-open .editor-toolbar {
   margin-right: auto;
 }
 
+.certificates .eyebrow {
+  text-align: center;
+}
+
 .certificates-grid-wrap {
   padding: 0 24px;
   max-width: 1200px;
