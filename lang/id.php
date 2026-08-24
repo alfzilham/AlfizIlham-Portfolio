@@ -223,7 +223,8 @@ return [
     'delete_cancel' => 'Batal',
 
     // Certificates
-    'certificates_heading' => 'Sertifikat & Kredensial',
+    'certificates_eyebrow' => '- Kredensial',
+    'certificates_heading' => 'Sertifikat',
     'certificates_subtitle' => 'Pencapaian terverifikasi dan sertifikasi profesional yang membuktikan keahlian saya.',
     'form_credential_id_label' => 'ID Kredential (opsional)',
     'form_credential_id_placeholder' => 'contoh: GCP-2024-XXXXX',

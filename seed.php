@@ -370,20 +370,7 @@ foreach ($faqs as $f) {
 }
 echo "Seeded " . count($faqs) . " FAQs.\n";
 
-// Seed Certificates
-$certificates = [
-    ['Google Cloud Certified', 'GCP-2024-XXXXX', 'https://cloud.google.com/certification', 'assets/image/services/service-1.webp', 1],
-    ['AWS Solutions Architect', 'AWS-SA-2024-XXXXX', 'https://aws.amazon.com/certification', 'assets/image/services/service-2.webp', 2],
-    ['Meta Front-End Developer', 'META-FE-2024-XXXXX', 'https://www.coursera.org/professional-certificates/meta', 'assets/image/services/service-3.webp', 3],
-];
-
-$db->exec("DELETE FROM certificates");
-
-$stmt = $db->getPdo()->prepare("INSERT INTO certificates (title, credential_id, credential_link, image, sort_order) VALUES (?, ?, ?, ?, ?)");
-foreach ($certificates as $c) {
-    $stmt->execute($c);
-}
-echo "Seeded " . count($certificates) . " certificates.\n";
+// Certificates table (created lazily, no seed data — admin uploads manually)
 
 echo "\nSetup complete! Database is ready.\n";
 echo "Visit http://localhost/alfizilham to view the portfolio.\n";

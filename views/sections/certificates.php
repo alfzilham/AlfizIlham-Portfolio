@@ -3,8 +3,10 @@
 ?>
 <section class="certificates section-padding" id="certificate">
   <div class="container">
+    <p class="eyebrow"><?= i18n::t('certificates_eyebrow') ?></p>
     <h1 class="certificates-heading"><?= i18n::t('certificates_heading') ?></h1>
     <p class="certificates-subtitle"><?= i18n::t('certificates_subtitle') ?></p>
+    <div class="divider"></div>
   </div>
   <div class="certificates-grid-wrap">
     <div class="certificates-grid">

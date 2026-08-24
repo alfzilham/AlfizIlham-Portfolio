@@ -2225,11 +2225,17 @@ function initLucideIcons() {
 
 function initCertificates() {
   var items = window.__CERTIFICATES || [];
-  if (!items.length || typeof gsap === "undefined") return;
-
   var wheelRoot = document.getElementById("certOptionWheel");
   var carouselRoot = document.getElementById("certDepthCarousel");
-  if (!wheelRoot || !carouselRoot) return;
+  var gridWrap = document.querySelector(".certificates-grid-wrap");
+
+  // Empty state: no certificates uploaded yet
+  if (!items.length) {
+    if (gridWrap) gridWrap.style.display = "none";
+    return;
+  }
+
+  if (!wheelRoot || !carouselRoot || typeof gsap === "undefined") return;
 
   var prefersReduced =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2420,8 +2426,7 @@ function initCertificates() {
   owStartLoop();
 
   // ── DEPTH CAROUSEL (right grid) ──
-  var DC_CARD_W = 280;
-  var DC_CARD_H = 380;
+  var DC_MAX_W = 320;
   var DC_RADIUS = 18;
   var DC_TINT = "#05060a";
   var DC_DEPTH = 220;
@@ -2439,6 +2444,7 @@ function initCertificates() {
   var dcFocus = 0;
   var dcTween = null;
   var dcScale = 1;
+  var dcCardW = DC_MAX_W;
 
   carouselRoot.style.perspective = "1400px";
   carouselRoot.style.perspectiveOrigin = "50% 50%";
@@ -2464,8 +2470,9 @@ function initCertificates() {
     card.style.position = "absolute";
     card.style.top = "50%";
     card.style.left = "50%";
-    card.style.width = DC_CARD_W + "px";
-    card.style.height = DC_CARD_H + "px";
+    card.style.maxWidth = DC_MAX_W + "px";
+    card.style.width = "100%";
+    card.style.height = "auto";
     card.style.borderRadius = DC_RADIUS + "px";
     card.style.overflow = "hidden";
     card.style.background = "#0b0d12";
@@ -2479,7 +2486,7 @@ function initCertificates() {
     img.alt = item.title || "";
     img.draggable = false;
     img.style.width = "100%";
-    img.style.height = "100%";
+    img.style.height = "auto";
     img.style.objectFit = "cover";
     img.style.display = "block";
     img.style.pointerEvents = "none";
@@ -2635,7 +2642,7 @@ function initCertificates() {
 
   carouselRoot.addEventListener("pointermove", function (e) {
     if (!dcDrag) return;
-    var stepPx = Math.max(DC_CARD_W * 0.55 * dcScale, 40);
+    var stepPx = Math.max(dcCardW * 0.55 * dcScale, 40);
     var dx = e.clientX - dcDrag.x;
     if (!dcDrag.moved && Math.abs(dx) > 4) {
       dcDrag.moved = true;
@@ -2656,7 +2663,7 @@ function initCertificates() {
     var wasDragged = dcDrag.moved;
     dcDrag = null;
     if (!wasDragged) return;
-    var stepPx = Math.max(DC_CARD_W * 0.55 * dcScale, 40);
+    var stepPx = Math.max(dcCardW * 0.55 * dcScale, 40);
     var projected = dcPos - (dcDrag ? dcDrag.v : 0) * 180 / stepPx;
     dcSetFocus(Math.round(projected), true);
   });
@@ -2670,7 +2677,7 @@ function initCertificates() {
     if (dcTween) dcTween.kill();
     var raw = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
     var delta = e.deltaMode === 1 ? raw * 24 : raw;
-    var step = Math.min(0.6, Math.max(-0.6, delta / (DC_CARD_W * 0.9)));
+    var step = Math.min(0.6, Math.max(-0.6, delta / (dcCardW * 0.9)));
     dcPos += step;
     dcLayout(dcPos);
     if (dcWheelTimer) clearTimeout(dcWheelTimer);
@@ -2699,7 +2706,11 @@ function initCertificates() {
   // ResizeObserver for scaling
   var dcRo = new ResizeObserver(function (entries) {
     var w = entries[0].contentRect.width;
-    var needed = DC_CARD_W + Math.abs(DC_SPREAD) * 2 + 120;
+    // Measure actual card width from first card
+    if (dcCards.length && dcCards[0].offsetWidth) {
+      dcCardW = dcCards[0].offsetWidth;
+    }
+    var needed = dcCardW + Math.abs(DC_SPREAD) * 2 + 120;
     dcScale = Math.min(1, Math.max(0.4, w / needed));
     dcLayout(dcPos);
   });
@@ -2757,12 +2768,14 @@ function initCertificates() {
   function certOpenOverlay(el) {
     el.hidden = false;
     document.body.style.overflow = "hidden";
+    document.body.classList.add("card-form-open");
     if (window.__lenis) window.__lenis.stop();
   }
 
   function certCloseOverlay(el) {
     el.hidden = true;
     document.body.style.overflow = "";
+    document.body.classList.remove("card-form-open");
     if (window.__lenis) window.__lenis.start();
   }
 
