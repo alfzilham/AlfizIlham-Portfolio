@@ -2383,10 +2383,14 @@ body.card-form-open .editor-toolbar {
 
 .gallery-item img {
   width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
   display: block;
   border-radius: var(--radius-md);
   filter: grayscale(100%);
   transition: transform var(--transition-slow), filter var(--transition-slow);
+  content-visibility: auto;
+  contain-intrinsic-size: 600px 400px;
 }
 
 .gallery-item:hover img {
@@ -2396,17 +2400,22 @@ body.card-form-open .editor-toolbar {
 
 .gallery-tooltip {
   position: fixed;
-  background: var(--color-text);
-  color: var(--color-white);
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
   font-size: var(--fs-body-sm);
   font-weight: var(--fw-medium);
-  max-width: 280px;
+  max-width: 260px;
   pointer-events: none;
   z-index: var(--z-tooltip);
   white-space: normal;
   line-height: var(--lh-body);
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  transform: translateY(4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 /* --------------------------------------------------------------------------

@@ -1761,25 +1761,69 @@ function initGalleryHover() {
   const grid = document.getElementById("galleryGrid");
   if (!tooltip || !grid) return;
 
-  grid.addEventListener("mousemove", (e) => {
+  let isVisible = false;
+  let rafId = null;
+  let pendingX = 0;
+  let pendingY = 0;
+
+  function updatePosition() {
+    const pad = 16;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const tw = tooltip.offsetWidth;
+    const th = tooltip.offsetHeight;
+
+    let x = pendingX + pad;
+    let y = pendingY + pad;
+
+    if (x + tw > vw - pad) x = pendingX - tw - pad;
+    if (y + th > vh - pad) y = pendingY - th - pad;
+    if (x < pad) x = pad;
+    if (y < pad) y = pad;
+
+    tooltip.style.left = x + "px";
+    tooltip.style.top = y + "px";
+    rafId = null;
+  }
+
+  grid.addEventListener("pointermove", (e) => {
     const item = e.target.closest(".gallery-item");
-    if (!item) return;
+    if (!item) {
+      if (isVisible) hideTooltip();
+      return;
+    }
 
-    tooltip.textContent = item.dataset.desc;
-    tooltip.hidden = false;
-    tooltip.style.left = e.clientX + 16 + "px";
-    tooltip.style.top = e.clientY - 10 + "px";
-  });
+    const desc = item.dataset.desc;
+    if (!desc) return;
 
-  grid.addEventListener("mouseleave", () => {
-    tooltip.hidden = true;
-  });
+    if (!isVisible) {
+      tooltip.textContent = desc;
+      tooltip.hidden = false;
+      tooltip.style.opacity = "1";
+      tooltip.style.transform = "translateY(0)";
+      isVisible = true;
+    } else if (tooltip.textContent !== desc) {
+      tooltip.textContent = desc;
+    }
 
-  grid.addEventListener("mouseout", (e) => {
-    if (!e.target.closest(".gallery-item")) {
-      tooltip.hidden = true;
+    pendingX = e.clientX;
+    pendingY = e.clientY;
+
+    if (!rafId) {
+      rafId = requestAnimationFrame(updatePosition);
     }
   });
+
+  function hideTooltip() {
+    tooltip.style.opacity = "0";
+    tooltip.style.transform = "translateY(4px)";
+    isVisible = false;
+    setTimeout(() => {
+      if (!isVisible) tooltip.hidden = true;
+    }, 200);
+  }
+
+  grid.addEventListener("pointerleave", hideTooltip);
 }
 
 /* --------------------------------------------------------------------------
