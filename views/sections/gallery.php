@@ -11,5 +11,4 @@
       <?php endforeach; ?>
     </div>
   </div>
-  <div class="gallery-tooltip" id="galleryTooltip" hidden></div>
 </section>

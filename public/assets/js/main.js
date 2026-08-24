@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollReveal();
   initFoldText();
   initStatCounters();
-  initGalleryHover();
   initVisitorCounter();
   initCertificates();
   initLucideIcons();
@@ -1753,33 +1752,7 @@ function initEditorMode() {
    -------------------------------------------------------------------------- */
 
 function renderGallery() {
-  // Gallery is rendered server-side in gallery.php — only init hover tooltip
-}
-
-function initGalleryHover() {
-  const tooltip = document.getElementById("galleryTooltip");
-  const grid = document.getElementById("galleryGrid");
-  if (!tooltip || !grid) return;
-
-  grid.addEventListener("mousemove", (e) => {
-    const item = e.target.closest(".gallery-item");
-    if (!item) return;
-
-    tooltip.textContent = item.dataset.desc;
-    tooltip.hidden = false;
-    tooltip.style.left = e.clientX + 16 + "px";
-    tooltip.style.top = e.clientY - 10 + "px";
-  });
-
-  grid.addEventListener("mouseleave", () => {
-    tooltip.hidden = true;
-  });
-
-  grid.addEventListener("mouseout", (e) => {
-    if (!e.target.closest(".gallery-item")) {
-      tooltip.hidden = true;
-    }
-  });
+  // Gallery is rendered server-side in gallery.php
 }
 
 /* --------------------------------------------------------------------------

@@ -2394,23 +2394,8 @@ body.card-form-open .editor-toolbar {
   filter: grayscale(0%);
 }
 
-.gallery-tooltip {
-  position: fixed;
-  background: var(--color-text);
-  color: var(--color-white);
-  padding: 8px 14px;
-  border-radius: var(--radius-sm);
-  font-size: var(--fs-body-sm);
-  font-weight: var(--fw-medium);
-  max-width: 280px;
-  pointer-events: none;
-  z-index: var(--z-tooltip);
-  white-space: normal;
-  line-height: var(--lh-body);
-}
-
 /* --------------------------------------------------------------------------
-   14. TESTIMONIALS
+   14. CTA SECTION
    -------------------------------------------------------------------------- */
 
 .testimonials-grid {
