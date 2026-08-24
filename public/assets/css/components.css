@@ -2598,6 +2598,65 @@ body.card-form-open .editor-toolbar {
   border-radius: 16px;
 }
 
+/* Certificate kebab menu (editor mode only) */
+.cert-menu-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background: rgba(18, 20, 26, 0.72);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+}
+
+body.editor-mode .cert-menu-btn {
+  display: flex;
+}
+
+.cert-menu {
+  position: absolute;
+  top: 48px;
+  right: 10px;
+  z-index: 7;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.cert-menu.open {
+  display: flex;
+}
+
+.cert-menu button {
+  text-align: left;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: var(--fs-body-sm);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cert-menu button:hover {
+  background: var(--color-bg-soft);
+}
+
+.cert-menu button.danger {
+  color: #dc2626;
+}
+
 /* --------------------------------------------------------------------------
    16. CONTACT
    -------------------------------------------------------------------------- */

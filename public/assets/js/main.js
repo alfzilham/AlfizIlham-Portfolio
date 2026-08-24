@@ -2409,7 +2409,7 @@ function initCertificates() {
   var isHovering = false;
 
   // ── OPTION WHEEL (left grid) ──
-  var OW_TEXT_COLOR = "#a6a6a6";
+  var OW_TEXT_COLOR = "#ffffff";
   var OW_ACTIVE_COLOR = "#ffffff";
   var OW_FONT_SIZE_REM = 2.2;
   var OW_SPACING = 1.4;
@@ -2707,6 +2707,36 @@ function initCertificates() {
     card.appendChild(tint);
     card.appendChild(overlay);
 
+    // Kebab menu (editor mode only)
+    card.dataset.id = item.id || "";
+    card.dataset.title = item.title || "";
+    card.dataset.credentialId = item.credential_id || "";
+    card.dataset.credentialLink = item.credential_link || "";
+    card.dataset.image = item.image || "";
+
+    var menuBtn = document.createElement("button");
+    menuBtn.type = "button";
+    menuBtn.className = "cert-menu-btn";
+    menuBtn.setAttribute("aria-label", "Card menu");
+    menuBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/></svg>';
+
+    var menu = document.createElement("div");
+    menu.className = "cert-menu";
+    var editBtn = document.createElement("button");
+    editBtn.type = "button";
+    editBtn.dataset.action = "edit";
+    editBtn.textContent = "Edit";
+    var deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.dataset.action = "delete";
+    deleteBtn.className = "danger";
+    deleteBtn.textContent = "Delete";
+    menu.appendChild(editBtn);
+    menu.appendChild(deleteBtn);
+
+    card.appendChild(menuBtn);
+    card.appendChild(menu);
+
     card.addEventListener("mouseenter", function () {
       overlay.style.opacity = "1";
     });
@@ -2846,13 +2876,60 @@ function initCertificates() {
     dcWheelTimer = setTimeout(function () { dcSetFocus(Math.round(dcPos), true); }, 130);
   }, { passive: false });
 
-  // Click on card
+  // Click on card (with kebab menu delegation)
+  var pendingDeleteCert = null;
+
   dcCards.forEach(function (card, i) {
-    card.addEventListener("click", function () {
+    card.addEventListener("click", function (e) {
       if (dcDrag && dcDrag.moved) return;
+
+      // Kebab menu button
+      var menuBtnEl = e.target.closest(".cert-menu-btn");
+      if (menuBtnEl) {
+        if (!document.body.classList.contains("editor-mode")) return;
+        e.stopPropagation();
+        var menuEl = menuBtnEl.parentElement.querySelector(".cert-menu");
+        var wasOpen = menuEl.classList.contains("open");
+        // Close all open menus first
+        carouselRoot.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
+        if (!wasOpen) menuEl.classList.add("open");
+        return;
+      }
+
+      // Menu action buttons
+      var actionBtn = e.target.closest(".cert-menu button");
+      if (actionBtn) {
+        e.stopPropagation();
+        carouselRoot.querySelectorAll(".cert-menu.open").forEach(function (m) { m.classList.remove("open"); });
+        if (actionBtn.dataset.action === "edit") {
+          certOpenForm(card);
+        } else if (actionBtn.dataset.action === "delete") {
+          pendingDeleteCert = card;
+          deleteCardName.textContent = card.dataset.title || "";
+          openOverlay(deleteOverlay);
+        }
+        return;
+      }
+
+      // Normal card click → set focus
       dcSetFocus(i, true);
     });
   });
+
+  // Delete confirmation handler for certificates
+  var deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
+  if (deleteConfirmBtn) {
+    deleteConfirmBtn.addEventListener("click", async function () {
+      if (!pendingDeleteCert) return;
+      var cert = pendingDeleteCert;
+      pendingDeleteCert = null;
+      closeOverlay(deleteOverlay);
+      try {
+        var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE" });
+        if (res.ok) location.reload();
+      } catch (_) {}
+    });
+  }
 
   // Keyboard on carousel
   carouselRoot.addEventListener("keydown", function (e) {
@@ -2884,7 +2961,9 @@ function initCertificates() {
   function startAutoSlide() {
     stopAutoSlide();
     autoTimer = setInterval(function () {
-      if (!isHovering) dcSetFocus(dcFocus + 1, true);
+      if (!isHovering && !document.body.classList.contains("editor-mode")) {
+        dcSetFocus(dcFocus + 1, true);
+      }
     }, AUTO_DELAY);
   }
 
