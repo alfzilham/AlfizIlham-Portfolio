@@ -35,4 +35,13 @@ class VisitorModel
             'visited_at' => date('Y-m-d H:i:s'),
         ]);
     }
+
+    /**
+     * Get visitor count by country
+     */
+    public static function countByCountry()
+    {
+        $db = Database::getInstance();
+        return $db->fetchAll("SELECT country, COUNT(*) as cnt FROM visitors GROUP BY country ORDER BY cnt DESC");
+    }
 }

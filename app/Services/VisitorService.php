@@ -22,7 +22,10 @@ class VisitorService
             return;
         }
 
-        VisitorModel::record($ip, $ua, 'ID');
+        // Detect country from IP
+        $country = self::getCountry($ip);
+
+        VisitorModel::record($ip, $ua, $country);
         $_SESSION['visitor_tracked'] = true;
     }
 
@@ -55,5 +58,39 @@ class VisitorService
             }
         }
         return false;
+    }
+
+    /**
+     * Detect country from IP using ip-api.com (free, no key)
+     */
+    private static function getCountry($ip)
+    {
+        // Skip localhost/private IPs
+        if ($ip === '127.0.0.1' || $ip === '::1' || preg_match('/^192\.168\./', $ip) || preg_match('/^10\./', $ip)) {
+            return 'ID';
+        }
+
+        try {
+            $context = stream_context_create(['http' => ['timeout' => 2]]);
+            $response = @file_get_contents("http://ip-api.com/json/{$ip}?fields=countryCode", false, $context);
+            if ($response) {
+                $data = json_decode($response, true);
+                if (!empty($data['countryCode'])) {
+                    return $data['countryCode'];
+                }
+            }
+        } catch (\Exception $e) {
+            // Fail silently, default to ID
+        }
+
+        return 'ID';
+    }
+
+    /**
+     * Get visitor count by country
+     */
+    public static function getByCountry()
+    {
+        return VisitorModel::countByCountry();
     }
 }

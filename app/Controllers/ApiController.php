@@ -33,6 +33,7 @@ class ApiController
         json_response([
             'count' => VisitorService::getCount(),
             'today' => VisitorService::getTodayCount(),
+            'byCountry' => VisitorService::getByCountry(),
         ]);
     }
 

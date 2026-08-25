@@ -26,7 +26,7 @@ return [
         'threads' => 'https://www.threads.com/@alfzilham',
         'pinterest' => 'https://pin.it/3PCoHDPgR',
         'discord' => 'https://discord.com/users/1501786539976425635',
-        'lynkid' => 'https://lynk.id/rumohenterprise',
+        'upwork' => 'https://www.upwork.com/freelancers/~01fd8d64bfe2a9ab88?mp_source=share',
     ],
     'emailjs' => [
         'service_id' => 'service_tdiat3m',

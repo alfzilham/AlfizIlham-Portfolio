@@ -2572,18 +2572,105 @@ function initLiveClock() {
    -------------------------------------------------------------------------- */
 
 function initVisitorCounter() {
-  fetch('index.php?/api/visitor')
-    .then(res => res.json())
-    .then(data => {
-      const countEl = document.getElementById('visitorCount');
-      const uniqueEl = document.getElementById('visitorUnique');
-      if (countEl) countEl.textContent = data.count || 17;
+  var countEl = document.getElementById("visitorCount");
+  var uniqueEl = document.getElementById("visitorUnique");
+  var chartEl = document.getElementById("visitorChart");
+  if (!countEl) return;
 
-      const lang = window.LANG || 'en';
-      const visitorsText = lang === 'id' ? 'pengunjung unik' : 'unique visitors';
-      if (uniqueEl) uniqueEl.textContent = `${data.count || 17} ${visitorsText}`;
-    })
-    .catch(() => {});
+  var chartInstance = null;
+
+  function updateVisitorData() {
+    fetch("index.php?/api/visitor")
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var count = data.count || 0;
+        var lang = window.LANG || "en";
+        var visitorsText = lang === "id" ? "pengunjung unik" : "unique visitors";
+
+        if (countEl) countEl.textContent = count;
+        if (uniqueEl) uniqueEl.textContent = count + " " + visitorsText;
+
+        // Render chart if data available
+        if (chartEl && typeof Chart !== "undefined" && data.byCountry && data.byCountry.length) {
+          renderVisitorChart(data.byCountry);
+        }
+      })
+      .catch(function () {});
+  }
+
+  function renderVisitorChart(byCountry) {
+    var labels = [];
+    var values = [];
+    byCountry.forEach(function (row) {
+      labels.push(row.country || "Unknown");
+      values.push(row.cnt || 0);
+    });
+
+    if (chartInstance) {
+      chartInstance.data.labels = labels;
+      chartInstance.data.datasets[0].data = values;
+      chartInstance.update();
+      return;
+    }
+
+    chartInstance = new Chart(chartEl, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: values,
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
+            borderColor: "rgba(255, 255, 255, 0.5)",
+            borderWidth: 1,
+            borderRadius: 4,
+            maxBarThickness: 32,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: "#1a1a1a",
+            titleColor: "#fff",
+            bodyColor: "#ccc",
+            padding: 10,
+            cornerRadius: 8,
+          },
+        },
+        scales: {
+          x: {
+            ticks: {
+              color: "rgba(255, 255, 255, 0.6)",
+              font: { size: 10 },
+            },
+            grid: { display: false },
+            border: { display: false },
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: "rgba(255, 255, 255, 0.4)",
+              font: { size: 10 },
+              stepSize: 1,
+            },
+            grid: { color: "rgba(255, 255, 255, 0.08)" },
+            border: { display: false },
+          },
+        },
+        animation: { duration: 600 },
+      },
+    });
+  }
+
+  // Initial fetch
+  updateVisitorData();
+
+  // Auto-refresh every 30 seconds
+  setInterval(updateVisitorData, 30000);
 }
 
 /* --------------------------------------------------------------------------
