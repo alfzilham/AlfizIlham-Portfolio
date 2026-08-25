@@ -4,9 +4,10 @@ RewriteEngine On
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^(.*)index\.php$ / [L,R=301]
 
-# Clean URLs — strip .php extension
-# /privacy.php → 301 redirect to /privacy
+# Clean URLs — strip .php extension (hanya page request, bukan API)
+# /privacy.php → 301 redirect ke /privacy
 RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^(.+)\.php$ /$1 [L,R=301]
 
 # /privacy → internally rewrite to privacy.php
