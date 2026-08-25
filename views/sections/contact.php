@@ -30,7 +30,7 @@
           <div class="form-group">
             <label><?= i18n::t('contact_phone_label') ?></label>
             <div class="phone-input-group">
-              <div class="custom-dropdown" id="countryCodeDropdown" data-type="country">
+              <div class="custom-dropdown" id="countryCodeDropdown" data-type="country" data-lenis-prevent>
                 <button type="button" class="dropdown-trigger" tabindex="-1">
                   <span class="dropdown-value" data-field="country_code">🇮🇩 +62</span>
                   <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -47,7 +47,7 @@
           </div>
           <div class="form-group">
             <label><?= i18n::t('contact_service_label') ?></label>
-            <div class="custom-dropdown" id="serviceDropdown" data-type="service">
+            <div class="custom-dropdown" id="serviceDropdown" data-type="service" data-lenis-prevent>
               <button type="button" class="dropdown-trigger" tabindex="-1">
                 <span class="dropdown-value" data-field="service"><?= i18n::t('contact_service_default') ?></span>
                 <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -68,7 +68,7 @@
             <label><?= i18n::t('contact_budget_label') ?></label>
             <div class="budget-input-group">
               <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" />
-              <div class="custom-dropdown" id="currencyDropdown" data-type="currency">
+              <div class="custom-dropdown" id="currencyDropdown" data-type="currency" data-lenis-prevent>
                 <button type="button" class="dropdown-trigger" tabindex="-1">
                   <span class="dropdown-value" data-field="currency">USD</span>
                   <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
