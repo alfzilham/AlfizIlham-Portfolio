@@ -2947,25 +2947,9 @@ body.editor-mode .cert-menu-btn {
   display: none;
 }
 
-/* Timeline DateTime Picker (Calendar + Clock) */
-.datetime-picker {
-  position: relative;
-}
-
-.datetime-popup {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  z-index: 100;
-  width: min(320px, calc(100vw - 48px));
-  background: var(--color-bg);
-  border-radius: var(--neu-radius);
-  box-shadow: var(--neu-shadow-out-lg);
-  padding: 16px;
-}
-
-.datetime-popup[hidden] {
-  display: none;
+/* Timeline DateTime Picker (Calendar + Clock) — modal overlay */
+.timeline-modal {
+  width: min(360px, calc(100vw - 32px));
 }
 
 .dt-step {

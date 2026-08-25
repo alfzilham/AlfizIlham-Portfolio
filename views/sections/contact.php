@@ -83,42 +83,10 @@
           </div>
           <div class="form-group">
             <label for="contactTimeline"><?= i18n::t('contact_timeline_label') ?></label>
-            <div class="datetime-picker" id="timelinePicker" data-lenis-prevent>
-              <button type="button" class="dropdown-trigger" id="timelineTrigger">
-                <span class="dropdown-value" id="timelineDisplay" data-field="timeline" data-placeholder="<?= i18n::t('contact_timeline_placeholder') ?>"><?= i18n::t('contact_timeline_placeholder') ?></span>
-                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              <div class="datetime-popup" id="timelinePopup" hidden>
-                <!-- Step 1: Calendar -->
-                <div class="dt-step" id="dtStepCalendar">
-                  <div class="dt-cal-header">
-                    <button type="button" class="dt-nav-btn" id="dtPrevMonth" aria-label="Previous month">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-                    </button>
-                    <span class="dt-cal-title" id="dtCalTitle"></span>
-                    <button type="button" class="dt-nav-btn" id="dtNextMonth" aria-label="Next month">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-                    </button>
-                  </div>
-                  <div class="dt-cal-weekdays" id="dtCalWeekdays"></div>
-                  <div class="dt-cal-grid" id="dtCalGrid"></div>
-                </div>
-                <!-- Step 2: Clock -->
-                <div class="dt-step" id="dtStepClock" hidden>
-                  <div class="dt-clock-digital">
-                    <span class="dt-clock-seg" id="dtClockH">00</span>
-                    <span class="dt-clock-sep">:</span>
-                    <span class="dt-clock-seg" id="dtClockM">00</span>
-                  </div>
-                  <div class="dt-clock-face" id="dtClockFace"></div>
-                </div>
-                <!-- Footer -->
-                <div class="dt-footer">
-                  <button type="button" class="dt-btn" id="dtCancel"><?= i18n::t('dt_cancel') ?></button>
-                  <button type="button" class="dt-btn dt-btn-primary" id="dtDone"><?= i18n::t('dt_done') ?></button>
-                </div>
-              </div>
-            </div>
+            <button type="button" class="dropdown-trigger" id="timelineTrigger">
+              <span class="dropdown-value" id="timelineDisplay" data-field="timeline" data-placeholder="<?= i18n::t('contact_timeline_placeholder') ?>"><?= i18n::t('contact_timeline_placeholder') ?></span>
+              <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
             <input type="hidden" name="timeline" id="contactTimeline" />
           </div>
         </div>
@@ -141,6 +109,40 @@
         </button>
         <div class="form-status" id="formStatus" hidden></div>
       </form>
+
+      <!-- Timeline picker modal overlay -->
+      <div class="editor-overlay" id="timelineOverlay" data-lenis-prevent hidden>
+        <div class="editor-modal timeline-modal" role="dialog" aria-modal="true" aria-label="Timeline picker">
+          <!-- Step 1: Calendar -->
+          <div class="dt-step" id="dtStepCalendar">
+            <div class="dt-cal-header">
+              <button type="button" class="dt-nav-btn" id="dtPrevMonth" aria-label="Previous month">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <span class="dt-cal-title" id="dtCalTitle"></span>
+              <button type="button" class="dt-nav-btn" id="dtNextMonth" aria-label="Next month">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+            <div class="dt-cal-weekdays" id="dtCalWeekdays"></div>
+            <div class="dt-cal-grid" id="dtCalGrid"></div>
+          </div>
+          <!-- Step 2: Clock -->
+          <div class="dt-step" id="dtStepClock" hidden>
+            <div class="dt-clock-digital">
+              <span class="dt-clock-seg" id="dtClockH">00</span>
+              <span class="dt-clock-sep">:</span>
+              <span class="dt-clock-seg" id="dtClockM">00</span>
+            </div>
+            <div class="dt-clock-face" id="dtClockFace"></div>
+          </div>
+          <!-- Footer -->
+          <div class="dt-footer">
+            <button type="button" class="dt-btn" id="dtCancel"><?= i18n::t('dt_cancel') ?></button>
+            <button type="button" class="dt-btn dt-btn-primary" id="dtDone"><?= i18n::t('dt_done') ?></button>
+          </div>
+        </div>
+      </div>
 
       <!-- Map -->
       <div class="contact-map-card">

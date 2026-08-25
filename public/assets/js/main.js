@@ -2001,12 +2001,11 @@ function initCustomDropdowns() {
    -------------------------------------------------------------------------- */
 
 function initTimelinePicker() {
-  var picker = document.getElementById("timelinePicker");
   var trigger = document.getElementById("timelineTrigger");
-  var popup = document.getElementById("timelinePopup");
+  var overlay = document.getElementById("timelineOverlay");
   var display = document.getElementById("timelineDisplay");
   var hiddenInput = document.getElementById("contactTimeline");
-  if (!picker || !trigger || !popup || !hiddenInput) return;
+  if (!trigger || !overlay || !hiddenInput) return;
 
   var lang = window.LANG || "en";
   var locale = lang === "id" ? "id-ID" : "en-US";
@@ -2035,7 +2034,7 @@ function initTimelinePicker() {
 
   function pad(n) { return String(n).padStart(2, "0"); }
 
-  // ── Open / Close ──
+  // ── Open / Close (modal overlay pattern) ──
   function openPicker() {
     if (!selectedDate) {
       var now = new Date();
@@ -2044,27 +2043,31 @@ function initTimelinePicker() {
     }
     step = "calendar";
     renderStep();
-    popup.hidden = false;
+    overlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("card-form-open");
+    if (window.__lenis) window.__lenis.stop();
   }
 
   function closePicker() {
-    popup.hidden = true;
+    overlay.hidden = true;
+    document.body.style.overflow = "";
+    document.body.classList.remove("card-form-open");
+    if (window.__lenis) window.__lenis.start();
   }
 
-  trigger.addEventListener("click", function (e) {
-    e.stopPropagation();
-    if (popup.hidden) openPicker();
+  trigger.addEventListener("click", function () {
+    if (overlay.hidden) openPicker();
     else closePicker();
   });
 
-  popup.addEventListener("click", function (e) { e.stopPropagation(); });
-
-  document.addEventListener("click", function () {
-    if (!popup.hidden) closePicker();
+  // Backdrop click to close
+  overlay.addEventListener("pointerdown", function (e) {
+    if (e.target === overlay) closePicker();
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && !popup.hidden) closePicker();
+    if (e.key === "Escape" && !overlay.hidden) closePicker();
   });
 
   // ── Calendar ──
