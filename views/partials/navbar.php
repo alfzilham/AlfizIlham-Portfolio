@@ -53,6 +53,10 @@
     <li><a href="#faq"><?= i18n::t('nav_faq') ?></a></li>
     <li><a href="#contact"><?= i18n::t('nav_contact') ?></a></li>
   </ul>
+  <div class="mobile-menu-lang">
+    <button class="lang-btn <?= $lang === 'en' ? 'active' : '' ?>" data-lang="en" onclick="switchLang('en')">EN</button>
+    <button class="lang-btn <?= $lang === 'id' ? 'active' : '' ?>" data-lang="id" onclick="switchLang('id')">ID</button>
+  </div>
   <div class="mobile-menu-social">
     <a href="<?= $social['instagram'] ?>" target="_blank" rel="noopener"><i class="bi bi-instagram"></i></a>
     <a href="<?= $social['linkedin'] ?>" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>

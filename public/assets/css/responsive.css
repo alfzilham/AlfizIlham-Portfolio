@@ -360,6 +360,20 @@
     padding-right: 0;
   }
 
+  /* Mobile menu — prevent overflow on small screens */
+  .mobile-menu {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-menu-links {
+    gap: var(--space-4);
+  }
+
+  .mobile-menu-links a {
+    font-size: var(--fs-h3);
+  }
+
   /* Intro (wordmark) */
   .intro-mascot {
     max-height: 280px;

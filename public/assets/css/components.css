@@ -323,9 +323,14 @@
 
 .navbar-hamburger {
   display: none;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
   background: none;
   border: none;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar-hamburger svg {
@@ -335,7 +340,7 @@
 
 /* Mobile Menu */
 .mobile-menu {
-  display: none;
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
@@ -348,13 +353,16 @@
   padding: 24px;
   flex-direction: column;
   opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(-12px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
 }
 
 .mobile-menu.open {
-  display: flex;
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -382,12 +390,28 @@
   gap: var(--space-5);
 }
 
+/* Stagger entrance when menu opens */
 .mobile-menu-links a {
   font-size: var(--fs-h2);
   font-weight: var(--fw-extrabold);
   color: var(--color-text);
-  transition: color var(--transition-base), transform var(--transition-base);
+  opacity: 0;
+  transform: translateX(-16px);
+  transition: opacity 0.35s ease, transform 0.35s ease, color var(--transition-base);
 }
+
+.mobile-menu.open .mobile-menu-links a {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-menu.open .mobile-menu-links li:nth-child(1) a { transition-delay: 0.05s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(2) a { transition-delay: 0.1s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(3) a { transition-delay: 0.15s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(4) a { transition-delay: 0.2s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(5) a { transition-delay: 0.25s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(6) a { transition-delay: 0.3s; }
+.mobile-menu.open .mobile-menu-links li:nth-child(7) a { transition-delay: 0.35s; }
 
 .mobile-menu-links a.active {
   color: var(--color-accent);
@@ -397,6 +421,22 @@
 
 .mobile-menu-links a:hover {
   transform: translateX(6px);
+}
+
+.mobile-menu-lang {
+  display: flex;
+  gap: 4px;
+  margin-top: var(--space-6);
+  padding: 2px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-soft);
+  box-shadow: var(--neu-shadow-in-sm);
+  width: fit-content;
+}
+
+.mobile-menu-lang .lang-btn {
+  padding: 6px 16px;
+  font-size: var(--fs-body-sm);
 }
 
 .mobile-menu-social {
