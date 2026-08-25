@@ -3484,21 +3484,21 @@ body.editor-mode .cert-menu-btn {
   white-space: nowrap;
   overflow: hidden;
   text-shadow:
-    -2px -2px 0 #e5e5e5,
-    -3px -3px 0 #e0e0e0,
-    -4px -4px 0 #d8d8d8,
-    -5px -5px 0 #d0d0d0,
-    -6px -6px 0 #c8c8c8,
-    -7px -7px 0 #c0c0c0,
-    -8px -8px 0 #b8b8b8,
-    -9px -9px 0 #adadad,
-    -10px -10px 0 #a0a0a0;
+    2px -2px 0 #e5e5e5,
+    3px -3px 0 #e0e0e0,
+    4px -4px 0 #d8d8d8,
+    5px -5px 0 #d0d0d0,
+    6px -6px 0 #c8c8c8,
+    7px -7px 0 #c0c0c0,
+    8px -8px 0 #b8b8b8,
+    9px -9px 0 #adadad,
+    10px -10px 0 #a0a0a0;
 }
 
 .footer-dark {
   background: var(--color-footer-bg);
   color: var(--color-footer-text);
-  padding: var(--space-8) 0 var(--space-5);
+  padding: 0 0 var(--space-5);
 }
 
 .footer-dark-inner {
