@@ -2498,7 +2498,7 @@ body.card-form-open .editor-toolbar {
   background: var(--color-bg);
   border-radius: var(--neu-radius-lg);
   padding: var(--space-6) var(--space-7);
-  max-height: 520px;
+  max-height: 440px;
   overflow-y: auto;
   overscroll-behavior: contain;
   box-shadow: var(--neu-shadow-out);
