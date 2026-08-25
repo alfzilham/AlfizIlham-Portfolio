@@ -345,21 +345,26 @@ echo "Seeded " . count($gallery) . " gallery items.\n";
 
 // Seed FAQs
 $faqs = [
-    ['pricing', 'What is the cost of your services?', 'It depends on the scope of your project. Contact me with your requirements and I\'ll provide a tailored quote.', 1],
-    ['process', 'How much time is typically needed to finish a project?', 'A landing page takes around 1.5 days using my AI-directed workflow. Larger projects typically take 1 to 2 weeks depending on complexity.', 2],
-    ['services', 'How does your revision policy work?', 'Minor revisions such as color, font, or content changes are included in the initial price. Structural changes like adding new pages are charged separately based on the request.', 3],
-    ['services', 'Can you work with my existing brand guidelines?', 'Yes. I adapt my design and development workflow to match your existing brand identity and guidelines.', 4],
-    ['services', 'Do you offer website maintenance after launch?', 'As a freelancer, yes. Maintenance is available at an additional cost. If you hire me full-time as a remote employee, maintenance is included as part of the role.', 5],
-    ['contact', 'Can you handle projects from outside Indonesia?', 'Yes. I work with clients globally and offer the same quality of service regardless of location.', 6],
-    ['general', 'What sets you apart from other designers and developers?', 'I combine full-stack development, AI workflow engineering, and Arabic calligraphy art in one workflow. You get a developer who designs, codes, and deploys — not just one piece of the puzzle.', 7],
-    ['general', 'What tools and tech stack do you use?', 'For frontend, I use React and Next.js. For backend, I work with Node.js, Python, and PostgreSQL. I also build AI workflows and ML models using Claude API, TensorFlow, and cloud platforms like AWS Bedrock and Vertex AI.', 8],
-    ['process', 'What does your working process look like?', 'I start by understanding your needs, then architect the solution — from system design to development and deployment. AI accelerates the workflow, but quality and communication stay hands-on.', 9],
-    ['contact', 'Are you open to full-time remote work?', 'Yes. I am actively looking for full-time remote opportunities as a Software & AI Engineer or full-stack developer.', 10],
-    ['services', 'Can you provide design only, without building the website?', 'I do not use design tools like Figma or Framer. Instead, I design directly in React, which means the design is live and interactive from day one. Revisions are done in the same workflow.', 11],
-    ['services', 'Can I order Arabic calligraphy online?', 'At the moment, I do not accept online calligraphy orders. My calligraphy work is showcased as part of my portfolio only.', 12],
-    ['pricing', 'What is your payment structure?', 'For larger projects, I require a deposit before work begins. Payment terms are discussed and agreed upon before the project starts.', 13],
-    ['services', 'Can you integrate features like payment gateway, database, or backend?', 'Yes. I have experience building full-stack applications with React, Node.js, Python, and PostgreSQL — including payment gateways, REST APIs, and database design.', 14],
-    ['contact', 'What language do you communicate in with international clients?', 'I communicate in Arabic with clients from Arab countries, and in English with clients from the US, UK, and other English-speaking regions.', 15],
+    // Services
+    ['services', 'What services do you offer?', 'I offer five core services: Full-Stack Web Development, AI-Integrated Applications, Workflow Automation, API & Database Engineering, and Tech Consultation for stack and AI strategy.', 1],
+    ['services', 'Can you handle projects from outside Indonesia?', 'Yes. I work with clients globally and offer the same quality of service regardless of location. Communication is in English for international clients.', 2],
+    ['services', 'Can you integrate payment gateways, databases, or backend systems?', 'Yes. I have experience building full-stack applications with React, Node.js, Python, and PostgreSQL — including payment gateways, REST APIs, and database design.', 3],
+    // Process
+    ['process', 'How long does it take to build a website?', 'A landing page typically takes around 1.5 days with my AI-directed workflow. Larger projects usually take 1 to 2 weeks depending on complexity.', 4],
+    ['process', 'What does your working process look like?', 'I start by understanding your needs, then architect the solution — from system design to development and deployment. AI accelerates the workflow, but quality and communication stay hands-on.', 5],
+    ['process', 'Do you offer revisions after the project is delivered?', 'Yes. Minor revisions such as color, font, or content changes are included. Structural changes like adding new pages are discussed separately.', 6],
+    // Pricing
+    ['pricing', 'How much do your services cost?', 'It depends on the scope of your project. Contact me with your requirements and I will provide a tailored quote.', 7],
+    ['pricing', 'Do you require a deposit or offer installment plans?', 'For larger projects, I require a deposit before work begins. Payment terms are discussed and agreed upon before the project starts.', 8],
+    ['pricing', 'Are there special rates for startups?', 'I am open to discussing flexible pricing for startups and early-stage projects. Let us talk about your budget and goals.', 9],
+    // General
+    ['general', 'What technologies do you use?', 'For frontend, I use React and Next.js. For backend, I work with Node.js, Python, and PHP. I also build AI workflows using Claude API, OpenRouter, n8n, and cloud platforms like AWS Bedrock and Vertex AI.', 10],
+    ['general', 'Do you have a portfolio of past projects?', 'Yes. I have completed 50+ projects across web development, design, and calligraphy. You can browse them in the Projects section above.', 11],
+    ['general', 'What sets you apart from other developers?', 'I combine full-stack development, AI workflow engineering, and Arabic calligraphy art in one workflow. You get a developer who designs, codes, and deploys — not just one piece of the puzzle.', 12],
+    // Contact
+    ['contact', 'Are you available for full-time remote work?', 'Yes. I am actively looking for full-time remote opportunities as a Software & AI Engineer or full-stack developer.', 13],
+    ['contact', 'How do I start a project with you?', 'Send me a message through the contact form below or reach out via WhatsApp. I will review your requirements and get back to you within 24 hours.', 14],
+    ['contact', 'What languages do you communicate in?', 'I communicate in Arabic with clients from Arab countries, and in English with clients from the US, UK, and other English-speaking regions.', 15],
 ];
 
 $db->exec("DELETE FROM faqs");

@@ -2498,7 +2498,9 @@ body.card-form-open .editor-toolbar {
   background: var(--color-bg);
   border-radius: var(--neu-radius-lg);
   padding: var(--space-6) var(--space-7);
-  min-height: 400px;
+  max-height: 520px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   box-shadow: var(--neu-shadow-out);
 }
 
@@ -2536,6 +2538,10 @@ body.card-form-open .editor-toolbar {
 
 .faq-item.open .faq-icon {
   transform: rotate(45deg);
+}
+
+.faq-item.open .faq-answer {
+  max-height: 500px;
 }
 
 .faq-answer {
