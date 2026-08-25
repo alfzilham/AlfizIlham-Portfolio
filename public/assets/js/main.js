@@ -1997,234 +1997,297 @@ function initCustomDropdowns() {
 }
 
 /* --------------------------------------------------------------------------
-   TIMELINE PICKER — Calendar + Clock (Google Tasks style, neumorphic theme)
+   TIMELINE PICKER (Calendar + Clock, neumorphic theme)
    -------------------------------------------------------------------------- */
 
 function initTimelinePicker() {
+  var picker = document.getElementById("timelinePicker");
   var trigger = document.getElementById("timelineTrigger");
   var popup = document.getElementById("timelinePopup");
   var display = document.getElementById("timelineDisplay");
-  var hiddenInput = document.getElementById("timelineValue");
-  var calPanel = document.getElementById("timelineCalendar");
-  var clockPanel = document.getElementById("timelineClock");
-  var calGrid = document.getElementById("calGrid");
-  var calTitle = document.getElementById("calTitle");
-  var calWeekdays = document.getElementById("calWeekdays");
-  var calPrev = document.getElementById("calPrev");
-  var calNext = document.getElementById("calNext");
-  var calDone = document.getElementById("calDone");
-  var calCancel = document.getElementById("calCancel");
-  var clockFace = document.getElementById("clockFace");
-  var clockDisplay = document.getElementById("clockDisplay");
-  var clockLabel = document.getElementById("clockLabel");
-  var clockDone = document.getElementById("clockDone");
-  var clockCancel = document.getElementById("clockCancel");
+  var hiddenInput = document.getElementById("contactTimeline");
+  if (!picker || !trigger || !popup || !hiddenInput) return;
 
-  if (!trigger || !popup) return;
+  var lang = window.LANG || "en";
+  var locale = lang === "id" ? "id-ID" : "en-US";
 
-  var lang = window.CONTACT_LANG || {};
-  var months = lang.months || ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var weekdays = lang.weekdays || ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  var stepCalendar = document.getElementById("dtStepCalendar");
+  var stepClock = document.getElementById("dtStepClock");
+  var calTitle = document.getElementById("dtCalTitle");
+  var calWeekdays = document.getElementById("dtCalWeekdays");
+  var calGrid = document.getElementById("dtCalGrid");
+  var clockH = document.getElementById("dtClockH");
+  var clockM = document.getElementById("dtClockM");
+  var clockFace = document.getElementById("dtClockFace");
+  var cancelBtn = document.getElementById("dtCancel");
+  var doneBtn = document.getElementById("dtDone");
 
+  var step = "calendar"; // calendar | hour | minute
+  var viewYear, viewMonth;
+  var selectedDate = null;
+  var selectedHour = null;
+  var selectedMinute = null;
   var today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  var calMonth = today.getMonth();
-  var calYear = today.getFullYear();
-  var selectedDate = null;
-  var selectedHour = 13;
-  var selectedMinute = 0;
-  var clockStep = 'hour'; // 'hour' | 'minute'
+  var monthFmt = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" });
+  var dateFmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long", year: "numeric" });
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  // ── Open / Close ──
+  function openPicker() {
+    if (!selectedDate) {
+      var now = new Date();
+      viewYear = now.getFullYear();
+      viewMonth = now.getMonth();
+    }
+    step = "calendar";
+    renderStep();
+    popup.hidden = false;
+  }
+
+  function closePicker() {
+    popup.hidden = true;
+  }
+
+  trigger.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (popup.hidden) openPicker();
+    else closePicker();
+  });
+
+  popup.addEventListener("click", function (e) { e.stopPropagation(); });
+
+  document.addEventListener("click", function () {
+    if (!popup.hidden) closePicker();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !popup.hidden) closePicker();
+  });
 
   // ── Calendar ──
-  function renderCalendar() {
-    calTitle.textContent = months[calMonth] + ' ' + calYear;
-
-    calWeekdays.innerHTML = '';
-    weekdays.forEach(function(d) {
-      var span = document.createElement('span');
-      span.textContent = d;
+  function renderWeekdays() {
+    // Weekday labels starting Monday (locale-aware via Intl)
+    var fmt = new Intl.DateTimeFormat(locale, { weekday: "short" });
+    // 2023-01-02 was a Monday
+    var labels = [];
+    for (var i = 0; i < 7; i++) {
+      labels.push(fmt.format(new Date(2023, 0, 2 + i)));
+    }
+    calWeekdays.innerHTML = "";
+    labels.forEach(function (l) {
+      var span = document.createElement("span");
+      span.textContent = l;
       calWeekdays.appendChild(span);
     });
+  }
 
-    calGrid.innerHTML = '';
-    var firstDay = new Date(calYear, calMonth, 1).getDay();
-    var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
-    var startDay = (firstDay + 6) % 7; // Monday = 0
+  function renderCalendar() {
+    calTitle.textContent = monthFmt.format(new Date(viewYear, viewMonth, 1));
+    calGrid.innerHTML = "";
 
-    for (var i = 0; i < startDay; i++) {
-      var empty = document.createElement('button');
-      empty.type = 'button';
-      empty.className = 'timeline-cal-day empty';
-      empty.disabled = true;
-      calGrid.appendChild(empty);
+    var firstDay = new Date(viewYear, viewMonth, 1);
+    // Day of week (Mon=0 .. Sun=6)
+    var startOffset = (firstDay.getDay() + 6) % 7;
+    var daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+    var cell;
+    // Empty leading cells
+    for (cell = 0; cell < startOffset; cell++) {
+      calGrid.appendChild(document.createElement("span"));
     }
 
     for (var d = 1; d <= daysInMonth; d++) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'timeline-cal-day';
+      var date = new Date(viewYear, viewMonth, d);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "dt-cal-day";
       btn.textContent = d;
 
-      var cellDate = new Date(calYear, calMonth, d);
-      cellDate.setHours(0, 0, 0, 0);
-
-      if (cellDate < today) {
-        btn.classList.add('disabled');
+      if (date.getTime() < today.getTime()) {
         btn.disabled = true;
-      } else {
-        if (cellDate.getTime() === today.getTime()) btn.classList.add('today');
-        if (selectedDate && cellDate.getTime() === selectedDate.getTime()) btn.classList.add('selected');
-
-        (function(day) {
-          btn.addEventListener('click', function() {
-            selectedDate = new Date(calYear, calMonth, day);
-            calDone.disabled = false;
-            renderCalendar();
-          });
-        })(d);
       }
+      if (date.getTime() === today.getTime()) {
+        btn.classList.add("today");
+      }
+      if (
+        selectedDate &&
+        date.getFullYear() === selectedDate.getFullYear() &&
+        date.getMonth() === selectedDate.getMonth() &&
+        date.getDate() === selectedDate.getDate()
+      ) {
+        btn.classList.add("selected");
+      }
+
+      (function (selDate) {
+        btn.addEventListener("click", function () {
+          selectedDate = selDate;
+          step = "hour";
+          renderStep();
+        });
+      })(date);
 
       calGrid.appendChild(btn);
     }
   }
 
-  calPrev.addEventListener('click', function() {
-    calMonth--;
-    if (calMonth < 0) { calMonth = 11; calYear--; }
+  document.getElementById("dtPrevMonth").addEventListener("click", function () {
+    viewMonth--;
+    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
     renderCalendar();
   });
 
-  calNext.addEventListener('click', function() {
-    calMonth++;
-    if (calMonth > 11) { calMonth = 0; calYear++; }
+  document.getElementById("dtNextMonth").addEventListener("click", function () {
+    viewMonth++;
+    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
     renderCalendar();
-  });
-
-  calDone.addEventListener('click', function() {
-    if (!selectedDate) return;
-    calPanel.hidden = true;
-    clockPanel.hidden = false;
-    clockStep = 'hour';
-    selectedHour = 13;
-    selectedMinute = 0;
-    renderClock();
-  });
-
-  calCancel.addEventListener('click', function() {
-    popup.hidden = true;
-    selectedDate = null;
-    calDone.disabled = true;
   });
 
   // ── Clock ──
+  function positionNumbers(container, values, selectedValue, onSelect) {
+    container.innerHTML = "";
+    var radius = container.offsetWidth / 2 - 20;
+    var cx = container.offsetWidth / 2;
+    var cy = container.offsetHeight / 2;
+    var total = values.length;
+
+    values.forEach(function (val, i) {
+      var angle = (i / total) * 2 * Math.PI - Math.PI / 2;
+      var x = cx + radius * Math.cos(angle);
+      var y = cy + radius * Math.sin(angle);
+
+      var num = document.createElement("div");
+      num.className = "dt-clock-num";
+      num.textContent = pad(val);
+      num.style.left = x + "px";
+      num.style.top = y + "px";
+      if (selectedValue === val) num.classList.add("selected");
+
+      num.addEventListener("click", function (e) {
+        e.stopPropagation();
+        onSelect(val);
+      });
+
+      container.appendChild(num);
+    });
+  }
+
   function renderClock() {
-    var hh = String(selectedHour).padStart(2, '0');
-    var mm = String(selectedMinute).padStart(2, '0');
+    var isHour = step === "hour";
+    clockH.classList.toggle("active", isHour);
+    clockM.classList.toggle("active", !isHour);
+    clockH.textContent = pad(selectedHour != null ? selectedHour : 0);
+    clockM.textContent = pad(selectedMinute != null ? selectedMinute : 0);
 
-    if (clockStep === 'hour') {
-      clockDisplay.innerHTML = '<span class="active">' + hh + '</span> : ' + mm;
-      clockLabel.textContent = lang.select_hour || 'Select hour';
-      clockDone.disabled = false;
-      renderClockFace(24, selectedHour, function(v) { selectedHour = v; renderClock(); });
+    var values, selected;
+    if (isHour) {
+      values = [];
+      for (var h = 0; h < 24; h++) values.push(h);
+      selected = selectedHour;
+      positionNumbers(clockFace, values, selected, function (val) {
+        selectedHour = val;
+        step = "minute";
+        renderClock();
+      });
     } else {
-      clockDisplay.innerHTML = hh + ' : <span class="active">' + mm + '</span>';
-      clockLabel.textContent = lang.select_minute || 'Select minute';
-      clockDone.disabled = false;
-      renderClockFace(12, Math.floor(selectedMinute / 5), function(v) { selectedMinute = v * 5; renderClock(); });
+      values = [];
+      for (var m = 0; m < 60; m += 5) values.push(m);
+      selected = selectedMinute;
+      positionNumbers(clockFace, values, selected, function (val) {
+        selectedMinute = val;
+        renderClock();
+      });
     }
   }
 
-  function renderClockFace(steps, selected, onSelect) {
-    clockFace.innerHTML = '';
-    var cx = 110, cy = 110, r = 86;
+  // Drag on clock face → snap to nearest number
+  var dragging = false;
+  clockFace.addEventListener("pointerdown", function (e) {
+    dragging = true;
+    handleDrag(e);
+  });
+  clockFace.addEventListener("pointermove", function (e) {
+    if (dragging) handleDrag(e);
+  });
+  window.addEventListener("pointerup", function () {
+    dragging = false;
+  });
 
-    for (var i = 0; i < steps; i++) {
-      var angle = (i / steps) * 2 * Math.PI - Math.PI / 2;
-      var x = cx + r * Math.cos(angle);
-      var y = cy + r * Math.sin(angle);
+  function handleDrag(e) {
+    var rect = clockFace.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2;
+    var cy = rect.top + rect.height / 2;
+    var dx = e.clientX - cx;
+    var dy = e.clientY - cy;
+    var angle = Math.atan2(dy, dx); // -PI..PI
+    var deg = (angle * 180) / Math.PI + 90; // 0deg at top
+    if (deg < 0) deg += 360;
 
-      var num = document.createElement('button');
-      num.type = 'button';
-      num.className = 'timeline-clock-num';
-      num.textContent = clockStep === 'hour' ? String(i).padStart(2, '0') : String(i * 5).padStart(2, '0');
-      num.style.left = x + 'px';
-      num.style.top = y + 'px';
+    var isHour = step === "hour";
+    var total = isHour ? 24 : 12;
+    var perStep = 360 / total;
+    var index = Math.round(deg / perStep) % total;
 
-      if (i === selected) num.classList.add('selected');
-
-      (function(val) {
-        num.addEventListener('click', function() {
-          onSelect(val);
-        });
-      })(i);
-
-      clockFace.appendChild(num);
+    if (isHour) {
+      selectedHour = index;
+    } else {
+      selectedMinute = index * 5;
     }
-
-    // Draw hand
-    var hand = document.createElement('div');
-    hand.className = 'timeline-clock-hand';
-    var handAngle = (selected / steps) * 360;
-    var handLen = r - 10;
-    hand.style.height = handLen + 'px';
-    hand.style.transform = 'translate(-50%, -100%) rotate(' + handAngle + 'deg)';
-    clockFace.appendChild(hand);
+    renderClock();
   }
 
-  clockDone.addEventListener('click', function() {
-    if (clockStep === 'hour') {
-      clockStep = 'minute';
+  // ── Step rendering ──
+  function renderStep() {
+    stepCalendar.hidden = step !== "calendar";
+    stepClock.hidden = step === "calendar";
+    if (step === "calendar") {
+      renderCalendar();
+    } else {
       renderClock();
-    } else {
-      // Done — format and set value
-      var hh = String(selectedHour).padStart(2, '0');
-      var mm = String(selectedMinute).padStart(2, '0');
-      var day = selectedDate.getDate();
-      var month = months[selectedDate.getMonth()];
-      var year = selectedDate.getFullYear();
-      var formatted = day + ' ' + month + ' ' + year + ', ' + hh + ':' + mm;
-
-      hiddenInput.value = formatted;
-      display.textContent = formatted;
-      display.classList.remove('placeholder');
-      popup.hidden = true;
-      selectedDate = null;
-      calDone.disabled = true;
     }
+  }
+
+  // ── Footer buttons ──
+  cancelBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    closePicker();
   });
 
-  clockCancel.addEventListener('click', function() {
-    popup.hidden = true;
-    selectedDate = null;
-    calDone.disabled = true;
-  });
-
-  // ── Open/Close popup ──
-  trigger.addEventListener('click', function() {
-    popup.hidden = false;
-    calPanel.hidden = false;
-    clockPanel.hidden = true;
-    calDone.disabled = !selectedDate;
-    renderCalendar();
-  });
-
-  popup.addEventListener('pointerdown', function(e) {
-    if (e.target === popup) {
-      popup.hidden = true;
-      selectedDate = null;
-      calDone.disabled = true;
+  doneBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (!selectedDate) {
+      // Still on calendar step with no selection — just close
+      closePicker();
+      return;
     }
+    if (step === "calendar") {
+      step = "hour";
+      renderStep();
+      return;
+    }
+    if (step === "hour") {
+      if (selectedHour == null) return;
+      step = "minute";
+      renderStep();
+      return;
+    }
+    // minute step — finalize
+    if (selectedMinute == null) selectedMinute = 0;
+    var formatted = dateFmt.format(selectedDate) + ", " + pad(selectedHour) + ":" + pad(selectedMinute);
+    hiddenInput.value = formatted;
+    display.textContent = formatted;
+    display.style.color = "var(--color-text)";
+    closePicker();
   });
 
-  // Escape key
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !popup.hidden) {
-      popup.hidden = true;
-      selectedDate = null;
-      calDone.disabled = true;
-    }
-  });
+  // ── Init ──
+  renderWeekdays();
+  var now = new Date();
+  viewYear = now.getFullYear();
+  viewMonth = now.getMonth();
+  renderCalendar();
 }
 
 /* --------------------------------------------------------------------------
@@ -2318,7 +2381,7 @@ function initContactForm() {
           phone: fullPhone,
           service: service.value,
           budget: budgetValue,
-          timeline: form.querySelector("#timelineValue").value.trim() || "Not specified",
+          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
           message: message.value.trim(),
           github_url: form.querySelector("input[name='github_url']").value,
           linkedin_url: form.querySelector("input[name='linkedin_url']").value,
@@ -2337,7 +2400,7 @@ function initContactForm() {
           from_email: email.value.trim(),
           service: service.value,
           budget: budgetValue,
-          timeline: form.querySelector("#timelineValue").value.trim() || "Not specified",
+          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
           whatsapp_url: form.querySelector("input[name='whatsapp_url']").value,
           github_url: form.querySelector("input[name='github_url']").value,
           linkedin_url: form.querySelector("input[name='linkedin_url']").value,
@@ -2366,6 +2429,13 @@ function initContactForm() {
         else if (type === "currency") el.value = "USD";
         else if (type === "country") el.value = "+62";
       });
+
+      // Reset timeline picker display
+      var tlDisplay = document.getElementById("timelineDisplay");
+      if (tlDisplay && tlDisplay.dataset.placeholder) {
+        tlDisplay.textContent = tlDisplay.dataset.placeholder;
+        tlDisplay.style.color = "";
+      }
 
       setTimeout(() => { statusEl.hidden = true; }, 5000);
     } catch (err) {
