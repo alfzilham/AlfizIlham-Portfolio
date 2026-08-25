@@ -17,7 +17,7 @@
         <button class="faq-category" data-category="contact">&bull; <?= i18n::t('faq_contact') ?></button>
       </aside>
       <!-- Accordion Panel (rendered by JS) -->
-      <div class="faq-panel" id="faqPanel"></div>
+      <div class="faq-panel" id="faqPanel" data-lenis-prevent></div>
     </div>
   </div>
 </section>
