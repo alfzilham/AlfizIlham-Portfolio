@@ -83,7 +83,43 @@
           </div>
           <div class="form-group">
             <label for="contactTimeline"><?= i18n::t('contact_timeline_label') ?></label>
-            <input type="text" id="contactTimeline" name="timeline" placeholder="<?= i18n::t('contact_timeline_placeholder') ?>" />
+            <div class="timeline-picker-trigger" id="timelineTrigger" tabindex="0">
+              <span class="timeline-picker-value" id="timelineDisplay"><?= i18n::t('contact_timeline_placeholder') ?></span>
+              <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <input type="hidden" name="timeline" id="timelineValue" />
+          </div>
+        </div>
+
+        <!-- Timeline Picker Popup -->
+        <div class="timeline-popup" id="timelinePopup" hidden data-lenis-prevent>
+          <!-- Calendar Step -->
+          <div class="timeline-calendar" id="timelineCalendar">
+            <div class="timeline-cal-header">
+              <button type="button" class="timeline-nav-btn" id="calPrev">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <span class="timeline-cal-title" id="calTitle"></span>
+              <button type="button" class="timeline-nav-btn" id="calNext">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+            <div class="timeline-cal-weekdays" id="calWeekdays"></div>
+            <div class="timeline-cal-grid" id="calGrid"></div>
+            <div class="timeline-cal-footer">
+              <button type="button" class="btn btn-ghost" id="calCancel"><?= i18n::t('timeline_cancel') ?></button>
+              <button type="button" class="btn btn-primary" id="calDone" disabled><?= i18n::t('timeline_done') ?></button>
+            </div>
+          </div>
+          <!-- Clock Step -->
+          <div class="timeline-clock" id="timelineClock" hidden>
+            <div class="timeline-clock-display" id="clockDisplay">13 : 00</div>
+            <div class="timeline-clock-label" id="clockLabel"><?= i18n::t('timeline_select_hour') ?></div>
+            <div class="timeline-clock-face" id="clockFace"></div>
+            <div class="timeline-cal-footer">
+              <button type="button" class="btn btn-ghost" id="clockCancel"><?= i18n::t('timeline_cancel') ?></button>
+              <button type="button" class="btn btn-primary" id="clockDone" disabled><?= i18n::t('timeline_done') ?></button>
+            </div>
           </div>
         </div>
 
@@ -151,5 +187,11 @@
       'error_phone' => i18n::t('error_phone'),
       'error_service' => i18n::t('error_service'),
       'error_message' => i18n::t('error_message'),
+      'months' => i18n::t('timeline_months'),
+      'weekdays' => i18n::t('timeline_weekdays'),
+      'select_hour' => i18n::t('timeline_select_hour'),
+      'select_minute' => i18n::t('timeline_select_minute'),
+      'done' => i18n::t('timeline_done'),
+      'cancel' => i18n::t('timeline_cancel'),
   ], JSON_UNESCAPED_UNICODE) ?>;
 </script>

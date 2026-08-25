@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initFaqAccordion();
   initContactMap();
   initCustomDropdowns();
+  initTimelinePicker();
   initContactForm();
   initLiveClock();
   initScrollReveal();
@@ -1996,6 +1997,237 @@ function initCustomDropdowns() {
 }
 
 /* --------------------------------------------------------------------------
+   TIMELINE PICKER — Calendar + Clock (Google Tasks style, neumorphic theme)
+   -------------------------------------------------------------------------- */
+
+function initTimelinePicker() {
+  var trigger = document.getElementById("timelineTrigger");
+  var popup = document.getElementById("timelinePopup");
+  var display = document.getElementById("timelineDisplay");
+  var hiddenInput = document.getElementById("timelineValue");
+  var calPanel = document.getElementById("timelineCalendar");
+  var clockPanel = document.getElementById("timelineClock");
+  var calGrid = document.getElementById("calGrid");
+  var calTitle = document.getElementById("calTitle");
+  var calWeekdays = document.getElementById("calWeekdays");
+  var calPrev = document.getElementById("calPrev");
+  var calNext = document.getElementById("calNext");
+  var calDone = document.getElementById("calDone");
+  var calCancel = document.getElementById("calCancel");
+  var clockFace = document.getElementById("clockFace");
+  var clockDisplay = document.getElementById("clockDisplay");
+  var clockLabel = document.getElementById("clockLabel");
+  var clockDone = document.getElementById("clockDone");
+  var clockCancel = document.getElementById("clockCancel");
+
+  if (!trigger || !popup) return;
+
+  var lang = window.CONTACT_LANG || {};
+  var months = lang.months || ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var weekdays = lang.weekdays || ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  var calMonth = today.getMonth();
+  var calYear = today.getFullYear();
+  var selectedDate = null;
+  var selectedHour = 13;
+  var selectedMinute = 0;
+  var clockStep = 'hour'; // 'hour' | 'minute'
+
+  // ── Calendar ──
+  function renderCalendar() {
+    calTitle.textContent = months[calMonth] + ' ' + calYear;
+
+    calWeekdays.innerHTML = '';
+    weekdays.forEach(function(d) {
+      var span = document.createElement('span');
+      span.textContent = d;
+      calWeekdays.appendChild(span);
+    });
+
+    calGrid.innerHTML = '';
+    var firstDay = new Date(calYear, calMonth, 1).getDay();
+    var daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+    var startDay = (firstDay + 6) % 7; // Monday = 0
+
+    for (var i = 0; i < startDay; i++) {
+      var empty = document.createElement('button');
+      empty.type = 'button';
+      empty.className = 'timeline-cal-day empty';
+      empty.disabled = true;
+      calGrid.appendChild(empty);
+    }
+
+    for (var d = 1; d <= daysInMonth; d++) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'timeline-cal-day';
+      btn.textContent = d;
+
+      var cellDate = new Date(calYear, calMonth, d);
+      cellDate.setHours(0, 0, 0, 0);
+
+      if (cellDate < today) {
+        btn.classList.add('disabled');
+        btn.disabled = true;
+      } else {
+        if (cellDate.getTime() === today.getTime()) btn.classList.add('today');
+        if (selectedDate && cellDate.getTime() === selectedDate.getTime()) btn.classList.add('selected');
+
+        (function(day) {
+          btn.addEventListener('click', function() {
+            selectedDate = new Date(calYear, calMonth, day);
+            calDone.disabled = false;
+            renderCalendar();
+          });
+        })(d);
+      }
+
+      calGrid.appendChild(btn);
+    }
+  }
+
+  calPrev.addEventListener('click', function() {
+    calMonth--;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+  });
+
+  calNext.addEventListener('click', function() {
+    calMonth++;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    renderCalendar();
+  });
+
+  calDone.addEventListener('click', function() {
+    if (!selectedDate) return;
+    calPanel.hidden = true;
+    clockPanel.hidden = false;
+    clockStep = 'hour';
+    selectedHour = 13;
+    selectedMinute = 0;
+    renderClock();
+  });
+
+  calCancel.addEventListener('click', function() {
+    popup.hidden = true;
+    selectedDate = null;
+    calDone.disabled = true;
+  });
+
+  // ── Clock ──
+  function renderClock() {
+    var hh = String(selectedHour).padStart(2, '0');
+    var mm = String(selectedMinute).padStart(2, '0');
+
+    if (clockStep === 'hour') {
+      clockDisplay.innerHTML = '<span class="active">' + hh + '</span> : ' + mm;
+      clockLabel.textContent = lang.select_hour || 'Select hour';
+      clockDone.disabled = false;
+      renderClockFace(24, selectedHour, function(v) { selectedHour = v; renderClock(); });
+    } else {
+      clockDisplay.innerHTML = hh + ' : <span class="active">' + mm + '</span>';
+      clockLabel.textContent = lang.select_minute || 'Select minute';
+      clockDone.disabled = false;
+      renderClockFace(12, Math.floor(selectedMinute / 5), function(v) { selectedMinute = v * 5; renderClock(); });
+    }
+  }
+
+  function renderClockFace(steps, selected, onSelect) {
+    clockFace.innerHTML = '';
+    var cx = 110, cy = 110, r = 86;
+
+    for (var i = 0; i < steps; i++) {
+      var angle = (i / steps) * 2 * Math.PI - Math.PI / 2;
+      var x = cx + r * Math.cos(angle);
+      var y = cy + r * Math.sin(angle);
+
+      var num = document.createElement('button');
+      num.type = 'button';
+      num.className = 'timeline-clock-num';
+      num.textContent = clockStep === 'hour' ? String(i).padStart(2, '0') : String(i * 5).padStart(2, '0');
+      num.style.left = x + 'px';
+      num.style.top = y + 'px';
+
+      if (i === selected) num.classList.add('selected');
+
+      (function(val) {
+        num.addEventListener('click', function() {
+          onSelect(val);
+        });
+      })(i);
+
+      clockFace.appendChild(num);
+    }
+
+    // Draw hand
+    var hand = document.createElement('div');
+    hand.className = 'timeline-clock-hand';
+    var handAngle = (selected / steps) * 360;
+    var handLen = r - 10;
+    hand.style.height = handLen + 'px';
+    hand.style.transform = 'translate(-50%, -100%) rotate(' + handAngle + 'deg)';
+    clockFace.appendChild(hand);
+  }
+
+  clockDone.addEventListener('click', function() {
+    if (clockStep === 'hour') {
+      clockStep = 'minute';
+      renderClock();
+    } else {
+      // Done — format and set value
+      var hh = String(selectedHour).padStart(2, '0');
+      var mm = String(selectedMinute).padStart(2, '0');
+      var day = selectedDate.getDate();
+      var month = months[selectedDate.getMonth()];
+      var year = selectedDate.getFullYear();
+      var formatted = day + ' ' + month + ' ' + year + ', ' + hh + ':' + mm;
+
+      hiddenInput.value = formatted;
+      display.textContent = formatted;
+      display.classList.remove('placeholder');
+      popup.hidden = true;
+      selectedDate = null;
+      calDone.disabled = true;
+    }
+  });
+
+  clockCancel.addEventListener('click', function() {
+    popup.hidden = true;
+    selectedDate = null;
+    calDone.disabled = true;
+  });
+
+  // ── Open/Close popup ──
+  trigger.addEventListener('click', function() {
+    popup.hidden = false;
+    calPanel.hidden = false;
+    clockPanel.hidden = true;
+    calDone.disabled = !selectedDate;
+    renderCalendar();
+  });
+
+  popup.addEventListener('pointerdown', function(e) {
+    if (e.target === popup) {
+      popup.hidden = true;
+      selectedDate = null;
+      calDone.disabled = true;
+    }
+  });
+
+  // Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && !popup.hidden) {
+      popup.hidden = true;
+      selectedDate = null;
+      calDone.disabled = true;
+    }
+  });
+}
+
+/* --------------------------------------------------------------------------
    CONTACT FORM (EmailJS + Auto-Reply)
    -------------------------------------------------------------------------- */
 
@@ -2086,7 +2318,7 @@ function initContactForm() {
           phone: fullPhone,
           service: service.value,
           budget: budgetValue,
-          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
+          timeline: form.querySelector("#timelineValue").value.trim() || "Not specified",
           message: message.value.trim(),
           github_url: form.querySelector("input[name='github_url']").value,
           linkedin_url: form.querySelector("input[name='linkedin_url']").value,
@@ -2105,7 +2337,7 @@ function initContactForm() {
           from_email: email.value.trim(),
           service: service.value,
           budget: budgetValue,
-          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
+          timeline: form.querySelector("#timelineValue").value.trim() || "Not specified",
           whatsapp_url: form.querySelector("input[name='whatsapp_url']").value,
           github_url: form.querySelector("input[name='github_url']").value,
           linkedin_url: form.querySelector("input[name='linkedin_url']").value,

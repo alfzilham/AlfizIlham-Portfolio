@@ -126,6 +126,14 @@ return [
     'contact_currency_default' => 'USD',
     'contact_country_default' => '+62',
     'contact_search_placeholder' => 'Search...',
+
+    // Timeline Picker
+    'timeline_cancel' => 'Cancel',
+    'timeline_done' => 'Done',
+    'timeline_select_hour' => 'Select hour',
+    'timeline_select_minute' => 'Select minute',
+    'timeline_months' => ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    'timeline_weekdays' => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     'contact_budget_label' => 'Budget',
     'contact_budget_placeholder' => 'Estimated budget',
     'contact_timeline_label' => 'Timeline',

@@ -126,6 +126,14 @@ return [
     'contact_currency_default' => 'USD',
     'contact_country_default' => '+62',
     'contact_search_placeholder' => 'Cari...',
+
+    // Timeline Picker
+    'timeline_cancel' => 'Batal',
+    'timeline_done' => 'Selesai',
+    'timeline_select_hour' => 'Pilih jam',
+    'timeline_select_minute' => 'Pilih menit',
+    'timeline_months' => ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+    'timeline_weekdays' => ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
     'contact_budget_label' => 'Anggaran',
     'contact_budget_placeholder' => 'Estimasi anggaran',
     'contact_timeline_label' => 'Timeline',
