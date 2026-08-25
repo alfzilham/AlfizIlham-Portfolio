@@ -1,5 +1,8 @@
 RewriteEngine On
 
+# /index.php → redirect to root /
+RewriteRule ^(.*)index\.php$ / [L,R=301]
+
 # Clean URLs — strip .php extension
 # /privacy.php → 301 redirect to /privacy
 RewriteCond %{REQUEST_FILENAME} -f
