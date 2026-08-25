@@ -1,33 +1,37 @@
 <section class="cta-closing section-padding" id="cta-closing">
-  <div class="cta-closing-inner">
-    <!-- Floating icon badges - left arc -->
-    <div class="cta-arc cta-arc-left">
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/react.svg" alt="React" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/nextjs.svg" alt="Next.js" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/javascript.svg" alt="JS" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/github.svg" alt="GitHub" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/ai/claude.svg" alt="Claude" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/design/photoshop.svg" alt="Photoshop" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/design/lightroom.svg" alt="Lightroom" /></div>
+  <div class="cta-inner">
+    <p class="cta-clock" id="liveClock"><?= i18n::t('cta_clock_prefix') ?> --:--:-- --</p>
+    <h1 class="cta-headline"><?= i18n::t('cta_heading') ?></h1>
+
+    <div class="cards-wrap">
+      <div class="fan-card fan-card-1" data-skill="React" style="--tx: -260px; --rot: -16deg; --z: 1;">
+        <img src="assets/image/icons/fullstack/react.svg" alt="React" loading="lazy" />
+      </div>
+      <div class="fan-card fan-card-2" data-skill="Node.js" style="--tx: -165px; --rot: -9deg; --z: 2;">
+        <img src="assets/image/icons/fullstack/nodejs.svg" alt="Node.js" loading="lazy" />
+      </div>
+      <div class="fan-card fan-card-3" data-skill="Python" style="--tx: -70px; --rot: -3deg; --z: 3;">
+        <img src="assets/image/icons/fullstack/python.svg" alt="Python" loading="lazy" />
+      </div>
+      <div class="fan-card fan-card-4" data-skill="Claude" style="--tx: 28px; --rot: 4deg; --z: 4;">
+        <img src="assets/image/icons/ai/claude.svg" alt="Claude" loading="lazy" />
+      </div>
+      <div class="fan-card fan-card-5" data-skill="OpenRouter" style="--tx: 128px; --rot: 10deg; --z: 3;">
+        <img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" loading="lazy" />
+      </div>
+      <div class="fan-card fan-card-6" data-skill="n8n" style="--tx: 225px; --rot: 17deg; --z: 2;">
+        <img src="assets/image/icons/platform/n8n.svg" alt="n8n" loading="lazy" />
+      </div>
     </div>
 
-    <div class="cta-closing-content text-center">
-      <p class="cta-clock" id="liveClock"><?= i18n::t('cta_clock_prefix') ?> --:--:-- --</p>
-      <h1 class="cta-heading"><?= i18n::t('cta_heading') ?></h1>
-      <p class="cta-description"><?= i18n::t('cta_description') ?></p>
-      <a href="#contact" class="btn btn-primary"><?= i18n::t('cta_primary') ?> <i data-lucide="arrow-up-right"></i></a>
-      <a href="<?= config('whatsapp') ?>" target="_blank" rel="noopener" class="btn btn-ghost"><?= i18n::t('cta_whatsapp') ?> <i data-lucide="arrow-right"></i></a>
-    </div>
+    <p class="cta-description"><?= i18n::t('cta_description') ?></p>
 
-    <!-- Floating icon badges - right arc -->
-    <div class="cta-arc cta-arc-right">
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/html5.svg" alt="HTML" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/css3.svg" alt="CSS" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/php.svg" alt="PHP" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/design/coreldraw.svg" alt="CorelDRAW" /></div>
-      <div class="floating-icon-badge"><img src="assets/image/icons/fullstack/docker.svg" alt="Docker" /></div>
+    <div class="cta-row">
+      <a href="#contact" class="btn-pill"><?= i18n::t('cta_primary') ?></a>
+      <a href="<?= config('whatsapp') ?>" target="_blank" rel="noopener" class="btn-text-link">
+        <?= i18n::t('cta_whatsapp') ?>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
     </div>
   </div>
 </section>

@@ -155,8 +155,8 @@ return [
 
     // Closing CTA
     'cta_clock_prefix' => 'Waktu Anda —',
-    'cta_heading' => 'Siap Membangun Sesuatu yang Berani?',
-    'cta_description' => 'Mari ubah ide Anda menjadi pengalaman digital yang cepat, indah, dan fungsional. Saya terbuka untuk proyek baru.',
+    'cta_heading' => 'Mewujudkan ide menjadi pengalaman cerdas.',
+    'cta_description' => 'Pengembangan full-stack dengan AI yang terpasang langsung di dalam produknya — cepat, indah, dan fungsional. Saya terbuka untuk proyek baru.',
     'cta_primary' => 'Mulai Proyek',
     'cta_whatsapp' => 'Atau hubungi saya via WhatsApp',
 

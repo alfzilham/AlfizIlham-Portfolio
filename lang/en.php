@@ -155,8 +155,8 @@ return [
 
     // Closing CTA
     'cta_clock_prefix' => 'Your time —',
-    'cta_heading' => 'Ready to Build Something Bold?',
-    'cta_description' => 'Let\'s turn your idea into a fast, beautiful, and functional digital experience. I\'m open for new projects.',
+    'cta_heading' => 'Turning ideas into intelligent experiences.',
+    'cta_description' => 'Full-stack development with AI built directly into the product — fast, beautiful, and functional. I\'m open for new projects.',
     'cta_primary' => 'Start a Project',
     'cta_whatsapp' => 'Or reach me on WhatsApp',
 

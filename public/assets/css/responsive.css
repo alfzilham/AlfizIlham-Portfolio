@@ -81,13 +81,36 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  /* CTA Arc */
-  .cta-arc {
-    display: none;
+  /* CTA Cards Fan — mobile */
+  .cta-inner {
+    padding: 0 20px;
   }
 
-  .cta-closing-inner {
-    padding: 0 24px;
+  .cards-wrap {
+    height: 150px;
+  }
+
+  .fan-card {
+    width: 82px;
+    height: 82px;
+    margin-left: -41px;
+    border-radius: 10px;
+  }
+
+  .fan-card img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fan-card-1 { --tx: -140px; --rot: -16deg; }
+  .fan-card-2 { --tx: -88px; --rot: -9deg; }
+  .fan-card-3 { --tx: -38px; --rot: -3deg; }
+  .fan-card-4 { --tx: 14px; --rot: 4deg; }
+  .fan-card-5 { --tx: 66px; --rot: 10deg; }
+  .fan-card-6 { --tx: 118px; --rot: 17deg; }
+
+  .cta-row {
+    gap: 18px;
   }
 
   /* Contact Info Strip */
@@ -395,8 +418,8 @@
   }
 
   /* CTA */
-  .cta-heading {
-    font-size: clamp(32px, 7vw, 48px);
+  .cta-headline {
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
   }
 
   /* Gallery */
