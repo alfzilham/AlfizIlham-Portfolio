@@ -125,6 +125,7 @@ return [
     'contact_service_default' => 'Choose a service...',
     'contact_currency_default' => 'USD',
     'contact_country_default' => '+62',
+    'contact_search_placeholder' => 'Search...',
     'contact_budget_label' => 'Budget',
     'contact_budget_placeholder' => 'Estimated budget',
     'contact_timeline_label' => 'Timeline',

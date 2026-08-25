@@ -125,6 +125,7 @@ return [
     'contact_service_default' => 'Pilih layanan...',
     'contact_currency_default' => 'USD',
     'contact_country_default' => '+62',
+    'contact_search_placeholder' => 'Cari...',
     'contact_budget_label' => 'Anggaran',
     'contact_budget_placeholder' => 'Estimasi anggaran',
     'contact_timeline_label' => 'Timeline',

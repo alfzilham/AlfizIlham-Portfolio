@@ -2905,6 +2905,9 @@ body.editor-mode .cert-menu-btn {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   max-height: 240px;
+}
+
+.dropdown-popup:not([hidden]) {
   display: flex;
   flex-direction: column;
 }
