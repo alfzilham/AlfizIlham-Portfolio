@@ -3211,7 +3211,6 @@ body.editor-mode .cert-menu-btn {
 
 .qr-card img {
   width: 100%;
-  max-width: 150px;
   height: auto;
   display: block;
 }
