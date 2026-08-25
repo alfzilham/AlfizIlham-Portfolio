@@ -3499,7 +3499,7 @@ body.editor-mode .cert-menu-btn {
 .footer-dark {
   background: var(--color-footer-bg);
   color: var(--color-footer-text);
-  padding: 0 0 var(--space-5);
+  padding: var(--space-8) 0 var(--space-5);
   box-shadow:
     2px -2px 0 #e5e5e5,
     3px -3px 0 #e0e0e0,
