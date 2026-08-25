@@ -23,43 +23,92 @@
             <span class="form-error" id="emailError"></span>
           </div>
         </div>
+
+        <!-- Phone: country code + number -->
         <div class="form-row">
-          <div class="form-group">
-            <label for="contactPhone"><?= i18n::t('contact_phone_label') ?></label>
-            <input type="tel" id="contactPhone" name="phone" placeholder="<?= i18n::t('contact_phone_placeholder') ?>" required />
+          <div class="form-group" style="flex: 0 0 120px;">
+            <label><?= i18n::t('contact_phone_label') ?></label>
+            <div class="custom-dropdown" id="countryCodeDropdown" data-type="country">
+              <button type="button" class="dropdown-trigger" tabindex="-1">
+                <span class="dropdown-value" data-field="country_code">🇮🇩 +62</span>
+                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="dropdown-popup" hidden>
+                <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
+                <div class="dropdown-items" id="countryCodeItems"></div>
+              </div>
+            </div>
+            <input type="hidden" name="country_code" id="countryCodeValue" value="+62" />
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>&nbsp;</label>
+            <input type="tel" id="contactPhone" name="phone" placeholder="852 1389 6460" inputmode="numeric" required />
             <span class="form-error" id="phoneError"></span>
           </div>
+        </div>
+
+        <!-- Service: custom dropdown -->
+        <div class="form-row">
           <div class="form-group">
-            <label for="contactService"><?= i18n::t('contact_service_label') ?></label>
-            <select id="contactService" name="service" required>
-              <option value="" disabled selected><?= i18n::t('contact_service_default') ?></option>
-              <?php foreach (i18n::t('contact_service_options') as $opt): ?>
-                <option value="<?= sanitize($opt) ?>"><?= sanitize($opt) ?></option>
-              <?php endforeach; ?>
-            </select>
+            <label><?= i18n::t('contact_service_label') ?></label>
+            <div class="custom-dropdown" id="serviceDropdown" data-type="service">
+              <button type="button" class="dropdown-trigger" tabindex="-1">
+                <span class="dropdown-value" data-field="service"><?= i18n::t('contact_service_default') ?></span>
+                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="dropdown-popup" hidden>
+                <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
+                <div class="dropdown-items" id="serviceItems"></div>
+              </div>
+            </div>
+            <input type="hidden" name="service" id="serviceValue" value="" required />
             <span class="form-error" id="serviceError"></span>
           </div>
         </div>
+
+        <!-- Budget: number + currency dropdown -->
         <div class="form-row">
-          <div class="form-group">
-            <label for="contactBudget"><?= i18n::t('contact_budget_label') ?></label>
-            <input type="text" id="contactBudget" name="budget" placeholder="<?= i18n::t('contact_budget_placeholder') ?>" />
+          <div class="form-group" style="flex: 1;">
+            <label><?= i18n::t('contact_budget_label') ?></label>
+            <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" />
           </div>
+          <div class="form-group" style="flex: 0 0 100px;">
+            <label>&nbsp;</label>
+            <div class="custom-dropdown" id="currencyDropdown" data-type="currency">
+              <button type="button" class="dropdown-trigger" tabindex="-1">
+                <span class="dropdown-value" data-field="currency">USD</span>
+                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="dropdown-popup" hidden>
+                <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
+                <div class="dropdown-items" id="currencyItems"></div>
+              </div>
+            </div>
+            <input type="hidden" name="currency" id="currencyValue" value="USD" />
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="form-row">
           <div class="form-group">
             <label for="contactTimeline"><?= i18n::t('contact_timeline_label') ?></label>
             <input type="text" id="contactTimeline" name="timeline" placeholder="<?= i18n::t('contact_timeline_placeholder') ?>" />
           </div>
         </div>
+
+        <!-- Message -->
         <div class="form-group">
           <label for="contactMessage"><?= i18n::t('contact_message_label') ?></label>
           <textarea id="contactMessage" name="message" rows="4" placeholder="<?= i18n::t('contact_message_placeholder') ?>" required minlength="10"></textarea>
           <span class="form-error" id="messageError"></span>
         </div>
+
         <!-- Hidden fields -->
         <input type="hidden" name="github_url" value="<?= config('social.github') ?>" />
         <input type="hidden" name="linkedin_url" value="<?= config('social.linkedin') ?>" />
         <input type="hidden" name="whatsapp_url" value="<?= $whatsapp ?>" />
         <input type="hidden" name="instagram_url" value="<?= config('social.instagram') ?>" />
+
         <button type="submit" class="btn btn-primary" id="submitBtn">
           <?= i18n::t('contact_submit') ?> <i data-lucide="external-link"></i>
         </button>

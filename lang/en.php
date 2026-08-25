@@ -123,6 +123,8 @@ return [
     'contact_phone_placeholder' => '+62 812 xxxx xxxx',
     'contact_service_label' => 'Service',
     'contact_service_default' => 'Choose a service...',
+    'contact_currency_default' => 'USD',
+    'contact_country_default' => '+62',
     'contact_budget_label' => 'Budget',
     'contact_budget_placeholder' => 'Estimated budget',
     'contact_timeline_label' => 'Timeline',
@@ -138,11 +140,11 @@ return [
     'contact_response_time' => 'Weekdays: 08.00–17.00 WIB / Weekend: Closed',
     'contact_write_title' => 'Write to Us',
     'contact_service_options' => [
-        'Full-Stack Development',
-        'AI & Automation',
+        'Full-Stack Web Development',
+        'AI-Integrated Applications',
+        'Workflow Automation',
+        'API & Database Engineering',
         'Tech Consultation',
-        'Design & Calligraphy',
-        'Others',
     ],
 
     // Closing CTA

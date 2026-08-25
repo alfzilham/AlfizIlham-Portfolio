@@ -31,6 +31,7 @@ return [
     'emailjs' => [
         'service_id' => 'service_tdiat3m',
         'template_id' => 'template_8xhjpd2',
+        'template_id_auto_reply' => 'template_xycc4zl',
         'public_key' => '2MWuXtQlMs5Z7lht_',
     ],
     // Editor mode admin password (bcrypt). Default: "admin123" — CHANGE IT:

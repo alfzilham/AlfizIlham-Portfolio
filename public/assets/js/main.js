@@ -31,6 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderFaqPanel();
   initFaqAccordion();
   initContactMap();
+  initCustomDropdowns();
   initContactForm();
   initLiveClock();
   initScrollReveal();
@@ -1844,7 +1845,158 @@ function initContactMap() {
 }
 
 /* --------------------------------------------------------------------------
-   CONTACT FORM (EmailJS + PHP fallback)
+   CUSTOM DROPDOWNS (Service, Currency, Country Code)
+   -------------------------------------------------------------------------- */
+
+function initCustomDropdowns() {
+  // Data
+  var serviceOptions = window.SERVICES_DATA
+    ? window.SERVICES_DATA.map(function(s) { return s.title || s.label || ""; })
+    : [
+      "Full-Stack Web Development",
+      "AI-Integrated Applications",
+      "Workflow Automation",
+      "API & Database Engineering",
+      "Tech Consultation"
+    ];
+
+  var currencyOptions = [
+    { code: "USD", symbol: "$", name: "US Dollar" },
+    { code: "IDR", symbol: "Rp", name: "Indonesian Rupiah" },
+    { code: "EUR", symbol: "€", name: "Euro" },
+    { code: "GBP", symbol: "£", name: "British Pound" },
+    { code: "JPY", symbol: "¥", name: "Japanese Yen" },
+    { code: "AUD", symbol: "A$", name: "Australian Dollar" },
+    { code: "CAD", symbol: "C$", name: "Canadian Dollar" },
+    { code: "SGD", symbol: "S$", name: "Singapore Dollar" },
+    { code: "MYR", symbol: "RM", name: "Malaysian Ringgit" },
+    { code: "KRW", symbol: "₩", name: "South Korean Won" },
+    { code: "CNY", symbol: "¥", name: "Chinese Yuan" },
+    { code: "AED", symbol: "د.إ", name: "UAE Dirham" },
+    { code: "SAR", symbol: "﷼", name: "Saudi Riyal" },
+    { code: "QAR", symbol: "﷼", name: "Qatari Riyal" },
+    { code: "THB", symbol: "฿", name: "Thai Baht" },
+    { code: "PHP", symbol: "₱", name: "Philippine Peso" },
+    { code: "INR", symbol: "₹", name: "Indian Rupee" },
+    { code: "TRY", symbol: "₺", name: "Turkish Lira" },
+    { code: "CHF", symbol: "CHF", name: "Swiss Franc" },
+    { code: "NZD", symbol: "NZ$", name: "New Zealand Dollar" }
+  ];
+
+  var countryCodes = [
+    { code: "+62", country: "Indonesia", flag: "🇮🇩" },
+    { code: "+1", country: "United States", flag: "🇺🇸" },
+    { code: "+1", country: "Canada", flag: "🇨🇦" },
+    { code: "+44", country: "United Kingdom", flag: "🇬🇧" },
+    { code: "+61", country: "Australia", flag: "🇦🇺" },
+    { code: "+81", country: "Japan", flag: "🇯🇵" },
+    { code: "+82", country: "South Korea", flag: "🇰🇷" },
+    { code: "+86", country: "China", flag: "🇨🇳" },
+    { code: "+91", country: "India", flag: "🇮🇳" },
+    { code: "+65", country: "Singapore", flag: "🇸🇬" },
+    { code: "+60", country: "Malaysia", flag: "🇲🇾" },
+    { code: "+66", country: "Thailand", flag: "🇹🇭" },
+    { code: "+63", country: "Philippines", flag: "🇵🇭" },
+    { code: "+971", country: "UAE", flag: "🇦🇪" },
+    { code: "+966", country: "Saudi Arabia", flag: "🇸🇦" },
+    { code: "+974", country: "Qatar", flag: "🇶🇦" },
+    { code: "+90", country: "Turkey", flag: "🇹🇷" },
+    { code: "+49", country: "Germany", flag: "🇩🇪" },
+    { code: "+33", country: "France", flag: "🇫🇷" },
+    { code: "+39", country: "Italy", flag: "🇮🇹" },
+    { code: "+34", country: "Spain", flag: "🇪🇸" },
+    { code: "+31", country: "Netherlands", flag: "🇳🇱" },
+    { code: "+46", country: "Sweden", flag: "🇸🇪" },
+    { code: "+47", country: "Norway", flag: "🇳🇴" },
+    { code: "+48", country: "Poland", flag: "🇵🇱" },
+    { code: "+55", country: "Brazil", flag: "🇧🇷" },
+    { code: "+52", country: "Mexico", flag: "🇲🇽" },
+    { code: "+234", country: "Nigeria", flag: "🇳🇬" },
+    { code: "+27", country: "South Africa", flag: "🇿🇦" },
+    { code: "+64", country: "New Zealand", flag: "🇳🇿" }
+  ];
+
+  // Initialize each dropdown
+  document.querySelectorAll(".custom-dropdown").forEach(function(dd) {
+    var type = dd.dataset.type;
+    var trigger = dd.querySelector(".dropdown-trigger");
+    var popup = dd.querySelector(".dropdown-popup");
+    var search = dd.querySelector(".dropdown-search");
+    var itemsContainer = dd.querySelector(".dropdown-items");
+    var valueEl = dd.querySelector(".dropdown-value");
+    var hiddenInput = dd.parentElement.querySelector("input[type='hidden']");
+
+    if (!trigger || !popup || !itemsContainer) return;
+
+    var options = [];
+    if (type === "service") options = serviceOptions.map(function(s) { return { value: s, label: s }; });
+    else if (type === "currency") options = currencyOptions.map(function(c) { return { value: c.code, label: c.code + " — " + c.name }; });
+    else if (type === "country") options = countryCodes.map(function(c) { return { value: c.code, label: c.flag + " " + c.code + " " + c.country }; });
+
+    // Render items
+    function renderItems(filter) {
+      itemsContainer.innerHTML = "";
+      var lowerFilter = (filter || "").toLowerCase();
+      options.forEach(function(opt) {
+        if (lowerFilter && opt.label.toLowerCase().indexOf(lowerFilter) === -1) return;
+        var div = document.createElement("div");
+        div.className = "dropdown-item";
+        div.textContent = opt.label;
+        div.dataset.value = opt.value;
+        if (hiddenInput && hiddenInput.value === opt.value) div.classList.add("active");
+        div.addEventListener("click", function() {
+          valueEl.textContent = opt.label;
+          if (hiddenInput) hiddenInput.value = opt.value;
+          dd.classList.remove("open");
+          popup.hidden = true;
+          if (search) search.value = "";
+        });
+        itemsContainer.appendChild(div);
+      });
+    }
+
+    renderItems("");
+
+    trigger.addEventListener("click", function(e) {
+      e.stopPropagation();
+      var wasOpen = dd.classList.contains("open");
+      // Close all other dropdowns
+      document.querySelectorAll(".custom-dropdown.open").forEach(function(d) {
+        d.classList.remove("open");
+        d.querySelector(".dropdown-popup").hidden = true;
+      });
+      if (!wasOpen) {
+        dd.classList.add("open");
+        popup.hidden = false;
+        if (search) { search.value = ""; search.focus(); renderItems(""); }
+      }
+    });
+
+    if (search) {
+      search.addEventListener("input", function() {
+        renderItems(search.value);
+      });
+      search.addEventListener("click", function(e) {
+        e.stopPropagation();
+      });
+    }
+
+    itemsContainer.addEventListener("click", function(e) {
+      e.stopPropagation();
+    });
+  });
+
+  // Close dropdowns on outside click
+  document.addEventListener("click", function() {
+    document.querySelectorAll(".custom-dropdown.open").forEach(function(d) {
+      d.classList.remove("open");
+      d.querySelector(".dropdown-popup").hidden = true;
+    });
+  });
+}
+
+/* --------------------------------------------------------------------------
+   CONTACT FORM (EmailJS + Auto-Reply)
    -------------------------------------------------------------------------- */
 
 function initContactForm() {
@@ -1862,7 +2014,10 @@ function initContactForm() {
     const name = form.querySelector("#contactName");
     const email = form.querySelector("#contactEmail");
     const phone = form.querySelector("#contactPhone");
-    const service = form.querySelector("#contactService");
+    const countryCode = form.querySelector("#countryCodeValue");
+    const service = form.querySelector("#serviceValue");
+    const budget = form.querySelector("#contactBudget");
+    const currency = form.querySelector("#currencyValue");
     const message = form.querySelector("#contactMessage");
 
     clearError("nameError");
@@ -1898,6 +2053,15 @@ function initContactForm() {
 
     if (!valid) return;
 
+    // Format budget with currency
+    var budgetValue = "";
+    if (budget.value) {
+      budgetValue = currency.value + " " + Number(budget.value).toLocaleString();
+    }
+
+    // Full phone with country code
+    var fullPhone = (countryCode.value || "+62") + " " + phone.value;
+
     // Submit
     submitBtn.disabled = true;
     submitBtn.innerHTML = `${lang.sending || 'Sending...'} <i data-lucide="loader"></i>`;
@@ -1908,16 +2072,46 @@ function initContactForm() {
     try {
       const config = window.EMAILJS_CONFIG || {};
 
-      // Try EmailJS first
       if (!window.emailjs) {
         await loadScript("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js");
       }
 
-      await emailjs.sendForm(
-        config.service_id || 'service_tdiat3m',
-        config.template_id || 'template_8xhjpd2',
-        form,
-        config.public_key || '2MWuXtQlMs5Z7lht_'
+      // Send admin notification
+      await emailjs.send(
+        config.service_id,
+        config.template_id,
+        {
+          from_name: name.value.trim(),
+          from_email: email.value.trim(),
+          phone: fullPhone,
+          service: service.value,
+          budget: budgetValue,
+          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
+          message: message.value.trim(),
+          github_url: form.querySelector("input[name='github_url']").value,
+          linkedin_url: form.querySelector("input[name='linkedin_url']").value,
+          whatsapp_url: form.querySelector("input[name='whatsapp_url']").value,
+          instagram_url: form.querySelector("input[name='instagram_url']").value,
+        },
+        config.public_key
+      );
+
+      // Send auto-reply to sender
+      await emailjs.send(
+        config.service_id,
+        config.template_id_auto_reply,
+        {
+          from_name: name.value.trim(),
+          from_email: email.value.trim(),
+          service: service.value,
+          budget: budgetValue,
+          timeline: form.querySelector("#contactTimeline").value.trim() || "Not specified",
+          whatsapp_url: form.querySelector("input[name='whatsapp_url']").value,
+          github_url: form.querySelector("input[name='github_url']").value,
+          linkedin_url: form.querySelector("input[name='linkedin_url']").value,
+          instagram_url: form.querySelector("input[name='instagram_url']").value,
+        },
+        config.public_key
       );
 
       statusEl.className = "form-status success";
@@ -1925,30 +2119,27 @@ function initContactForm() {
       statusEl.hidden = false;
       form.reset();
 
+      // Reset custom dropdowns
+      document.querySelectorAll(".custom-dropdown .dropdown-value").forEach(function(el) {
+        var dd = el.closest(".custom-dropdown");
+        var type = dd ? dd.dataset.type : "";
+        if (type === "service") el.textContent = lang.service_default || "Choose a service...";
+        else if (type === "currency") el.textContent = "USD";
+        else if (type === "country") el.textContent = "🇮🇩 +62";
+      });
+      document.querySelectorAll(".custom-dropdown input[type='hidden']").forEach(function(el) {
+        var dd = el.closest(".custom-dropdown");
+        var type = dd ? dd.dataset.type : "";
+        if (type === "service") el.value = "";
+        else if (type === "currency") el.value = "USD";
+        else if (type === "country") el.value = "+62";
+      });
+
       setTimeout(() => { statusEl.hidden = true; }, 5000);
     } catch (err) {
-      // Fallback to PHP endpoint
-      try {
-        const formData = new FormData(form);
-        const response = await fetch('index.php?/api/contact', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          statusEl.className = "form-status success";
-          statusEl.textContent = lang.success || "Message Sent! I'll get back to you within 24 hours.";
-          statusEl.hidden = false;
-          form.reset();
-          setTimeout(() => { statusEl.hidden = true; }, 5000);
-        } else {
-          throw new Error('PHP fallback failed');
-        }
-      } catch (phpErr) {
-        statusEl.className = "form-status error";
-        statusEl.textContent = (lang.error || 'Failed to send. Try via WhatsApp:') + ' ' + (window.__WHATSAPP || 'https://wa.me/6285213896460');
-        statusEl.hidden = false;
-      }
+      statusEl.className = "form-status error";
+      statusEl.textContent = (lang.error || 'Failed to send. Try via WhatsApp:') + ' ' + (window.__WHATSAPP || 'https://wa.me/6285213896460');
+      statusEl.hidden = false;
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = `${lang.submit || 'Send Message'} <i data-lucide="external-link"></i>`;

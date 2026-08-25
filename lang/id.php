@@ -123,6 +123,8 @@ return [
     'contact_phone_placeholder' => '+62 812 xxxx xxxx',
     'contact_service_label' => 'Layanan',
     'contact_service_default' => 'Pilih layanan...',
+    'contact_currency_default' => 'USD',
+    'contact_country_default' => '+62',
     'contact_budget_label' => 'Anggaran',
     'contact_budget_placeholder' => 'Estimasi anggaran',
     'contact_timeline_label' => 'Timeline',
@@ -138,11 +140,11 @@ return [
     'contact_response_time' => 'Senin-Jumat: 08.00–17.00 WIB / Weekend: Libur',
     'contact_write_title' => 'Hubungi Kami',
     'contact_service_options' => [
-        'Full-Stack Development',
-        'AI & Automation',
+        'Full-Stack Web Development',
+        'AI-Integrated Applications',
+        'Workflow Automation',
+        'API & Database Engineering',
         'Tech Consultation',
-        'Design & Calligraphy',
-        'Lainnya',
     ],
 
     // Closing CTA
