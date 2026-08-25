@@ -3194,6 +3194,7 @@ body.editor-mode .cert-menu-btn {
 }
 
 .qr-card {
+  aspect-ratio: 1 / 1;
   border-radius: var(--neu-radius);
   background: var(--color-bg);
   box-shadow: var(--neu-shadow-in);
@@ -3268,6 +3269,7 @@ body.editor-mode .cert-menu-btn {
 .contact-info-right {
   justify-content: flex-end;
   text-align: right;
+  align-items: center;
 }
 
 .contact-info-right .contact-info-text {
