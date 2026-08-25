@@ -49,7 +49,7 @@
     </div>
 
     <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--color-border);">
-      <a href="index.php" style="color:var(--color-text);text-decoration:none;font-weight:600;">&larr; Back to portfolio</a>
+      <a href="/" style="color:var(--color-text);text-decoration:none;font-weight:600;">&larr; Back to portfolio</a>
     </div>
   </div>
 </body>

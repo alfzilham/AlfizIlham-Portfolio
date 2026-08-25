@@ -1,5 +1,15 @@
 RewriteEngine On
 
+# Clean URLs — strip .php extension
+# /privacy.php → 301 redirect to /privacy
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.+)\.php$ /$1 [L,R=301]
+
+# /privacy → internally rewrite to privacy.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
 # Handle requests that don't match existing files or directories
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

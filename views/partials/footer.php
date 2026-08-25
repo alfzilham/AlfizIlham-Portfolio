@@ -78,9 +78,9 @@
       <span><?= i18n::t('footer_copyright') ?></span>
       <span><?= i18n::t('footer_rights') ?></span>
       <div class="footer-legal">
-        <a href="<?= config('url') ?>/privacy.php"><?= i18n::t('footer_privacy') ?></a>
+        <a href="<?= config('url') ?>/privacy"><?= i18n::t('footer_privacy') ?></a>
         <span>&middot;</span>
-        <a href="<?= config('url') ?>/terms.php"><?= i18n::t('footer_terms') ?></a>
+        <a href="<?= config('url') ?>/terms"><?= i18n::t('footer_terms') ?></a>
       </div>
     </div>
   </div>
