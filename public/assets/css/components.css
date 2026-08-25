@@ -3345,7 +3345,7 @@ body.editor-mode .cert-menu-btn {
   line-height: 1.15;
   letter-spacing: var(--ls-tight);
   max-width: 780px;
-  margin: 0 auto var(--space-8);
+  margin: 0 auto var(--space-6);
 }
 
 /* Cards Fan */
@@ -3357,7 +3357,7 @@ body.editor-mode .cert-menu-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--space-8);
+  margin: 0 auto var(--space-6);
 }
 
 .fan-card {
