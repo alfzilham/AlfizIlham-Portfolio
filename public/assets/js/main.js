@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactMap();
   initCustomDropdowns();
   initTimelinePicker();
+  initNewsletterForm();
   initContactForm();
   initLiveClock();
   initScrollReveal();
@@ -2291,6 +2292,75 @@ function initTimelinePicker() {
   viewYear = now.getFullYear();
   viewMonth = now.getMonth();
   renderCalendar();
+}
+
+/* --------------------------------------------------------------------------
+   NEWSLETTER FORM (EmailJS)
+   -------------------------------------------------------------------------- */
+
+function initNewsletterForm() {
+  var form = document.getElementById("newsletterForm");
+  if (!form) return;
+
+  var statusEl = document.getElementById("newsletterStatus");
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    var emailInput = form.querySelector("input[type='email']");
+    var email = emailInput ? emailInput.value.trim() : "";
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+
+    var config = window.EMAILJS_CONFIG || {};
+    var btn = form.querySelector("button[type='submit']");
+    btn.disabled = true;
+    btn.textContent = "...";
+    if (statusEl) statusEl.hidden = true;
+
+    try {
+      if (!window.emailjs) {
+        await loadScript("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js");
+      }
+
+      await emailjs.send(
+        config.service_id,
+        config.template_id,
+        {
+          from_name: "Newsletter Subscriber",
+          from_email: email,
+          phone: "N/A",
+          service: "Newsletter",
+          budget: "N/A",
+          timeline: "N/A",
+          message: "Newsletter subscription request from " + email,
+          github_url: "",
+          linkedin_url: "",
+          whatsapp_url: "",
+          instagram_url: ""
+        },
+        config.public_key
+      );
+
+      if (statusEl) {
+        statusEl.className = "form-status success";
+        statusEl.textContent = window.CONTACT_LANG && window.CONTACT_LANG.success
+          ? window.CONTACT_LANG.success
+          : "Subscribed!";
+        statusEl.hidden = false;
+        setTimeout(function () { statusEl.hidden = true; }, 5000);
+      }
+      form.reset();
+    } catch (err) {
+      if (statusEl) {
+        statusEl.className = "form-status error";
+        statusEl.textContent = "Failed to subscribe. Try again later.";
+        statusEl.hidden = false;
+      }
+    } finally {
+      btn.disabled = false;
+      btn.textContent = window.LANG === "id" ? "Berlangganan" : "Subscribe";
+    }
+  });
 }
 
 /* --------------------------------------------------------------------------

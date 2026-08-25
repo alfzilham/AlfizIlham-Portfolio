@@ -144,34 +144,47 @@
         </div>
       </div>
 
-      <!-- Map -->
-      <div class="contact-map-card">
-        <div id="contact-map"></div>
+      <!-- Map + QR column -->
+      <div class="contact-map-column">
+        <div class="contact-map-card">
+          <div id="contact-map"></div>
+        </div>
+        <div class="contact-qr-grid">
+          <a href="<?= config('whatsapp') ?>" target="_blank" rel="noopener" class="qr-card" aria-label="WhatsApp QR Code">
+            <img src="assets/image/qrcode/wa-qrcode.webp" alt="WhatsApp QR Code" loading="lazy" />
+          </a>
+          <a href="<?= config('social.instagram') ?>" target="_blank" rel="noopener" class="qr-card" aria-label="Instagram QR Code">
+            <img src="assets/image/qrcode/ig-qrcode.webp" alt="Instagram QR Code" loading="lazy" />
+          </a>
+        </div>
       </div>
     </div>
 
     <!-- Contact Info Strip -->
     <div class="contact-info-strip">
-      <div class="contact-info-item">
+      <!-- Col 1: Call & WhatsApp -->
+      <div class="contact-info-item contact-info-center">
         <i data-lucide="phone"></i>
-        <div>
+        <a class="contact-info-link" href="<?= config('whatsapp') ?>" target="_blank" rel="noopener">
           <strong><?= i18n::t('contact_call_title') ?></strong>
           <span><?= config('phone') ?></span>
-        </div>
+        </a>
       </div>
-      <div class="contact-info-item">
-        <i data-lucide="clock"></i>
-        <div>
-          <strong><?= i18n::t('contact_response_title') ?></strong>
-          <span><?= i18n::t('contact_response_time') ?></span>
-        </div>
+      <!-- Col 2: Newsletter -->
+      <div class="contact-info-item contact-info-newsletter">
+        <form class="newsletter-form" id="newsletterForm" novalidate>
+          <input type="email" name="from_email" placeholder="<?= i18n::t('contact_newsletter_placeholder') ?>" required />
+          <button type="submit" class="btn btn-primary"><?= i18n::t('contact_newsletter_button') ?></button>
+          <span class="form-status" id="newsletterStatus" hidden></span>
+        </form>
       </div>
-      <div class="contact-info-item">
-        <i data-lucide="send"></i>
-        <div>
+      <!-- Col 3: Write to Us -->
+      <div class="contact-info-item contact-info-right">
+        <div class="contact-info-text">
           <strong><?= i18n::t('contact_write_title') ?></strong>
           <span><?= config('email') ?></span>
         </div>
+        <i data-lucide="send"></i>
       </div>
     </div>
   </div>
