@@ -16,8 +16,8 @@
       <div class="fan-card fan-card-4" data-skill="Claude" style="--tx: 28px; --rot: 4deg; --z: 4;">
         <img src="assets/image/icons/ai/claude.svg" alt="Claude" loading="lazy" />
       </div>
-      <div class="fan-card fan-card-5" data-skill="OpenRouter" style="--tx: 128px; --rot: 10deg; --z: 3;">
-        <img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" loading="lazy" />
+      <div class="fan-card fan-card-5" data-skill="JavaScript" style="--tx: 128px; --rot: 10deg; --z: 3;">
+        <img src="assets/image/icons/fullstack/javascript.svg" alt="JavaScript" loading="lazy" />
       </div>
       <div class="fan-card fan-card-6" data-skill="n8n" style="--tx: 225px; --rot: 17deg; --z: 2;">
         <img src="assets/image/icons/platform/n8n.svg" alt="n8n" loading="lazy" />
