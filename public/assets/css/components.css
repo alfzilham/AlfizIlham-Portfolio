@@ -2947,6 +2947,38 @@ body.editor-mode .cert-menu-btn {
   display: none;
 }
 
+/* Compound input groups (phone + budget) */
+.phone-input-group,
+.budget-input-group {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.phone-input-group .custom-dropdown,
+.budget-input-group .custom-dropdown {
+  flex: 0 0 120px;
+}
+
+.phone-input-group input[type="tel"],
+.budget-input-group input[type="number"] {
+  flex: 1;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--neu-radius-sm);
+  background: var(--color-bg);
+  font-size: var(--fs-body);
+  outline: none;
+  box-shadow: var(--neu-shadow-in-sm);
+  transition: box-shadow var(--transition-base);
+}
+
+.phone-input-group input[type="tel"]:focus,
+.budget-input-group input[type="number"]:focus {
+  box-shadow: var(--neu-shadow-in);
+}
+
 /* Map */
 .contact-map-card {
   border-radius: var(--neu-radius-lg);

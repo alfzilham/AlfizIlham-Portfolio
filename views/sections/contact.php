@@ -11,6 +11,7 @@
     <div class="contact-grid">
       <!-- Form -->
       <form class="contact-form" id="contactForm" novalidate>
+        <!-- Row 1: Name | Email -->
         <div class="form-row">
           <div class="form-group">
             <label for="contactName"><?= i18n::t('contact_name_label') ?></label>
@@ -24,31 +25,26 @@
           </div>
         </div>
 
-        <!-- Phone: country code + number -->
+        <!-- Row 2: Phone Number | Service -->
         <div class="form-row">
-          <div class="form-group" style="flex: 0 0 120px;">
+          <div class="form-group">
             <label><?= i18n::t('contact_phone_label') ?></label>
-            <div class="custom-dropdown" id="countryCodeDropdown" data-type="country">
-              <button type="button" class="dropdown-trigger" tabindex="-1">
-                <span class="dropdown-value" data-field="country_code">🇮🇩 +62</span>
-                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              <div class="dropdown-popup" hidden>
-                <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
-                <div class="dropdown-items" id="countryCodeItems"></div>
+            <div class="phone-input-group">
+              <div class="custom-dropdown" id="countryCodeDropdown" data-type="country">
+                <button type="button" class="dropdown-trigger" tabindex="-1">
+                  <span class="dropdown-value" data-field="country_code">🇮🇩 +62</span>
+                  <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="dropdown-popup" hidden>
+                  <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
+                  <div class="dropdown-items" id="countryCodeItems"></div>
+                </div>
               </div>
+              <input type="hidden" name="country_code" id="countryCodeValue" value="+62" />
+              <input type="tel" id="contactPhone" name="phone" placeholder="852 1389 6460" inputmode="numeric" required />
             </div>
-            <input type="hidden" name="country_code" id="countryCodeValue" value="+62" />
-          </div>
-          <div class="form-group" style="flex: 1;">
-            <label>&nbsp;</label>
-            <input type="tel" id="contactPhone" name="phone" placeholder="852 1389 6460" inputmode="numeric" required />
             <span class="form-error" id="phoneError"></span>
           </div>
-        </div>
-
-        <!-- Service: custom dropdown -->
-        <div class="form-row">
           <div class="form-group">
             <label><?= i18n::t('contact_service_label') ?></label>
             <div class="custom-dropdown" id="serviceDropdown" data-type="service">
@@ -66,37 +62,32 @@
           </div>
         </div>
 
-        <!-- Budget: number + currency dropdown -->
+        <!-- Row 3: Budget | Timeline -->
         <div class="form-row">
-          <div class="form-group" style="flex: 1;">
+          <div class="form-group">
             <label><?= i18n::t('contact_budget_label') ?></label>
-            <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" />
-          </div>
-          <div class="form-group" style="flex: 0 0 100px;">
-            <label>&nbsp;</label>
-            <div class="custom-dropdown" id="currencyDropdown" data-type="currency">
-              <button type="button" class="dropdown-trigger" tabindex="-1">
-                <span class="dropdown-value" data-field="currency">USD</span>
-                <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-              <div class="dropdown-popup" hidden>
-                <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
-                <div class="dropdown-items" id="currencyItems"></div>
+            <div class="budget-input-group">
+              <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" />
+              <div class="custom-dropdown" id="currencyDropdown" data-type="currency">
+                <button type="button" class="dropdown-trigger" tabindex="-1">
+                  <span class="dropdown-value" data-field="currency">USD</span>
+                  <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <div class="dropdown-popup" hidden>
+                  <input type="text" class="dropdown-search" placeholder="<?= i18n::t('contact_search_placeholder') ?>" />
+                  <div class="dropdown-items" id="currencyItems"></div>
+                </div>
               </div>
+              <input type="hidden" name="currency" id="currencyValue" value="USD" />
             </div>
-            <input type="hidden" name="currency" id="currencyValue" value="USD" />
           </div>
-        </div>
-
-        <!-- Timeline -->
-        <div class="form-row">
           <div class="form-group">
             <label for="contactTimeline"><?= i18n::t('contact_timeline_label') ?></label>
             <input type="text" id="contactTimeline" name="timeline" placeholder="<?= i18n::t('contact_timeline_placeholder') ?>" />
           </div>
         </div>
 
-        <!-- Message -->
+        <!-- Row 4: Message (full width) -->
         <div class="form-group">
           <label for="contactMessage"><?= i18n::t('contact_message_label') ?></label>
           <textarea id="contactMessage" name="message" rows="4" placeholder="<?= i18n::t('contact_message_placeholder') ?>" required minlength="10"></textarea>
