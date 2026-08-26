@@ -605,3 +605,4 @@ alfizilham/
 | Stat numbers (4.5)         | Count-up `0 → target` on scroll (GSAP, suffix preserved)         |
 | Skill icons (4.6)          | Hover: one-shot rotate wiggle + black pill tooltip (`category_label`) |
 | Circular gallery (4.7)     | Infinite WebGL drag gallery with bend + wave shader (OGL, esm.sh)|
+| AI chatbot (v1.1.0)        | Floating panel reveal/cross-blur; animated thinking dots; safe rich-text answer reveal with bold, italic, paragraphs, and lists; reduced-motion fallback |

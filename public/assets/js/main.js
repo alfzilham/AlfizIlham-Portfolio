@@ -2968,10 +2968,19 @@ function initChatbot() {
   const messages = document.getElementById('chatbotMessages');
   if (!toggle || !panel || !form || !input || !messages) return;
 
+  let closeTimer;
   const setOpen = (open) => {
-    panel.hidden = !open;
-    toggle.setAttribute('aria-expanded', String(open));
-    if (open) input.focus();
+    clearTimeout(closeTimer);
+    if (open) {
+      panel.hidden = false;
+      requestAnimationFrame(() => panel.setAttribute('data-open', 'true'));
+      toggle.setAttribute('aria-expanded', 'true');
+      input.focus();
+    } else {
+      panel.setAttribute('data-open', 'false');
+      toggle.setAttribute('aria-expanded', 'false');
+      closeTimer = setTimeout(() => { panel.hidden = true; }, 360);
+    }
   };
   const addMessage = (text, role) => {
     const item = document.createElement('p');
@@ -2982,7 +2991,7 @@ function initChatbot() {
     return item;
   };
 
-  toggle.addEventListener('click', () => setOpen(panel.hidden));
+  toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
   close?.addEventListener('click', () => setOpen(false));
   input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); form.requestSubmit(); }
@@ -2997,8 +3006,11 @@ function initChatbot() {
     addMessage(message, 'visitor');
     input.value = '';
     input.disabled = true;
-    const pending = addMessage(labels.sending || 'Thinking…', 'assistant');
-    pending.classList.add('is-pending');
+    const pending = document.createElement('p');
+    pending.className = 'chatbot-message chatbot-message--assistant is-pending';
+    pending.innerHTML = '<span class="sr-only">' + (labels.sending || 'Thinking…') + '</span><span class="chatbot-thinking" aria-hidden="true"><i></i><i></i><i></i></span>';
+    messages.appendChild(pending);
+    messages.scrollTop = messages.scrollHeight;
     try {
       const response = await fetch('index.php?/api/chat', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -3006,15 +3018,58 @@ function initChatbot() {
       });
       const data = await response.json().catch(() => ({}));
       pending.remove();
-      addMessage(data.answer || data.error || labels.error || 'The assistant is unavailable.', 'assistant');
+      appendRichMessage(data.answer || data.error || labels.error || 'The assistant is unavailable.');
     } catch (error) {
       pending.remove();
-      addMessage(labels.error || 'The assistant is unavailable.', 'assistant');
+      appendRichMessage(labels.error || 'The assistant is unavailable.');
     } finally {
       input.disabled = false;
       input.focus();
     }
   });
+
+  const appendAnimatedText = (parent, text, container) => {
+    text.split(/(\s+)/).forEach((part) => {
+      if (/^\s+$/.test(part)) { parent.appendChild(document.createTextNode(part)); return; }
+      if (!part) return;
+      const word = document.createElement('span');
+      word.className = 'chatbot-word';
+      word.textContent = part;
+      word.style.setProperty('--word-delay', `${Math.min(container.querySelectorAll('.chatbot-word').length * 22, 1100)}ms`);
+      parent.appendChild(word);
+    });
+  };
+  const appendInline = (parent, text, container) => {
+    const tokenPattern = /(\*\*[^*]+\*\*|__[^_]+__|\*[^*\n]+\*|_[^_\n]+_)/g;
+    let cursor = 0, match;
+    while ((match = tokenPattern.exec(text))) {
+      appendAnimatedText(parent, text.slice(cursor, match.index), container);
+      const token = match[0];
+      const isStrong = token.startsWith('**') || token.startsWith('__');
+      const element = document.createElement(isStrong ? 'strong' : 'em');
+      appendAnimatedText(element, token.slice(isStrong ? 2 : 1, isStrong ? -2 : -1), container);
+      parent.appendChild(element);
+      cursor = match.index + token.length;
+    }
+    appendAnimatedText(parent, text.slice(cursor), container);
+  };
+  const appendRichMessage = (text) => {
+    const item = document.createElement('div');
+    item.className = 'chatbot-message chatbot-message--assistant chatbot-rich';
+    String(text).trim().split(/\n\s*\n/).forEach((block) => {
+      const lines = block.split('\n');
+      const list = lines.every((line) => /^\s*[-*]\s+/.test(line));
+      const content = document.createElement(list ? 'ul' : 'p');
+      if (list) content.className = 'chatbot-list';
+      lines.forEach((line) => {
+        if (list) { const li = document.createElement('li'); appendInline(li, line.replace(/^\s*[-*]\s+/, ''), item); content.appendChild(li); }
+        else { if (content.childNodes.length) content.appendChild(document.createElement('br')); appendInline(content, line, item); }
+      });
+      item.appendChild(content);
+    });
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+  };
 }
 
 function initLucideIcons() {

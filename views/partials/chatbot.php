@@ -2,7 +2,7 @@
   <button type="button" class="chatbot-toggle" id="chatbotToggle" aria-expanded="false" aria-controls="chatbotPanel">
     <i data-lucide="message-circle"></i><span><?= i18n::t('chat_open') ?></span>
   </button>
-  <div class="chatbot-panel" id="chatbotPanel" hidden role="dialog" aria-modal="false" aria-labelledby="chatbotTitle">
+  <div class="chatbot-panel t-panel-slide" id="chatbotPanel" data-open="false" hidden role="dialog" aria-modal="false" aria-labelledby="chatbotTitle">
     <div class="chatbot-header">
       <div><strong id="chatbotTitle"><?= i18n::t('chat_title') ?></strong><p><?= i18n::t('chat_subtitle') ?></p></div>
       <button type="button" id="chatbotClose" aria-label="<?= i18n::t('chat_close') ?>"><i data-lucide="x"></i></button>

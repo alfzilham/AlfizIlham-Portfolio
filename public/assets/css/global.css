@@ -74,6 +74,15 @@ table {
    -------------------------------------------------------------------------- */
 
 :root {
+  --panel-open-dur: 400ms;
+  --panel-close-dur: 350ms;
+  --panel-translate-y: 35px;
+  --panel-blur: 2px;
+  --panel-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-swap-dur: 200ms;
+  --text-swap-translate-y: 8px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-out;
   /* --- Colors (pure white / pure black monochrome) --- */
   --color-bg: #ffffff;
   --color-bg-soft: #f2f2f2;
