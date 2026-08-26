@@ -71,4 +71,4 @@ The site is bilingual (EN/ID toggle in navbar) — English is the default langua
 - **Contact form** — EmailJS as primary submission method, PHP `mail()` as fallback. No dedicated email service configured yet.
 - **i18n** — English complete, Indonesian complete. Toggle via PHP session.
 - **Visitor counter** — real tracking via SQLite. Session-based deduplication. Bot filtering included.
-- **Mobile responsiveness** — tuned per-section in `responsive.css` (4 breakpoints): navbar keeps side padding from viewport edges, skill filters stack instead of scrolling, contact strip pairs "Call & WhatsApp" with "Write to Us" (newsletter below), and the CTA fan cards scale down so all six icons stay inside small viewports.
+- **Mobile responsiveness** — tuned per-section in `responsive.css` (4 breakpoints): navbar keeps side padding from viewport edges, the curved marquee scales up on small screens, skill filters stack instead of scrolling, contact strip pairs "Call & WhatsApp" with "Write to Us" (icons hidden, newsletter below), and the CTA fan cards scale down so all six icons stay inside small viewports.

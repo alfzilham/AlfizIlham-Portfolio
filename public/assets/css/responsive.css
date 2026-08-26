@@ -246,6 +246,11 @@
     min-width: 0;
   }
 
+  /* Curved Marquee */
+  .curved-loop-svg {
+    font-size: clamp(60px, 12vw, 88px);
+  }
+
   /* Services */
   .services-top {
     flex-direction: column;
@@ -325,17 +330,23 @@
     width: 100%;
   }
 
-  /* Center all contact info items on mobile */
-  .contact-info-item,
-  .contact-info-center,
-  .contact-info-right {
-    justify-content: center;
-    text-align: center;
-    align-items: center;
+  /* Hide strip icons on mobile (i + svg — lucide replaces <i> with <svg>) */
+  .contact-info-center > i,
+  .contact-info-center > svg,
+  .contact-info-right > i,
+  .contact-info-right > svg {
+    display: none;
   }
 
-  .contact-info-right .contact-info-text {
-    order: 0;
+  /* Call & WhatsApp left, Write to Us right */
+  .contact-info-center {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  .contact-info-right {
+    justify-content: flex-end;
+    text-align: right;
   }
 
   /* Footer — hide giant wordmark + shadow on mobile */
@@ -465,7 +476,7 @@
 
   /* Curved Marquee */
   .curved-loop-svg {
-    font-size: clamp(56px, 14vw, 80px);
+    font-size: clamp(72px, 18vw, 104px);
   }
 
   /* About CTAs — side by side on mobile */
@@ -496,12 +507,12 @@
     height: 24px;
   }
 
-  .fan-card-1 { --tx: -86px; --rot: -16deg; }
-  .fan-card-2 { --tx: -54px; --rot: -9deg; }
-  .fan-card-3 { --tx: -22px; --rot: -3deg; }
-  .fan-card-4 { --tx: 10px; --rot: 4deg; }
-  .fan-card-5 { --tx: 42px; --rot: 10deg; }
-  .fan-card-6 { --tx: 74px; --rot: 17deg; }
+  .fan-card-1 { --tx: -65px; --rot: -16deg; }
+  .fan-card-2 { --tx: -41px; --rot: -9deg; }
+  .fan-card-3 { --tx: -17px; --rot: -3deg; }
+  .fan-card-4 { --tx: 7px; --rot: 4deg; }
+  .fan-card-5 { --tx: 31px; --rot: 10deg; }
+  .fan-card-6 { --tx: 55px; --rot: 17deg; }
 
   /* CTA buttons — stack vertically */
   .cta-row {

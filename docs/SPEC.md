@@ -127,7 +127,7 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 **Acceptance criteria**: form cannot submit with invalid fields; success clears form and shows confirmation; error shows retryable message with WhatsApp link.
 
-**Contact info strip (below the form)**: "Call & WhatsApp" and "Write to Us" flank a newsletter email form in a 3-column row on desktop. On mobile ≤768px, "Call & WhatsApp" and "Write to Us" sit side by side (2-column grid) with the newsletter form spanning full width beneath them.
+**Contact info strip (below the form)**: "Call & WhatsApp" and "Write to Us" flank a newsletter email form in a 3-column row on desktop. On mobile ≤768px, "Call & WhatsApp" and "Write to Us" sit side by side (2-column grid) with their icons hidden — "Call & WhatsApp" left-aligned, "Write to Us" right-aligned — and the newsletter form spanning full width beneath them.
 
 ---
 

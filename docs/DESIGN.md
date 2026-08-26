@@ -212,7 +212,7 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 - Full-width black bold text repeating "DEVELOPER ✦ ALFIZ ILHAM ✦" infinitely scrolling horizontally (CSS `@keyframes marquee` translateX loop, `animation: marquee 20s linear infinite;`).
 - Text is rotated slightly (`transform: rotate(-2deg)`) and bleeds off both edges of the viewport.
-- Font-size ~64-80px, font-weight 800, single line, no wrap. On mobile ≤480px the curved SVG marquee scales up to `clamp(56px, 14vw, 80px)` for stronger presence on small screens.
+- Font-size ~64-80px, font-weight 800, single line, no wrap. On tablet/mobile the curved SVG marquee scales up: `clamp(60px, 12vw, 88px)` at ≤768px and `clamp(72px, 18vw, 104px)` at ≤480px for stronger presence on small screens.
 - Background: white (transparent to page bg).
 
 ```css
@@ -440,7 +440,7 @@ document.querySelectorAll(".faq-item").forEach((item) => {
   - Icon (phone, Lucide `phone`) + "Call & WhatsApp" label + number
   - Newsletter email form (input + submit button)
   - Icon (paper-plane, Lucide `send`) + "Write to Us" label + email address
-- On mobile ≤768px the strip becomes a 2-column grid: "Call & WhatsApp" and "Write to Us" sit side by side on the first row, while the newsletter form spans the full width beneath them (centered, max-width `360px`).
+- On mobile ≤768px the strip becomes a 2-column grid: "Call & WhatsApp" and "Write to Us" sit side by side on the first row — icons hidden, "Call & WhatsApp" left-aligned and "Write to Us" right-aligned — while the newsletter form spans the full width beneath them (centered, max-width `360px`).
 
 ```js
 const map = L.map("contact-map", { zoomControl: false }).setView(
@@ -471,7 +471,7 @@ L.circleMarker([5.5483, 95.3238], {
   - Paragraph: "Let's turn your idea into a fast, beautiful, and functional digital experience. I'm open for new projects." (muted, centered)
   - Primary pill button: "Start a Project" (with arrow-up-right Lucide icon)
   - Small ghost link beneath: "Or reach me on WhatsApp →"
-- **Fan cards**: six tech icon cards (React, Node.js, Python, Claude, JavaScript, n8n) fan out horizontally under the heading — white rounded squares (`118px` desktop) rotated ±3–17° and offset via `--tx` custom properties, each showing its brand SVG (`52px`) with a black pill tooltip on hover. Tablet ≤1024px shrinks them to `82px`; mobile ≤480px tightens further to `56px` cards with offsets `--tx: -86px … 74px` so all six stay fully inside the viewport (no edge clipping).
+- **Fan cards**: six tech icon cards (React, Node.js, Python, Claude, JavaScript, n8n) fan out horizontally under the heading — white rounded squares (`118px` desktop) rotated ±3–17° and offset via `--tx` custom properties, each showing its brand SVG (`52px`) with a black pill tooltip on hover. Tablet ≤1024px shrinks them to `82px`; mobile ≤480px tightens further to `56px` cards with dense offsets `--tx: -65px … 55px` (24px steps) so all six stay fully inside the viewport (no edge clipping).
 - **Decorative side columns**: on both left and right edges, a curved/arched vertical stack of circular icon badges (each ~56px white circle with shadow) showing tech tool icons (React, Next.js "N" logo, JS, GitHub, a 3D-cube icon, a code/terminal icon, an "A" caligraphy icon, Photoshop "Ps", Lightroom "Lr" on the left; HTML5, CSS3, Claude sunburst, a bit-icon, a gem/diamond icon, a square/app icon, a "C" circle icon, a pen/design icon, a calligraphy/Arabic-script icon on the right) — arranged along a curved path (achievable via absolute positioning with calculated offsets or CSS `transform: rotate()` per item along an arc).
 
 ```css
