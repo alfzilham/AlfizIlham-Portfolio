@@ -33,6 +33,10 @@ spl_autoload_register(function ($class) {
 // Load config
 require_once CONFIG_PATH . '/config.php';
 
+// Load environment (.env) before helpers that may depend on env()
+require_once APP_PATH . '/Helpers/env.php';
+env_load(CONFIG_PATH . '/.env');
+
 // Load helpers
 require_once APP_PATH . '/Helpers/helpers.php';
 require_once APP_PATH . '/Helpers/i18n.php';
@@ -59,8 +63,12 @@ require_once APP_PATH . '/Models/Certificate.php';
 // Load services
 require_once APP_PATH . '/Services/ContactService.php';
 require_once APP_PATH . '/Services/VisitorService.php';
+require_once APP_PATH . '/Services/EmbeddingService.php';
+require_once APP_PATH . '/Services/RagService.php';
+require_once APP_PATH . '/Services/NeonSyncService.php';
 
 // Load controllers
 require_once APP_PATH . '/Controllers/PageController.php';
 require_once APP_PATH . '/Controllers/ApiController.php';
 require_once APP_PATH . '/Controllers/AdminController.php';
+require_once APP_PATH . '/Controllers/ChatController.php';
