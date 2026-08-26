@@ -3049,9 +3049,6 @@ function initChatbot() {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ message }),
       });
-      if (serviceOther) { serviceOther.value = ""; serviceOther.hidden = true; }
-      var serviceDropdown = document.getElementById("serviceDropdown");
-      if (serviceDropdown) serviceDropdown.hidden = false;
       const data = await response.json().catch(() => ({}));
       pending.remove();
       appendRichMessage(data.answer || data.error || labels.error || 'The assistant is unavailable.');
