@@ -222,7 +222,9 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 ## 14. Editor Mode (Admin Showcase CRUD)
 
-**Auth**: `Ctrl+Shift+E` → password modal → `POST /api/admin/login` (bcrypt hash in `config/config.php`, verified via `password_verify()`) → `$_SESSION['is_admin']`. All write endpoints return 401 without session.
+**Auth**: `Ctrl+Shift+E` → password modal → `POST /api/admin/login` (bcrypt hash in `config/config.php`, verified via `password_verify()`; session ID regenerated on success) → `$_SESSION['is_admin']`. All write endpoints return 401 without session.
+
+**CSRF**: every state-changing endpoint (login, logout, all card/certificate POST & DELETE routes) requires an `X-CSRF-Token` header matching the per-session token issued by `secure_session_start()`. The frontend attaches it via the shared `csrfHeaders()` helper (`window.__CSRF_TOKEN`). Mismatches get 403. Session cookies are `HttpOnly`, `SameSite=Lax`, and `Secure` when served over HTTPS.
 
 **Endpoints**:
 
@@ -236,7 +238,7 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 | POST | `/api/admin/cards/{id}` | admin | Update card (image optional) |
 | DELETE | `/api/admin/cards/{id}` | admin | Delete card (+ unlink image file) |
 
-**Upload rules**: finfo MIME whitelist (jpeg/png/webp/gif), max 5 MB, resized to max 1600px, converted to WebP quality 85 via GD, random filename stored in `public/assets/uploads/showcase/`.
+**Upload rules**: finfo MIME whitelist (jpeg/png/webp/gif), max 5 MB, pixel-dimension guard before decode (~24 MP / 8000 px max side), resized to max 1600px, converted to WebP quality 85 via GD, random filename stored in `public/assets/uploads/showcase/`.
 
 **UI behaviors**:
 - ChromaGrid (3×320px columns, **white cards**, thin border `1px var(--color-border)`, neumorphic shadow `--neu-shadow-out`) sits between the subtitle and the circular gallery; hidden when empty; cards whose image file is missing on disk are filtered out server-side (prevents broken cards + 404s)

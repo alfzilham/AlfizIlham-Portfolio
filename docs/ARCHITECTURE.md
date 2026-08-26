@@ -236,7 +236,11 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 - Root `.htaccess` returns **404** for sensitive paths — `.git`, `.opencode`, `graphify-out`, `config/`, `data/`, `logs/`, `app/`, `views/`, `lang/`, `docs/`, `seed.php`, `bootstrap.php` — plus dangerous extensions (.sqlite/.ini/.bak/etc.), hidden dotfiles, and TRACE/TRACK methods
 - `public/assets/uploads/.htaccess` disables PHP execution inside the uploads directory
 - Security headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; `X-Powered-By` removed (`expose_php=Off` in php.ini)
+- CSP runs in **report-only** mode (`Content-Security-Policy-Report-Only`) to collect violation reports without blocking; switch to enforcing after console reports are clean
 - Admin password stored as bcrypt hash in `config/config.php` (no default credential is shipped — rotate periodically); all editor endpoints session-gated (401 without login)
+- Session hardening via `secure_session_start()` (`app/Helpers/session.php`): cookie flags `HttpOnly` + `SameSite=Lax` + `Secure` on HTTPS, CSRF token issued per session, and the session ID is regenerated on editor login
+- All state-changing editor endpoints validate an `X-CSRF-Token` header (`hash_equals`) and return 403 on mismatch
+- Third-party CDN assets are pinned to exact versions with SRI `integrity` hashes (Leaflet, Lucide, Lenis, GSAP, Chart.js, Bootstrap Icons, EmailJS); Google Fonts CSS remains unpinned (UA-dependent content)
 
 **Note:** For production, consider:
 - Moving `data/database.sqlite` outside web root

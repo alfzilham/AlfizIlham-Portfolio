@@ -50,16 +50,17 @@ alfizilham/
 │   ├── index.php           ← Front controller
 │   ├── .htaccess           ← URL rewriting
 │   └── assets/             ← CSS, JS, images
-├── app/                    ← Backend MVC
-│   ├── Core/               ← Router, Database, View, Request
-│   ├── Controllers/        ← PageController, ApiController
-│   ├── Models/             ← Project, Tool, Faq, Testimonial, etc.
-│   ├── Services/           ← ContactService, VisitorService
-│   └── Helpers/            ← i18n, helpers
-├── views/                  ← PHP templates
-│   ├── layouts/            ← main.php
-│   ├── sections/           ← 15 section views
-│   └── partials/           ← navbar, footer
+├── app/                      ← Backend MVC
+│   ├── Core/                 ← Router, Database, View, Request
+│   ├── Controllers/          ← PageController, ApiController, AdminController
+│   ├── Models/               ← Project, Tool, Faq, Testimonial, etc.
+│   ├── Services/             ← ContactService, VisitorService
+│   └── Helpers/              ← i18n, helpers, session (CSRF + cookie flags)
+├── views/                    ← PHP templates
+│   ├── layouts/              ← main.php, legal.php
+│   ├── pages/                ← privacy.php, terms.php (legal content)
+│   ├── sections/             ← 15 section views
+│   └── partials/             ← navbar, footer
 ├── lang/                   ← i18n (en.php, id.php)
 ├── config/                 ← Configuration
 ├── data/                   ← SQLite database
