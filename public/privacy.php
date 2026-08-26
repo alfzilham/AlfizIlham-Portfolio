@@ -1,6 +1,11 @@
-<?php require_once dirname(__DIR__) . '/bootstrap.php'; ?>
+<?php
+session_start();
+require_once dirname(__DIR__) . '/bootstrap.php';
+$lang = $_GET['lang'] ?? $_SESSION['lang'] ?? 'en';
+if (!in_array($lang, ['en', 'id'], true)) $lang = 'en';
+?>
 <!DOCTYPE html>
-<html lang="<?= ($lang = ($_GET['lang'] ?? $_SESSION['lang'] ?? 'en')) ?>">
+<html lang="<?= $lang ?>">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -34,9 +34,8 @@ return [
         'template_id_auto_reply' => 'template_xycc4zl',
         'public_key' => '2MWuXtQlMs5Z7lht_',
     ],
-    // Editor mode admin password (bcrypt). Default: "admin123" — CHANGE IT:
-    // php -r "echo password_hash('YOUR_NEW_PASSWORD', PASSWORD_DEFAULT);"
-    'admin_password_hash' => '$2y$12$JYzRq0vKVyYhPhYyKHd0YevgrrvK.vxLlwVs7/7xX6AZ3WIpgo6KW',
+    // Editor mode admin password (bcrypt) — rotate periodically; never commit plaintext.
+    'admin_password_hash' => '$2y$12$/p0PPJ6ug8BUOCJ4wRvVpO9YhP0lp6o27Z2MtoRvYHd/x64Wt5fSy',
     'supported_languages' => ['en', 'id'],
     'default_language' => 'en',
 ];
