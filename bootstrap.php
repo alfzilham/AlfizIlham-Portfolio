@@ -36,6 +36,7 @@ require_once CONFIG_PATH . '/config.php';
 // Load helpers
 require_once APP_PATH . '/Helpers/helpers.php';
 require_once APP_PATH . '/Helpers/i18n.php';
+require_once APP_PATH . '/Helpers/session.php';
 
 // Use root namespace for classes (simpler for vanilla PHP)
 // Load core classes

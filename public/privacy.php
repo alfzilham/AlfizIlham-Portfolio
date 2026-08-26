@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once dirname(__DIR__) . '/bootstrap.php';
+secure_session_start();
 $lang = $_GET['lang'] ?? $_SESSION['lang'] ?? 'en';
 if (!in_array($lang, ['en', 'id'], true)) $lang = 'en';
 

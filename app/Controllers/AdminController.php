@@ -15,10 +15,27 @@ class AdminController
     }
 
     /**
+     * Validate the X-CSRF-Token header against the per-session token.
+     * Must be called on every state-changing (POST/DELETE) endpoint.
+     */
+    private static function verifyCsrf()
+    {
+        $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+        if (
+            empty($_SESSION['csrf_token'])
+            || !is_string($token)
+            || !hash_equals($_SESSION['csrf_token'], $token)
+        ) {
+            json_response(['error' => 'Invalid CSRF token'], 403);
+        }
+    }
+
+    /**
      * POST /api/admin/login  {password}
      */
     public function login()
     {
+        self::verifyCsrf();
         $data = Request::json() ?: Request::all();
         $password = isset($data['password']) ? (string) $data['password'] : '';
         $hash = config('admin_password_hash');
@@ -39,6 +56,7 @@ class AdminController
      */
     public function logout()
     {
+        self::verifyCsrf();
         unset($_SESSION['is_admin']);
         json_response(['success' => true]);
     }
@@ -65,6 +83,7 @@ class AdminController
     public function createCard()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $title = sanitize($_POST['title'] ?? '');
         $description = sanitize($_POST['description'] ?? '');
@@ -90,6 +109,7 @@ class AdminController
     public function updateCard()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $id = (int) ($_GET['id'] ?? 0);
         $existing = ShowcaseProject::find($id);
@@ -126,6 +146,7 @@ class AdminController
     public function deleteCard()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $id = (int) ($_GET['id'] ?? 0);
         $existing = ShowcaseProject::find($id);
@@ -157,6 +178,7 @@ class AdminController
     public function createCertificate()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $title = sanitize($_POST['title'] ?? '');
         $company = sanitize($_POST['company'] ?? '');
@@ -183,6 +205,7 @@ class AdminController
     public function updateCertificate()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $id = (int) ($_GET['id'] ?? 0);
         $existing = Certificate::find($id);
@@ -220,6 +243,7 @@ class AdminController
     public function deleteCertificate()
     {
         self::requireAdmin();
+        self::verifyCsrf();
 
         $id = (int) ($_GET['id'] ?? 0);
         $existing = Certificate::find($id);

@@ -272,6 +272,7 @@
   <script>
     window.__LANG = '<?php echo $lang; ?>';
     window.__IS_ADMIN = <?= $isAdmin ? 'true' : 'false' ?>;
+    window.__CSRF_TOKEN = '<?= htmlspecialchars($_SESSION['csrf_token'] ?? '', ENT_QUOTES, 'UTF-8') ?>';
     window.__LANG_DATA = <?php echo json_encode([
         'cta_clock_prefix' => i18n::t('cta_clock_prefix'),
     ], JSON_UNESCAPED_UNICODE); ?>;

@@ -1143,6 +1143,16 @@ function createCircularGallery(container, items, OGL, opts) {
    EDITOR MODE (admin CRUD for ChromaGrid showcase)
    -------------------------------------------------------------------------- */
 
+/* --------------------------------------------------------------------------
+   CSRF HELPER
+   -------------------------------------------------------------------------- */
+
+function csrfHeaders(extra) {
+  const h = extra || {};
+  if (window.__CSRF_TOKEN) h["X-CSRF-Token"] = window.__CSRF_TOKEN;
+  return h;
+}
+
 function initEditorMode() {
   const body = document.body;
   const grid = document.getElementById("chromaGrid");
@@ -1296,7 +1306,7 @@ function initEditorMode() {
     try {
       const res = await fetch("index.php?/api/admin/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: csrfHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify({ password: passwordInput.value }),
       });
       const data = await res.json().catch(() => ({}));
@@ -1315,7 +1325,7 @@ function initEditorMode() {
   });
 
   document.getElementById("editorLogoutBtn")?.addEventListener("click", async () => {
-    await fetch("index.php?/api/admin/logout", { method: "POST" }).catch(() => {});
+    await fetch("index.php?/api/admin/logout", { method: "POST", headers: csrfHeaders() }).catch(() => {});
     isAdmin = false;
     window.__IS_ADMIN = false;
     exitEditor();
@@ -1382,6 +1392,7 @@ function initEditorMode() {
     try {
       const res = await fetch(`index.php?/api/admin/cards/${card.dataset.id}`, {
         method: "DELETE",
+        headers: csrfHeaders(),
       });
       if (res.ok) {
         card.remove();
@@ -1695,7 +1706,7 @@ function initEditorMode() {
 
     submitBtn.disabled = true;
     try {
-      const res = await fetch(url, { method: "POST", body: fd });
+      const res = await fetch(url, { method: "POST", body: fd, headers: csrfHeaders() });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.success && data.card) {
         upsertCardNode(data.card);
@@ -3112,7 +3123,7 @@ function initCertificates() {
       pendingDeleteCert = null;
       certCloseOverlay(certDeleteOverlay);
       try {
-        var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE" });
+        var res = await fetch("index.php?/api/admin/certificates/" + cert.dataset.id, { method: "DELETE", headers: csrfHeaders() });
         if (res.ok) location.reload();
       } catch (_) {}
     });
@@ -3285,7 +3296,7 @@ function initCertificates() {
 
       certFormSubmit.disabled = true;
       try {
-        var res = await fetch(url, { method: "POST", body: fd });
+        var res = await fetch(url, { method: "POST", body: fd, headers: csrfHeaders() });
         var data = await res.json().catch(function () { return {}; });
         if (res.ok && data.success && data.certificate) {
           certClearForm();

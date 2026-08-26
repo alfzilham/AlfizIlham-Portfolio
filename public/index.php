@@ -4,10 +4,11 @@
  * All requests route through here.
  */
 
-session_start();
-
 // Load autoloader and bootstrap
 require_once dirname(__DIR__) . '/bootstrap.php';
+
+// Hardened session (cookie flags + CSRF token init)
+secure_session_start();
 
 // Determine language
 $lang = $_GET['lang'] ?? $_SESSION['lang'] ?? 'en';
