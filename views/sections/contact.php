@@ -15,23 +15,23 @@
         <div class="form-row">
           <div class="form-group">
             <label for="contactName"><?= i18n::t('contact_name_label') ?></label>
-            <input type="text" id="contactName" name="from_name" placeholder="<?= i18n::t('contact_name_placeholder') ?>" required minlength="2" />
-            <span class="form-error" id="nameError"></span>
+            <input type="text" id="contactName" name="from_name" placeholder="<?= i18n::t('contact_name_placeholder') ?>" required minlength="2" aria-describedby="nameError" />
+            <span class="form-error" id="nameError" aria-live="polite"></span>
           </div>
           <div class="form-group">
             <label for="contactEmail"><?= i18n::t('contact_email_label') ?></label>
-            <input type="email" id="contactEmail" name="from_email" placeholder="<?= i18n::t('contact_email_placeholder') ?>" required />
-            <span class="form-error" id="emailError"></span>
+            <input type="email" id="contactEmail" name="from_email" placeholder="<?= i18n::t('contact_email_placeholder') ?>" required aria-describedby="emailError" />
+            <span class="form-error" id="emailError" aria-live="polite"></span>
           </div>
         </div>
 
         <!-- Row 2: Phone Number | Service -->
         <div class="form-row">
           <div class="form-group">
-            <label><?= i18n::t('contact_phone_label') ?></label>
+            <label for="contactPhone"><?= i18n::t('contact_phone_label') ?></label>
             <div class="phone-input-group">
               <div class="custom-dropdown" id="countryCodeDropdown" data-type="country" data-lenis-prevent>
-                <button type="button" class="dropdown-trigger" tabindex="-1">
+                <button type="button" class="dropdown-trigger" aria-label="Country calling code" aria-haspopup="listbox" aria-expanded="false">
                   <span class="dropdown-value" data-field="country_code">🇮🇩 +62</span>
                   <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
@@ -41,14 +41,14 @@
                 </div>
               </div>
               <input type="hidden" name="country_code" id="countryCodeValue" value="+62" />
-              <input type="tel" id="contactPhone" name="phone" placeholder="852 1389 6460" inputmode="numeric" required />
+              <input type="tel" id="contactPhone" name="phone" placeholder="852 1389 6460" inputmode="numeric" required aria-describedby="phoneError" />
             </div>
-            <span class="form-error" id="phoneError"></span>
+            <span class="form-error" id="phoneError" aria-live="polite"></span>
           </div>
           <div class="form-group">
-            <label><?= i18n::t('contact_service_label') ?></label>
+            <label id="serviceLabel"><?= i18n::t('contact_service_label') ?></label>
             <div class="custom-dropdown" id="serviceDropdown" data-type="service" data-lenis-prevent>
-              <button type="button" class="dropdown-trigger" tabindex="-1">
+              <button type="button" class="dropdown-trigger" aria-labelledby="serviceLabel" aria-describedby="serviceError" aria-haspopup="listbox" aria-expanded="false">
                 <span class="dropdown-value" data-field="service"><?= i18n::t('contact_service_default') ?></span>
                 <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
@@ -58,18 +58,18 @@
               </div>
             </div>
             <input type="hidden" name="service" id="serviceValue" value="" required />
-            <span class="form-error" id="serviceError"></span>
+            <span class="form-error" id="serviceError" aria-live="polite"></span>
           </div>
         </div>
 
         <!-- Row 3: Budget | Timeline -->
         <div class="form-row">
           <div class="form-group">
-            <label><?= i18n::t('contact_budget_label') ?></label>
+            <label id="budgetLabel"><?= i18n::t('contact_budget_label') ?></label>
             <div class="budget-input-group">
-              <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" />
+              <input type="number" id="contactBudget" name="budget" placeholder="0" inputmode="numeric" min="0" aria-labelledby="budgetLabel" />
               <div class="custom-dropdown" id="currencyDropdown" data-type="currency" data-lenis-prevent>
-                <button type="button" class="dropdown-trigger" tabindex="-1">
+                <button type="button" class="dropdown-trigger" aria-label="Currency" aria-haspopup="listbox" aria-expanded="false">
                   <span class="dropdown-value" data-field="currency">USD</span>
                   <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
@@ -94,8 +94,8 @@
         <!-- Row 4: Message (full width) -->
         <div class="form-group">
           <label for="contactMessage"><?= i18n::t('contact_message_label') ?></label>
-          <textarea id="contactMessage" name="message" rows="4" placeholder="<?= i18n::t('contact_message_placeholder') ?>" required minlength="10"></textarea>
-          <span class="form-error" id="messageError"></span>
+          <textarea id="contactMessage" name="message" rows="4" placeholder="<?= i18n::t('contact_message_placeholder') ?>" required minlength="10" aria-describedby="messageError"></textarea>
+          <span class="form-error" id="messageError" aria-live="polite"></span>
         </div>
 
         <!-- Hidden fields -->
@@ -107,7 +107,7 @@
         <button type="submit" class="btn btn-primary" id="submitBtn">
           <?= i18n::t('contact_submit') ?> <i data-lucide="external-link"></i>
         </button>
-        <div class="form-status" id="formStatus" hidden></div>
+        <div class="form-status" id="formStatus" role="status" hidden></div>
       </form>
 
       <!-- Timeline picker modal overlay -->
@@ -175,7 +175,7 @@
         <form class="newsletter-form" id="newsletterForm" novalidate>
           <input type="email" name="from_email" placeholder="<?= i18n::t('contact_newsletter_placeholder') ?>" required />
           <button type="submit" class="btn btn-primary"><?= i18n::t('contact_newsletter_button') ?></button>
-          <span class="form-status" id="newsletterStatus" hidden></span>
+          <span class="form-status" id="newsletterStatus" role="status" hidden></span>
         </form>
       </div>
       <!-- Col 3: Write to Us -->

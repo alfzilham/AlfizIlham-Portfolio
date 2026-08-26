@@ -1974,10 +1974,29 @@ function initCustomDropdowns() {
 
     if (!trigger || !popup || !itemsContainer) return;
 
+    popup.setAttribute("role", "listbox");
+    trigger.setAttribute("aria-expanded", "false");
+
     var options = [];
     if (type === "service") options = serviceOptions.map(function(s) { return { value: s, label: s }; });
     else if (type === "currency") options = currencyOptions.map(function(c) { return { value: c.code, label: c.code + " — " + c.name }; });
     else if (type === "country") options = countryCodes.map(function(c) { return { value: c.code, label: c.flag + " " + c.code + " " + c.country }; });
+
+    function closeDropdown(refocusTrigger) {
+      dd.classList.remove("open");
+      popup.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      if (refocusTrigger) trigger.focus();
+    }
+
+    function closeAllDropdowns() {
+      document.querySelectorAll(".custom-dropdown.open").forEach(function(d) {
+        d.classList.remove("open");
+        d.querySelector(".dropdown-popup").hidden = true;
+        var t = d.querySelector(".dropdown-trigger");
+        if (t) t.setAttribute("aria-expanded", "false");
+      });
+    }
 
     // Render items
     function renderItems(filter) {
@@ -1989,13 +2008,14 @@ function initCustomDropdowns() {
         div.className = "dropdown-item";
         div.textContent = opt.label;
         div.dataset.value = opt.value;
+        div.setAttribute("role", "option");
+        div.tabIndex = -1;
         if (hiddenInput && hiddenInput.value === opt.value) div.classList.add("active");
-        div.addEventListener("click", function() {
+        div.addEventListener("click", function(e) {
           valueEl.textContent = opt.label;
           if (hiddenInput) hiddenInput.value = opt.value;
-          dd.classList.remove("open");
-          popup.hidden = true;
           if (search) search.value = "";
+          closeDropdown(e.detail === 0);
         });
         itemsContainer.appendChild(div);
       });
@@ -2007,14 +2027,35 @@ function initCustomDropdowns() {
       e.stopPropagation();
       var wasOpen = dd.classList.contains("open");
       // Close all other dropdowns
-      document.querySelectorAll(".custom-dropdown.open").forEach(function(d) {
-        d.classList.remove("open");
-        d.querySelector(".dropdown-popup").hidden = true;
-      });
+      closeAllDropdowns();
       if (!wasOpen) {
         dd.classList.add("open");
         popup.hidden = false;
+        trigger.setAttribute("aria-expanded", "true");
         if (search) { search.value = ""; search.focus(); renderItems(""); }
+      }
+    });
+
+    // Keyboard support: ArrowDown/Up navigate, Enter selects, Escape closes
+    popup.addEventListener("keydown", function(e) {
+      var items = itemsContainer.querySelectorAll(".dropdown-item");
+      var idx = Array.prototype.indexOf.call(items, document.activeElement);
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        (items[idx + 1] || items[0]).focus();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        (items[idx - 1] || items[items.length - 1]).focus();
+      } else if (e.key === "Enter" && document.activeElement === search && items.length) {
+        e.preventDefault();
+        items[0].click();
+      } else if (e.key === "Enter" && idx !== -1) {
+        e.preventDefault();
+        items[idx].click();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        e.stopPropagation();
+        closeDropdown(true);
       }
     });
 
@@ -2037,6 +2078,8 @@ function initCustomDropdowns() {
     document.querySelectorAll(".custom-dropdown.open").forEach(function(d) {
       d.classList.remove("open");
       d.querySelector(".dropdown-popup").hidden = true;
+      var t = d.querySelector(".dropdown-trigger");
+      if (t) t.setAttribute("aria-expanded", "false");
     });
   });
 }
@@ -2569,12 +2612,17 @@ function initContactForm() {
 
 function showError(id, msg) {
   const el = document.getElementById(id);
-  if (el) el.textContent = msg;
+  if (!el) return;
+  el.textContent = msg;
+  const ctrl = document.querySelector('[aria-describedby~="' + id + '"]');
+  if (ctrl) ctrl.setAttribute("aria-invalid", "true");
 }
 
 function clearError(id) {
   const el = document.getElementById(id);
   if (el) el.textContent = "";
+  const ctrl = document.querySelector('[aria-describedby~="' + id + '"]');
+  if (ctrl) ctrl.removeAttribute("aria-invalid");
 }
 
 function loadScript(src) {

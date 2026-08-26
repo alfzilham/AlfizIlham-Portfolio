@@ -107,7 +107,7 @@
       <p class="editor-modal-sub"><?= i18n::t('editor_login_sub') ?></p>
       <form id="editorLoginForm" novalidate>
         <input type="password" id="editorPassword" name="password" placeholder="<?= i18n::t('editor_password_placeholder') ?>" autocomplete="current-password" required />
-        <p class="form-error" id="editorLoginError"></p>
+        <p class="form-error" id="editorLoginError" aria-live="polite"></p>
         <button type="submit" class="btn btn-primary btn-block"><?= i18n::t('editor_login_btn') ?></button>
       </form>
     </div>
@@ -121,15 +121,15 @@
       <form id="cardForm" novalidate>
         <label for="cardTitle"><?= i18n::t('form_title_label') ?></label>
         <input type="text" id="cardTitle" name="title" placeholder="<?= i18n::t('form_title_placeholder') ?>" required />
-        <span class="form-error" id="cardTitleError"></span>
+        <span class="form-error" id="cardTitleError" aria-live="polite"></span>
 
         <label for="cardDescription"><?= i18n::t('form_desc_label') ?></label>
         <textarea id="cardDescription" name="description" rows="3" placeholder="<?= i18n::t('form_desc_placeholder') ?>" required></textarea>
-        <span class="form-error" id="cardDescError"></span>
+        <span class="form-error" id="cardDescError" aria-live="polite"></span>
 
         <label for="cardLink"><?= i18n::t('form_link_label') ?></label>
         <input type="url" id="cardLink" name="link" placeholder="<?= i18n::t('form_link_placeholder') ?>" />
-        <span class="form-error" id="cardLinkError"></span>
+        <span class="form-error" id="cardLinkError" aria-live="polite"></span>
 
         <label><?= i18n::t('form_image_label') ?></label>
         <div class="dropzone" id="dropzone">
@@ -144,7 +144,7 @@
             <span class="dropzone-name" id="dropzoneName"></span>
           </div>
         </div>
-        <span class="form-error" id="cardImageError"></span>
+        <span class="form-error" id="cardImageError" aria-live="polite"></span>
 
         <button type="submit" class="btn btn-primary btn-block" id="cardFormSubmit"><?= i18n::t('editor_submit') ?></button>
       </form>
@@ -172,19 +172,19 @@
       <form id="certForm" novalidate>
         <label for="certTitle"><?= i18n::t('form_title_label') ?></label>
         <input type="text" id="certTitle" name="title" placeholder="<?= i18n::t('form_title_placeholder') ?>" required />
-        <span class="form-error" id="certTitleError"></span>
+        <span class="form-error" id="certTitleError" aria-live="polite"></span>
 
         <label for="certCompany"><?= i18n::t('form_company_label') ?></label>
         <input type="text" id="certCompany" name="company" placeholder="<?= i18n::t('form_company_placeholder') ?>" />
-        <span class="form-error" id="certCompanyError"></span>
+        <span class="form-error" id="certCompanyError" aria-live="polite"></span>
 
         <label for="certCredentialId"><?= i18n::t('form_credential_id_label') ?></label>
         <input type="text" id="certCredentialId" name="credential_id" placeholder="<?= i18n::t('form_credential_id_placeholder') ?>" />
-        <span class="form-error" id="certCredentialIdError"></span>
+        <span class="form-error" id="certCredentialIdError" aria-live="polite"></span>
 
         <label for="certCredentialLink"><?= i18n::t('form_credential_link_label') ?></label>
         <input type="url" id="certCredentialLink" name="credential_link" placeholder="<?= i18n::t('form_credential_link_placeholder') ?>" />
-        <span class="form-error" id="certCredentialLinkError"></span>
+        <span class="form-error" id="certCredentialLinkError" aria-live="polite"></span>
 
         <label><?= i18n::t('form_image_label') ?></label>
         <div class="dropzone" id="certDropzone">
@@ -199,7 +199,7 @@
             <span class="dropzone-name" id="certDropzoneName"></span>
           </div>
         </div>
-        <span class="form-error" id="certImageError"></span>
+        <span class="form-error" id="certImageError" aria-live="polite"></span>
 
         <button type="submit" class="btn btn-primary btn-block" id="certFormSubmit"><?= i18n::t('editor_submit') ?></button>
       </form>
