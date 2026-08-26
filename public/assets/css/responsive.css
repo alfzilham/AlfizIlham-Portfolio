@@ -189,6 +189,11 @@
     display: none;
   }
 
+  /* Hide floating stats badge on mobile */
+  .hero-stats-card {
+    display: none;
+  }
+
   .hero-content {
     padding-top: 40px;
   }
@@ -219,6 +224,11 @@
   .icon-grid {
     grid-template-columns: repeat(4, 1fr);
     row-gap: var(--space-5);
+  }
+
+  /* Skills — hide "All" filter on mobile, default to first category */
+  .filter-pill[data-filter="all"] {
+    display: none;
   }
 
   .filter-bar {
@@ -306,6 +316,34 @@
     grid-template-columns: 1fr;
   }
 
+  /* Center all contact info items on mobile */
+  .contact-info-item,
+  .contact-info-center,
+  .contact-info-right {
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+
+  .contact-info-right .contact-info-text {
+    order: 0;
+  }
+
+  .contact-info-newsletter {
+    max-width: 360px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* Footer — hide giant wordmark + shadow on mobile */
+  .footer-wordmark-wrapper {
+    display: none;
+  }
+
+  .footer-dark {
+    box-shadow: none;
+  }
+
   /* Footer */
   .footer-dark-inner {
     grid-template-columns: 1fr;
@@ -349,9 +387,10 @@
     padding-bottom: 48px;
   }
 
-  /* Certificates — 1 column on mobile */
+  /* Certificates — 2 columns on mobile */
   .certificates-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
   }
 
   /* Navbar */
@@ -419,7 +458,48 @@
 
   /* Curved Marquee */
   .curved-loop-svg {
-    font-size: clamp(32px, 8vw, 48px);
+    font-size: clamp(40px, 10vw, 64px);
+  }
+
+  /* About CTAs — side by side on mobile */
+  .about-ctas {
+    flex-wrap: nowrap;
+    gap: var(--space-3);
+  }
+
+  .about-ctas .btn {
+    padding: 12px 16px;
+    font-size: var(--fs-body-sm);
+  }
+
+  /* CTA cards fan — tighter on small mobile */
+  .cards-wrap {
+    height: 120px;
+  }
+
+  .fan-card {
+    width: 64px;
+    height: 64px;
+    margin-left: -32px;
+    border-radius: 8px;
+  }
+
+  .fan-card img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .fan-card-1 { --tx: -108px; --rot: -16deg; }
+  .fan-card-2 { --tx: -68px; --rot: -9deg; }
+  .fan-card-3 { --tx: -28px; --rot: -3deg; }
+  .fan-card-4 { --tx: 12px; --rot: 4deg; }
+  .fan-card-5 { --tx: 52px; --rot: 10deg; }
+  .fan-card-6 { --tx: 92px; --rot: 17deg; }
+
+  /* CTA buttons — stack vertically */
+  .cta-row {
+    flex-direction: column;
+    gap: 12px;
   }
 
   /* Footer Wordmark */

@@ -2335,13 +2335,23 @@ body.card-form-open .editor-toolbar {
   }
 
   .ag-panel {
-    min-height: 84px;
+    height: 200px;
+    min-height: 0;
+    flex: none;
     transform: none !important;
   }
 
   .accordion-gallery .ag-panel__media {
-    width: 100%;
-    height: var(--ag-media-size);
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0;
+    left: 0;
+  }
+
+  .ag-panel__label {
+    opacity: 1;
   }
 }
 

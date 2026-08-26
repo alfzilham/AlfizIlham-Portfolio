@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeroParallax();
   initHeroReveal();
   initScrollProgress();
-  renderIconGrid();
+  renderIconGrid(window.matchMedia("(max-width: 768px)").matches ? "languages" : "all");
   initSkillFilters();
   initServicesAccordion();
   initCircularGallery();
@@ -378,7 +378,7 @@ function initScrollProgress() {
 
   const update = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    const pct = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
     bar.style.width = pct.toFixed(2) + "%";
   };
 
@@ -431,7 +431,21 @@ function initSkillFilters() {
   const searchInput = document.getElementById("skillSearch");
   if (!tabs) return;
 
-  let activeFilter = "all";
+  // Mobile: "All" filter hidden — default to first category
+  const isMobileSkills = window.matchMedia("(max-width: 768px)").matches;
+  let activeFilter = isMobileSkills ? "languages" : "all";
+
+  if (isMobileSkills) {
+    const firstPill = tabs.querySelector('.filter-pill[data-filter="languages"]');
+    if (firstPill) {
+      tabs.querySelectorAll(".filter-pill").forEach((p) => {
+        p.classList.remove("active");
+        p.setAttribute("aria-pressed", "false");
+      });
+      firstPill.classList.add("active");
+      firstPill.setAttribute("aria-pressed", "true");
+    }
+  }
 
   tabs.addEventListener("click", (e) => {
     const pill = e.target.closest(".filter-pill");
@@ -590,6 +604,28 @@ function initServicesAccordion() {
   function applyLayout(animate) {
     const panels = root.querySelectorAll(".ag-panel");
     if (!panels.length) return;
+
+    // Mobile (≤520px): static stacked layout — no GSAP transforms
+    if (window.matchMedia("(max-width: 520px)").matches) {
+      if (tlRef) tlRef.kill();
+      panels.forEach(function (panel) {
+        panel.style.flexGrow = 1;
+        panel.style.transform = "none";
+        panel.style.opacity = 1;
+        panel.style.filter = "none";
+        const media = panel.querySelector(".ag-panel__media");
+        if (media) {
+          gsap.set(media, { clearProps: "transform" });
+          media.style.setProperty("--ag-gray", 0);
+          media.style.setProperty("--ag-dim", 0);
+        }
+        const bar = panel.querySelector(".ag-panel__bar");
+        const text = panel.querySelector(".ag-panel__text");
+        if (bar) bar.style.opacity = 1;
+        if (text) text.style.opacity = 1;
+      });
+      return;
+    }
 
     const totalWidth = root.offsetWidth - GAP * (count - 1);
     const grow = count > 1 ? (EXPAND_RATIO * (count - 1)) / (1 - EXPAND_RATIO) : 1;
@@ -1180,7 +1216,7 @@ function initEditorMode() {
   function exitEditor() {
     editorOn = false;
     body.classList.remove("editor-mode");
-    chromaShown = CHROMA_PAGE;
+    chromaShown = getChromaPage();
     applyChromaVisibility();
     closeAllMenus();
   }
@@ -1681,8 +1717,11 @@ function initEditorMode() {
 
   // ---------- DOM node builder ----------
   // ---------- load more pagination (+6, public view only) ----------
-  const CHROMA_PAGE = 6;
-  let chromaShown = CHROMA_PAGE;
+  // Pagination: 3 per page on mobile, 6 on desktop
+  function getChromaPage() {
+    return window.matchMedia("(max-width: 768px)").matches ? 3 : 6;
+  }
+  let chromaShown = getChromaPage();
   const loadWrap = document.getElementById("chromaLoadMoreWrap");
   const loadBtn = document.getElementById("chromaLoadMoreBtn");
 
@@ -1698,7 +1737,12 @@ function initEditorMode() {
   }
 
   loadBtn?.addEventListener("click", () => {
-    chromaShown += CHROMA_PAGE;
+    chromaShown += getChromaPage();
+    applyChromaVisibility();
+  });
+
+  // Re-apply visibility when crossing the mobile breakpoint
+  window.matchMedia("(max-width: 768px)").addEventListener("change", function () {
     applyChromaVisibility();
   });
 
@@ -2856,8 +2900,11 @@ function initCertificates() {
   var loadBtn = document.getElementById("certLoadMoreBtn");
   if (!grid) return;
 
-  var CERT_PAGE = 8;
-  var certShown = CERT_PAGE;
+  // Pagination: 6 per page on mobile (2 cols × 3 rows), 8 on desktop
+  function getCertPage() {
+    return window.matchMedia("(max-width: 768px)").matches ? 6 : 8;
+  }
+  var certShown = getCertPage();
 
   // ── Render grid cards ──
   function renderCards() {
@@ -2955,10 +3002,15 @@ function initCertificates() {
 
   if (loadBtn) {
     loadBtn.addEventListener("click", function () {
-      certShown += CERT_PAGE;
+      certShown += getCertPage();
       applyVisibility();
     });
   }
+
+  // Re-apply visibility when crossing the mobile breakpoint
+  window.matchMedia("(max-width: 768px)").addEventListener("change", function () {
+    applyVisibility();
+  });
 
   // ── Card interactions (delegation) ──
   var pendingDeleteCert = null;
