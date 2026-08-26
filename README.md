@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/assets/favicon/Logo.png" alt="Alfiz Ilham Logo" width="120" />
   <h1>Alfiz Ilham — Portfolio</h1>
-  <p>Personal portfolio website for <strong>Alfiz Ilham</strong> — Software &amp; AI Engineer,<br/>Co-Founder of <a href="https://althentic.dev">althentic.dev</a></p>
+  <p>Personal portfolio website for <strong>Alfiz Ilham</strong> — Full Stack Developer, AI-Integrated Apps</p>
 </div>
 
 ---
