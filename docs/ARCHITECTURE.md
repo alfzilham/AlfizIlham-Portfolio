@@ -221,6 +221,7 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 - CSS split into 3 files (global, components, responsive) for maintainability; `responsive.css` holds all breakpoint overrides (navbar spacing, marquee scale, stacked skill filters, contact strip layout, CTA fan-card sizing on mobile)
 - Single `main.js` file (consolidated, no bundler needed)
 - SQLite for lightweight, serverless database
+- Visitor country lookup is best-effort: reuses a previously resolved country for the same IP via a fast local query before falling back to ip-api.com with a 0.7s timeout, so a slow third party never stalls the page response
 - `.htaccess` enables gzip compression and browser caching
 
 ---
@@ -235,7 +236,7 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 - Root `.htaccess` returns **404** for sensitive paths — `.git`, `.opencode`, `graphify-out`, `config/`, `data/`, `logs/`, `app/`, `views/`, `lang/`, `docs/`, `seed.php`, `bootstrap.php` — plus dangerous extensions (.sqlite/.ini/.bak/etc.), hidden dotfiles, and TRACE/TRACK methods
 - `public/assets/uploads/.htaccess` disables PHP execution inside the uploads directory
 - Security headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `Referrer-Policy: strict-origin-when-cross-origin`; `X-Powered-By` removed (`expose_php=Off` in php.ini)
-- Admin password stored as bcrypt hash in `config/config.php`; all editor endpoints session-gated (401 without login)
+- Admin password stored as bcrypt hash in `config/config.php` (no default credential is shipped — rotate periodically); all editor endpoints session-gated (401 without login)
 
 **Note:** For production, consider:
 - Moving `data/database.sqlite` outside web root
