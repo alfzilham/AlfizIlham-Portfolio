@@ -20,6 +20,12 @@ RedirectMatch 404 (?i)\.(sqlite|db|log|ini|sh|bat|yml|yaml|bak|orig|swp|dist|inc
 
 # --- Block TRACE/TRACK methods ---
 RewriteEngine On
+
+# Serve the public web root internally while keeping /public out of URLs.
+RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+RewriteRule ^(privacy|terms)$ public/$1.php [L]
+RewriteCond %{THE_REQUEST} \s/+[^\s?]*public(?:/|\?|\s) [NC]
+RewriteRule ^public(?:/index\.php)?/?$ ../ [R=301,L]
 RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK) [NC]
 RewriteRule .* - [F]
 

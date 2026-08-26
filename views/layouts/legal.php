@@ -14,14 +14,14 @@
 </head>
 <body>
   <div class="container" style="max-width:720px;padding-top:80px;padding-bottom:80px;">
-    <p class="eyebrow">Legal</p>
+    <p class="eyebrow"><?= i18n::t('legal_label') ?></p>
     <h1 style="font-size:clamp(28px,4vw,48px);font-weight:800;margin-bottom:32px;"><?php echo $heading; ?></h1>
-    <p style="color:var(--color-text-muted);margin-bottom:24px;font-size:14px;">Last updated: August 2026</p>
+    <p style="color:var(--color-text-muted);margin-bottom:24px;font-size:14px;"><?= i18n::t('legal_updated') ?></p>
 
     <?php echo $contentHtml; ?>
 
     <div style="margin-top:48px;padding-top:24px;border-top:1px solid var(--color-border);">
-      <a href="/" style="color:var(--color-text);text-decoration:none;font-weight:600;">&larr; Back to portfolio</a>
+      <a href="/" style="color:var(--color-text);text-decoration:none;font-weight:600;">&larr; <?= i18n::t('legal_back') ?></a>
     </div>
   </div>
 </body>

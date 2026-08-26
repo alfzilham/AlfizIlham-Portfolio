@@ -1,5 +1,9 @@
 # SPEC.md — Alfiz Ilham Portfolio
 
+## Localization and deployment
+
+Indonesian (`id`) is the default website language; English (`en`) remains selectable. UI strings and database-backed services, FAQs, testimonials, and gallery descriptions are localized from the language files. The root front controller serves `public/` internally, and direct `/public/` requests redirect to the clean project root.
+
 Functional specification: what each interactive feature must do, data shapes, acceptance criteria, and implementation details. Read alongside `CONTEXT.md` (why), `DESIGN.md` (how it looks), and `ARCHITECTURE.md` (how it's organized).
 
 ---

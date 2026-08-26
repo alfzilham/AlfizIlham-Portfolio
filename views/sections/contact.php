@@ -202,5 +202,8 @@
       'error_phone' => i18n::t('error_phone'),
       'error_service' => i18n::t('error_service'),
       'error_message' => i18n::t('error_message'),
+      'service_other' => i18n::t('contact_service_other'),
+      'service_other_placeholder' => i18n::t('contact_service_other_placeholder'),
+      'service_default' => i18n::t('contact_service_default'),
   ], JSON_UNESCAPED_UNICODE) ?>;
 </script>

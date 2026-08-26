@@ -123,6 +123,8 @@ return [
     'contact_phone_placeholder' => '+62 812 xxxx xxxx',
     'contact_service_label' => 'Service',
     'contact_service_default' => 'Choose a service...',
+    'contact_service_other' => 'Other',
+    'contact_service_other_placeholder' => 'Tell me what you need',
     'contact_currency_default' => 'USD',
     'contact_country_default' => '+62',
     'contact_search_placeholder' => 'Search...',
@@ -151,6 +153,7 @@ return [
         'Workflow Automation',
         'API & Database Engineering',
         'Tech Consultation',
+        'Other',
     ],
 
     // Closing CTA
@@ -241,6 +244,12 @@ return [
     'form_credential_link_placeholder' => 'https://credential-url.com',
     'form_company_label' => 'Company',
     'form_company_placeholder' => 'e.g. Google, AWS, Meta',
+    'dynamic_content' => [],
+    'legal_label' => 'Legal',
+    'legal_updated' => 'Last updated: August 2026',
+    'legal_back' => 'Back to portfolio',
+    'legal_privacy_title' => 'Privacy Policy',
+    'legal_terms_title' => 'Terms of Service',
 
     // Portfolio chatbot
     'chat_open' => 'Ask Alfiz',

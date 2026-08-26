@@ -1,5 +1,9 @@
 # ARCHITECTURE.md — Alfiz Ilham Portfolio
 
+## Localization and deployment routing
+
+Indonesian is the default locale. `PageController` overlays translated database content by `sort_order`, keeping FAQ, service, testimonial, and gallery copy synchronized with `lang/id.php` and `lang/en.php`. The root `index.php` internally loads `public/index.php`; Apache rewrites assets and routes so `/public/` is not part of normal browser URLs.
+
 Technical architecture: file structure, module responsibilities, data flow, and build/deploy notes. Pairs with `DESIGN.md` (visual spec) and `SPEC.md` (functional requirements).
 
 ---

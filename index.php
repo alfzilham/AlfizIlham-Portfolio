@@ -1,4 +1,3 @@
 <?php
-// Root router — redirect to public/
-header('Location: public/');
-exit;
+// Root router — keep the public directory out of the browser URL.
+require_once __DIR__ . '/public/index.php';

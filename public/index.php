@@ -11,8 +11,8 @@ require_once dirname(__DIR__) . '/bootstrap.php';
 secure_session_start();
 
 // Determine language
-$lang = $_GET['lang'] ?? $_SESSION['lang'] ?? 'en';
-if (!in_array($lang, ['en', 'id'])) $lang = 'en';
+$lang = $_GET['lang'] ?? $_SESSION['lang'] ?? config('default_language', 'id');
+if (!in_array($lang, ['en', 'id'])) $lang = config('default_language', 'id');
 $_SESSION['lang'] = $lang;
 
 // Load i18n strings

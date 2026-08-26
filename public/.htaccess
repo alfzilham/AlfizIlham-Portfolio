@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# If the project root is used as Apache's document root, hide /public/.
+RewriteCond %{THE_REQUEST} \s/+(.*/)?public(?:/|\?|\s) [NC]
+RewriteRule ^(?:index\.php)?/?$ /%1 [R=301,L,NE]
+
 # /index.php → redirect to root / (hanya jika tanpa query string)
 RewriteCond %{QUERY_STRING} ^$
 RewriteRule ^(.*)index\.php$ / [L,R=301]
@@ -8,6 +12,7 @@ RewriteRule ^(.*)index\.php$ / [L,R=301]
 # /privacy.php → 301 redirect ke /privacy
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteCond %{QUERY_STRING} ^$
+RewriteCond %{THE_REQUEST} \s/+[^\s?]*\.php(?:[?\s]) [NC]
 RewriteRule ^(.+)\.php$ /$1 [L,R=301]
 
 # /privacy → internally rewrite to privacy.php

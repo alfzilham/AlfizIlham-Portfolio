@@ -1917,6 +1917,7 @@ function initCustomDropdowns() {
       "API & Database Engineering",
       "Tech Consultation"
     ];
+  var contactLabels = window.__CONTACT_LANG || {};
 
   var currencyOptions = [
     { code: "USD", symbol: "$", name: "US Dollar" },
@@ -1983,6 +1984,7 @@ function initCustomDropdowns() {
     var itemsContainer = dd.querySelector(".dropdown-items");
     var valueEl = dd.querySelector(".dropdown-value");
     var hiddenInput = dd.parentElement.querySelector("input[type='hidden']");
+    var serviceOtherInput = null;
 
     if (!trigger || !popup || !itemsContainer) return;
 
@@ -1990,7 +1992,28 @@ function initCustomDropdowns() {
     trigger.setAttribute("aria-expanded", "false");
 
     var options = [];
-    if (type === "service") options = serviceOptions.map(function(s) { return { value: s, label: s }; });
+    if (type === "service") {
+      options = serviceOptions.map(function(s) { return { value: s, label: s }; });
+      options.push({ value: "__other__", label: contactLabels.service_other || "Other" });
+      serviceOtherInput = document.createElement("input");
+      serviceOtherInput.type = "text";
+      serviceOtherInput.className = "service-other-input";
+      serviceOtherInput.placeholder = contactLabels.service_other_placeholder || "Tell me what you need";
+      serviceOtherInput.setAttribute("aria-label", serviceOtherInput.placeholder);
+      serviceOtherInput.hidden = true;
+      dd.parentElement.insertBefore(serviceOtherInput, dd.nextSibling);
+      serviceOtherInput.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          serviceOtherInput.value = "";
+          serviceOtherInput.hidden = true;
+          dd.hidden = false;
+          if (hiddenInput) hiddenInput.value = "";
+          valueEl.textContent = contactLabels.service_default || "Choose a service...";
+          trigger.focus();
+        }
+      });
+    }
     else if (type === "currency") options = currencyOptions.map(function(c) { return { value: c.code, label: c.code + " — " + c.name }; });
     else if (type === "country") options = countryCodes.map(function(c) { return { value: c.code, label: c.flag + " " + c.code + " " + c.country }; });
 
@@ -2024,8 +2047,16 @@ function initCustomDropdowns() {
         div.tabIndex = -1;
         if (hiddenInput && hiddenInput.value === opt.value) div.classList.add("active");
         div.addEventListener("click", function(e) {
-          valueEl.textContent = opt.label;
-          if (hiddenInput) hiddenInput.value = opt.value;
+          if (type === "service" && opt.value === "__other__") {
+            dd.hidden = true;
+            if (serviceOtherInput) { serviceOtherInput.hidden = false; serviceOtherInput.focus(); }
+            valueEl.textContent = opt.label;
+            if (hiddenInput) hiddenInput.value = "";
+          } else {
+            if (type === "service" && serviceOtherInput) { serviceOtherInput.hidden = true; serviceOtherInput.value = ""; dd.hidden = false; }
+            valueEl.textContent = opt.label;
+            if (hiddenInput) hiddenInput.value = opt.value;
+          }
           if (search) search.value = "";
           closeDropdown(e.detail === 0);
         });
@@ -2490,6 +2521,7 @@ function initContactForm() {
     const phone = form.querySelector("#contactPhone");
     const countryCode = form.querySelector("#countryCodeValue");
     const service = form.querySelector("#serviceValue");
+    const serviceOther = form.querySelector(".service-other-input");
     const budget = form.querySelector("#contactBudget");
     const currency = form.querySelector("#currencyValue");
     const message = form.querySelector("#contactMessage");
@@ -2515,6 +2547,7 @@ function initContactForm() {
       valid = false;
     }
 
+    if (serviceOther && !serviceOther.hidden) service.value = serviceOther.value.trim();
     if (!service.value) {
       showError("serviceError", lang.error_service || 'Please select a service');
       valid = false;
@@ -3016,6 +3049,9 @@ function initChatbot() {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ message }),
       });
+      if (serviceOther) { serviceOther.value = ""; serviceOther.hidden = true; }
+      var serviceDropdown = document.getElementById("serviceDropdown");
+      if (serviceDropdown) serviceDropdown.hidden = false;
       const data = await response.json().catch(() => ({}));
       pending.remove();
       appendRichMessage(data.answer || data.error || labels.error || 'The assistant is unavailable.');

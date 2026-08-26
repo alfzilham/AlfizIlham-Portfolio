@@ -37,5 +37,5 @@ return [
     // Editor mode admin password (bcrypt) — rotate periodically; never commit plaintext.
     'admin_password_hash' => '$2y$12$/p0PPJ6ug8BUOCJ4wRvVpO9YhP0lp6o27Z2MtoRvYHd/x64Wt5fSy',
     'supported_languages' => ['en', 'id'],
-    'default_language' => 'en',
+    'default_language' => 'id',
 ];

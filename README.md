@@ -6,6 +6,8 @@
 
 ---
 
+The website defaults to Indonesian (`id`) and supports English (`en`). With Apache rewrites enabled, visitors use the clean project-root URL; `public/` is an internal web directory.
+
 ## Tech Stack
 
 - **Backend:** PHP 8.x (vanilla MVC, no framework)
