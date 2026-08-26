@@ -2417,7 +2417,14 @@ function initNewsletterForm() {
 
     try {
       if (!window.emailjs) {
-        await loadScript("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js");
+        await loadScript(
+          "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js",
+          {
+            integrity:
+              "sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS",
+            crossorigin: "anonymous",
+          }
+        );
       }
 
       await emailjs.send(
@@ -2539,7 +2546,14 @@ function initContactForm() {
       const config = window.EMAILJS_CONFIG || {};
 
       if (!window.emailjs) {
-        await loadScript("https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js");
+        await loadScript(
+          "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js",
+          {
+            integrity:
+              "sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS",
+            crossorigin: "anonymous",
+          }
+        );
       }
 
       // Send admin notification
@@ -2636,10 +2650,12 @@ function clearError(id) {
   if (ctrl) ctrl.removeAttribute("aria-invalid");
 }
 
-function loadScript(src) {
+function loadScript(src, opts) {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
     script.src = src;
+    if (opts && opts.integrity) script.integrity = opts.integrity;
+    if (opts && opts.crossorigin) script.crossOrigin = opts.crossorigin;
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);

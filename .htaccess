@@ -29,6 +29,9 @@ RewriteRule .* - [F]
   Header always set X-Content-Type-Options "nosniff"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # CSP report-only: monitors violations without blocking.
+  # Switch to "Content-Security-Policy" (enforce) only after console reports are clean.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://esm.sh; style-src 'self' 'unsafe-inline' https://unpkg.com https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://tile.openstreetmap.org; connect-src 'self' https://api.emailjs.com https://esm.sh; worker-src 'self' blob:; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"
 </IfModule>
 
 # --- No directory listing ---
