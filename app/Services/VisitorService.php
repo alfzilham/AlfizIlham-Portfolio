@@ -61,7 +61,10 @@ class VisitorService
     }
 
     /**
-     * Detect country from IP using ip-api.com (free, no key)
+     * Detect country from IP — best-effort, never allowed to stall the page.
+     * 1) Reuse a previously resolved country for this IP (fast local query)
+     * 2) External lookup via ip-api.com with a short timeout
+     * 3) Fallback default 'ID'
      */
     private static function getCountry($ip)
     {
@@ -70,8 +73,22 @@ class VisitorService
             return 'ID';
         }
 
+        // Local reuse: skip the external call when this IP was resolved before
         try {
-            $context = stream_context_create(['http' => ['timeout' => 2]]);
+            $db = Database::getInstance();
+            $row = $db->fetchOne(
+                "SELECT country FROM visitors WHERE ip_address = ? AND country IS NOT NULL ORDER BY id DESC LIMIT 1",
+                [$ip]
+            );
+            if (!empty($row['country'])) {
+                return $row['country'];
+            }
+        } catch (\Exception $e) {
+            // Fall through to external lookup
+        }
+
+        try {
+            $context = stream_context_create(['http' => ['timeout' => 0.7]]);
             $response = @file_get_contents("http://ip-api.com/json/{$ip}?fields=countryCode", false, $context);
             if ($response) {
                 $data = json_decode($response, true);
