@@ -31,6 +31,43 @@ class AdminController
     }
 
     /**
+     * Resolve the route id + existing record via $finder, or respond 404.
+     *
+     * @param callable $finder          e.g. 'ShowcaseProject::find'
+     * @param string   $notFoundMessage Error message for the 404 response
+     * @return array{0: int, 1: array}  [id, existing row]
+     */
+    private static function requireExisting($finder, $notFoundMessage)
+    {
+        $id = (int) ($_GET['id'] ?? 0);
+        $existing = $finder($id);
+        if (!$existing) {
+            json_response(['success' => false, 'error' => $notFoundMessage], 404);
+        }
+        return [$id, $existing];
+    }
+
+    /**
+     * Shared image-replacement flow for update endpoints: when a new image was
+     * uploaded, store it and delete the previous file; otherwise keep the old path.
+     *
+     * @param string $existingImage Current image path from the DB row
+     * @return array{0: bool, 1: string} [ok, newPathOrError]
+     */
+    private static function replaceImageIfUploaded($existingImage)
+    {
+        if (empty($_FILES['image']['name'])) {
+            return [true, $existingImage];
+        }
+        $upload = self::handleUpload();
+        if (!$upload['ok']) {
+            return [false, $upload['error']];
+        }
+        self::deleteImageFile($existingImage);
+        return [true, $upload['path']];
+    }
+
+    /**
      * POST /api/admin/login  {password}
      */
     public function login()
@@ -111,11 +148,7 @@ class AdminController
         self::requireAdmin();
         self::verifyCsrf();
 
-        $id = (int) ($_GET['id'] ?? 0);
-        $existing = ShowcaseProject::find($id);
-        if (!$existing) {
-            json_response(['success' => false, 'error' => 'Card not found'], 404);
-        }
+        [$id, $existing] = self::requireExisting('ShowcaseProject::find', 'Card not found');
 
         $title = sanitize($_POST['title'] ?? '');
         $description = sanitize($_POST['description'] ?? '');
@@ -126,14 +159,9 @@ class AdminController
             json_response(['success' => false, 'errors' => $errors], 422);
         }
 
-        $imagePath = $existing['image'];
-        if (!empty($_FILES['image']['name'])) {
-            $upload = self::handleUpload();
-            if (!$upload['ok']) {
-                json_response(['success' => false, 'error' => $upload['error']], 422);
-            }
-            self::deleteImageFile($existing['image']);
-            $imagePath = $upload['path'];
+        [$ok, $imagePath] = self::replaceImageIfUploaded($existing['image']);
+        if (!$ok) {
+            json_response(['success' => false, 'error' => $imagePath], 422);
         }
 
         ShowcaseProject::update($id, $title, $description, $imagePath, $link);
@@ -148,11 +176,7 @@ class AdminController
         self::requireAdmin();
         self::verifyCsrf();
 
-        $id = (int) ($_GET['id'] ?? 0);
-        $existing = ShowcaseProject::find($id);
-        if (!$existing) {
-            json_response(['success' => false, 'error' => 'Card not found'], 404);
-        }
+        [$id, $existing] = self::requireExisting('ShowcaseProject::find', 'Card not found');
 
         self::deleteImageFile($existing['image']);
         ShowcaseProject::delete($id);
@@ -207,11 +231,7 @@ class AdminController
         self::requireAdmin();
         self::verifyCsrf();
 
-        $id = (int) ($_GET['id'] ?? 0);
-        $existing = Certificate::find($id);
-        if (!$existing) {
-            json_response(['success' => false, 'error' => 'Certificate not found'], 404);
-        }
+        [$id, $existing] = self::requireExisting('Certificate::find', 'Certificate not found');
 
         $title = sanitize($_POST['title'] ?? '');
         $company = sanitize($_POST['company'] ?? '');
@@ -223,14 +243,9 @@ class AdminController
             json_response(['success' => false, 'errors' => $errors], 422);
         }
 
-        $imagePath = $existing['image'];
-        if (!empty($_FILES['image']['name'])) {
-            $upload = self::handleUpload();
-            if (!$upload['ok']) {
-                json_response(['success' => false, 'error' => $upload['error']], 422);
-            }
-            self::deleteImageFile($existing['image']);
-            $imagePath = $upload['path'];
+        [$ok, $imagePath] = self::replaceImageIfUploaded($existing['image']);
+        if (!$ok) {
+            json_response(['success' => false, 'error' => $imagePath], 422);
         }
 
         Certificate::update($id, $title, $company, $credentialId, $credentialLink, $imagePath);
@@ -245,11 +260,7 @@ class AdminController
         self::requireAdmin();
         self::verifyCsrf();
 
-        $id = (int) ($_GET['id'] ?? 0);
-        $existing = Certificate::find($id);
-        if (!$existing) {
-            json_response(['success' => false, 'error' => 'Certificate not found'], 404);
-        }
+        [$id, $existing] = self::requireExisting('Certificate::find', 'Certificate not found');
 
         self::deleteImageFile($existing['image']);
         Certificate::delete($id);
