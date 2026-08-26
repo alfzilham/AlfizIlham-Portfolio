@@ -241,4 +241,16 @@ return [
     'form_credential_link_placeholder' => 'https://credential-url.com',
     'form_company_label' => 'Company',
     'form_company_placeholder' => 'e.g. Google, AWS, Meta',
+
+    // Portfolio chatbot
+    'chat_open' => 'Ask Alfiz',
+    'chat_title' => 'Ask about Alfiz',
+    'chat_subtitle' => 'Portfolio assistant',
+    'chat_close' => 'Close assistant',
+    'chat_welcome' => 'Hi! Ask me about Alfiz’s skills, experience, projects, or certificates.',
+    'chat_input_label' => 'Your question',
+    'chat_placeholder' => 'Ask a question…',
+    'chat_send' => 'Send question',
+    'chat_sending' => 'Thinking…',
+    'chat_error' => 'I’m temporarily unavailable. Please try again or contact Alfiz on WhatsApp.',
 ];

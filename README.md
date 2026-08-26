@@ -21,6 +21,7 @@
 - Filterable projects grid (46 projects: 19 websites, 9 design, 18 calligraphy)
 - Contact form with EmailJS + PHP fallback
 - Real-time visitor counter (SQLite-based)
+- Portfolio AI assistant: grounded answers from CV plus admin-managed projects and certificates (RAG via Neon pgvector)
 - Responsive design (4 breakpoints: 480px, 768px, 1024px, 1280px)
 - Smooth scroll (Lenis.js)
 - Interactive elements (magnetic cursor, parallax, curved marquee, gallery tooltip)
@@ -73,6 +74,14 @@ alfizilham/
 - [CONTEXT.md](docs/CONTEXT.md) — Project background and goals
 - [DESIGN.md](docs/DESIGN.md) — Design specification
 - [SPEC.md](docs/SPEC.md) — Functional specification
+
+## AI Chatbot Setup (v1.1.0)
+
+Copy `config/.env.example` to `config/.env`, then configure Neon, OpenRouter, and (optionally) Hugging Face credentials. The web runtime needs PHP extensions `curl`, `pdo_pgsql`, and `pgsql` enabled. SQLite remains the source of truth; Neon is a rebuildable knowledge index. After configuring credentials, initialize or repair the derived index with:
+
+```bash
+php scripts/rebuild-knowledge.php
+```
 
 ## Curriculum Vitae
 

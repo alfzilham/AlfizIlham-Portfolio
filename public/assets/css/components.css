@@ -3875,3 +3875,15 @@ body.editor-mode .cert-menu-btn {
 .education-step-2 { left: 28%; top: 68%; text-align: left; animation-delay: 1.0s; }
 .education-step-3 { left: 56%; top: 15%; text-align: left; animation-delay: 1.6s; }
 .education-step-4 { left: 78%; top: 62%; text-align: left; animation-delay: 2.2s; }
+
+/* Portfolio chatbot */
+.chatbot { position: fixed; right: 24px; bottom: 24px; z-index: 1001; }
+.chatbot-toggle { display: inline-flex; align-items: center; gap: 9px; padding: 13px 17px; border: 0; border-radius: 999px; background: #111; color: #fff; box-shadow: 0 12px 34px rgba(0,0,0,.22); font: inherit; font-weight: 700; cursor: pointer; }
+.chatbot-toggle:hover, .chatbot-toggle:focus-visible { background: #292929; }
+.chatbot-toggle svg { width: 18px; }
+.chatbot-panel { position: absolute; right: 0; bottom: 58px; width: min(380px, calc(100vw - 32px)); overflow: hidden; border: 1px solid var(--color-border); border-radius: 20px; background: #fff; box-shadow: 0 24px 70px rgba(0,0,0,.2); }
+.chatbot-header { display: flex; justify-content: space-between; gap: 16px; padding: 17px 18px; border-bottom: 1px solid var(--color-border); background: #111; color: #fff; }
+.chatbot-header strong { display: block; font-size: 15px; }.chatbot-header p { margin: 2px 0 0; color: #c7c7c7; font-size: 12px; }.chatbot-header button { border: 0; background: transparent; color: inherit; cursor: pointer; }.chatbot-header svg { width: 18px; }
+.chatbot-messages { display: flex; flex-direction: column; gap: 10px; min-height: 250px; max-height: 370px; overflow-y: auto; padding: 16px; background: #fafafa; }
+.chatbot-message { max-width: 88%; margin: 0; padding: 10px 12px; border-radius: 13px; font-size: 13px; line-height: 1.55; white-space: pre-wrap; }.chatbot-message--assistant { align-self: flex-start; background: #eaeaea; color: #161616; }.chatbot-message--visitor { align-self: flex-end; background: #111; color: #fff; }.chatbot-message.is-pending { opacity: .65; font-style: italic; }
+.chatbot-form { display: flex; align-items: flex-end; gap: 8px; padding: 12px; border-top: 1px solid var(--color-border); background: #fff; }.chatbot-form textarea { flex: 1; min-height: 22px; max-height: 100px; resize: vertical; border: 0; outline: 0; font: inherit; font-size: 13px; }.chatbot-form button { display: grid; width: 34px; height: 34px; place-items: center; flex: 0 0 auto; border: 0; border-radius: 50%; background: #111; color: #fff; cursor: pointer; }.chatbot-form button svg { width: 15px; }

@@ -99,6 +99,8 @@
       'visitorCount' => $visitorCount,
   ]); ?>
 
+  <?php echo View::partial('chatbot'); ?>
+
   <!-- Editor mode: login modal -->
   <div class="editor-overlay" id="editorLoginOverlay" data-lenis-prevent hidden>
     <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="editorLoginTitle">

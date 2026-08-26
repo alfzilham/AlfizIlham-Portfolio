@@ -241,4 +241,16 @@ return [
     'form_credential_link_placeholder' => 'https://url-kredential.com',
     'form_company_label' => 'Perusahaan',
     'form_company_placeholder' => 'contoh: Google, AWS, Meta',
+
+    // Chatbot portfolio
+    'chat_open' => 'Tanya Alfiz',
+    'chat_title' => 'Tanya tentang Alfiz',
+    'chat_subtitle' => 'Asisten portfolio',
+    'chat_close' => 'Tutup asisten',
+    'chat_welcome' => 'Hai! Tanyakan tentang skill, pengalaman, proyek, atau sertifikat Alfiz.',
+    'chat_input_label' => 'Pertanyaan Anda',
+    'chat_placeholder' => 'Tulis pertanyaan…',
+    'chat_send' => 'Kirim pertanyaan',
+    'chat_sending' => 'Sedang berpikir…',
+    'chat_error' => 'Asisten sedang tidak tersedia. Coba lagi atau hubungi Alfiz melalui WhatsApp.',
 ];

@@ -33,7 +33,7 @@ spl_autoload_register(function ($class) {
 // Load config
 require_once CONFIG_PATH . '/config.php';
 
-// Load environment (.env) before helpers that may depend on env()
+// Load local secrets before services use environment-based configuration.
 require_once APP_PATH . '/Helpers/env.php';
 env_load(CONFIG_PATH . '/.env');
 

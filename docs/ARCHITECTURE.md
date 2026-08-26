@@ -132,6 +132,10 @@ HTML Output → Browser
 6. **View** → Renders PHP templates with data
 7. **Response** → HTML sent to browser
 
+### AI Chatbot (v1.1.0)
+
+`POST /api/chat` is handled by `ChatController`. It rate-limits by IP in SQLite, embeds the visitor question, retrieves same-provider vector matches from Neon pgvector, then sends grounded context plus the static CV to OpenRouter. `EmbeddingService` prefers Hugging Face and falls back to OpenRouter; retrieval filters by `embedding_provider` so vectors from different model spaces are never compared. `NeonSyncService` runs after successful admin project/certificate writes. A failed sync never rolls back SQLite, which remains the source of truth; `scripts/rebuild-knowledge.php` can rebuild the derived index.
+
 ---
 
 ## 4. Database Schema (SQLite)
@@ -194,6 +198,7 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 | GET | `/api/tools` | ApiController::tools() | Get filtered tools |
 | GET | `/api/projects` | ApiController::projects() | Get filtered projects |
 | GET | `/api/cards` | AdminController::listCards() | Public showcase cards list |
+| POST | `/api/chat` | ChatController::ask() | Grounded portfolio chatbot |
 | POST | `/api/admin/login` | AdminController::login() | Editor mode login |
 | POST | `/api/admin/logout` | AdminController::logout() | Clear admin session |
 | GET | `/api/admin/session` | AdminController::session() | Check auth state |

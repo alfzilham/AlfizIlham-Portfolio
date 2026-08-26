@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initStatCounters();
   initVisitorCounter();
   initCertificates();
+  initChatbot();
   initLucideIcons();
 });
 
@@ -2957,6 +2958,64 @@ function initStatCounters() {
 /* --------------------------------------------------------------------------
    LUCIDE ICONS
    -------------------------------------------------------------------------- */
+
+function initChatbot() {
+  const toggle = document.getElementById('chatbotToggle');
+  const panel = document.getElementById('chatbotPanel');
+  const close = document.getElementById('chatbotClose');
+  const form = document.getElementById('chatbotForm');
+  const input = document.getElementById('chatbotInput');
+  const messages = document.getElementById('chatbotMessages');
+  if (!toggle || !panel || !form || !input || !messages) return;
+
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) input.focus();
+  };
+  const addMessage = (text, role) => {
+    const item = document.createElement('p');
+    item.className = 'chatbot-message chatbot-message--' + role;
+    item.textContent = text;
+    messages.appendChild(item);
+    messages.scrollTop = messages.scrollHeight;
+    return item;
+  };
+
+  toggle.addEventListener('click', () => setOpen(panel.hidden));
+  close?.addEventListener('click', () => setOpen(false));
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); form.requestSubmit(); }
+    if (event.key === 'Escape') setOpen(false);
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const message = input.value.trim();
+    if (message.length < 2) return;
+    const labels = window.__CHAT_LANG || {};
+    addMessage(message, 'visitor');
+    input.value = '';
+    input.disabled = true;
+    const pending = addMessage(labels.sending || 'Thinking…', 'assistant');
+    pending.classList.add('is-pending');
+    try {
+      const response = await fetch('index.php?/api/chat', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ message }),
+      });
+      const data = await response.json().catch(() => ({}));
+      pending.remove();
+      addMessage(data.answer || data.error || labels.error || 'The assistant is unavailable.', 'assistant');
+    } catch (error) {
+      pending.remove();
+      addMessage(labels.error || 'The assistant is unavailable.', 'assistant');
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  });
+}
 
 function initLucideIcons() {
   if (window.lucide) {
