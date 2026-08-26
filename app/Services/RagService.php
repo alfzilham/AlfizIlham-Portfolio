@@ -85,6 +85,11 @@ class RagService
             'dbname=' . ltrim($parts['path'], '/'), 'user=' . rawurldecode($parts['user'] ?? ''),
             'password=' . rawurldecode($parts['pass'] ?? ''), 'sslmode=' . ($query['sslmode'] ?? 'require'),
         ];
+        // Older libpq builds (including some XAMPP releases) need Neon SNI's
+        // endpoint option explicitly because they cannot infer it from TLS.
+        if (preg_match('/^(ep-.+?)(?:-pooler)?\./', $parts['host'], $match)) {
+            $items[] = 'options=endpoint=' . $match[1];
+        }
         return 'pgsql:' . implode(';', $items);
     }
 
