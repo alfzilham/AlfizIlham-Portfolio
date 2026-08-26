@@ -120,7 +120,7 @@ Letter-spacing: headings use `-0.02em` (tight), uppercase labels use `0.08em` (w
 
 ## 3. Global Layout Rules
 
-- **Navbar**: fixed/sticky top, white background, height `72px`, padding `0 32px`. Layout (left → right):
+- **Navbar**: fixed/sticky top, white background, height `72px`, padding `0 32px`. On mobile ≤480px the inner bar keeps `20px` side padding (and the hamburger drops its negative right margin) so the "Alfiz." brand and hamburger never touch the viewport edges. Layout (left → right):
   - **Logo**: text wordmark **"Alfiz."** (not an icon/badge) — `--fs-h4` scale, weight 800, black, with the trailing period styled as part of the brand.
   - **Nav links** (centered): About, Skills, Projects, Services, Gallery, FAQ, Contact — `--fs-body-sm`, weight 500, `--color-text-muted`, hover → black.
   - **Language toggle pill**: rounded pill switch with "EN" / "ID" segments, active segment = black bg + white text, inactive = transparent + muted text. `border-radius: var(--radius-full); border: 1px solid var(--color-border);`
@@ -212,7 +212,7 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 
 - Full-width black bold text repeating "DEVELOPER ✦ ALFIZ ILHAM ✦" infinitely scrolling horizontally (CSS `@keyframes marquee` translateX loop, `animation: marquee 20s linear infinite;`).
 - Text is rotated slightly (`transform: rotate(-2deg)`) and bleeds off both edges of the viewport.
-- Font-size ~64-80px, font-weight 800, single line, no wrap.
+- Font-size ~64-80px, font-weight 800, single line, no wrap. On mobile ≤480px the curved SVG marquee scales up to `clamp(56px, 14vw, 80px)` for stronger presence on small screens.
 - Background: white (transparent to page bg).
 
 ```css
@@ -276,7 +276,7 @@ Layout: 2-column grid, `grid-template-columns: 1fr 1fr;` gap `48px`, stacks to 1
 **Purpose**: Filterable technology showcase — a single icon grid driven by category tabs + search.
 
 - Section heading centered: "My Skill Set" (`--fs-h1`) + subheading paragraph centered, muted, max-width `560px`: "A curated collection of tools and technologies I work with — from frontend and backend to AI, design, and deployment."
-- **Filter bar (top)**: pill tab row "ALL / LANGUAGES / FRONTEND / BACKEND / DATABASE / DEVOPS / AI & ML / DESIGN / TOOLS" (active = black bg/white text, inactive = white bg neumorphic shadow) + search input on the right (Lucide search icon, placeholder "Search tools...", `border-radius: var(--radius-full)`). Wraps below `--space-4` gap; stacks vertically on tablet/mobile.
+- **Filter bar (top)**: pill tab row "ALL / LANGUAGES / FRONTEND / BACKEND / DATABASE / DEVOPS / AI & ML / DESIGN / TOOLS" (active = black bg/white text, inactive = white bg neumorphic shadow) + search input on the right (Lucide search icon, placeholder "Search tools...", `border-radius: var(--radius-full)`). Wraps below `--space-4` gap; stacks vertically on tablet/mobile — on ≤768px the category pills wrap into multiple stacked rows (no horizontal scroll) and the search input takes the full row width.
 - **Icon grid (below filter bar)**: responsive grid, 7 columns desktop → 5 tablet → 4 mobile → 3 mobile-small, `row-gap: 40px; column-gap: 24px`. Each cell = **plain icon glyph only** (no colored box/badge background) at `48px` (36px on small screens), native brand SVG in its own brand color, sitting directly on the white page background. Below each icon: uppercase label (`--fs-caption`, weight 600, letter-spacing `0.05em`, centered).
 - **No tool cards** — the former card grid was removed; the icon grid itself is the filtered surface.
 - **Hover interaction**: each icon wiggles once on hover (rotate keyframes ±6°, `0.5s ease-in-out`, no loop) and a black pill tooltip fades in above the cell showing the tool's micro category label (`category_label`, e.g. "Library", "Runtime", "AI Platform") — implemented pure-CSS via `data-tooltip` attribute + `::after`; both respect `prefers-reduced-motion`.
@@ -316,7 +316,7 @@ JS behavior: clicking a tab re-renders the icon grid filtered by tool `category`
 - Big heading: "HOW CAN I HELP YOU" (`--fs-hero`-ish scale, ~72-90px, weight 800, uppercase, two lines)
 - Below heading, a horizontal divider, then a row: left = short paragraph "From code to design to AI. Turning ideas into working products." (`--fs-h4`, weight 600, max-width 480px) + right side = primary button "Let's Talk" + small muted caption "Need a website, an AI workflow, or just a sharp logo? Here's how I can help."
 - Another divider line.
-- **AccordionGallery** (vanilla port of ReactBits component, 460px height, 5 panels): each panel shows a service illustration (monochrome line-art, `assets/image/services/service-N.webp`) with an active-expand / inactive-compress layout driven by GSAP (`flexGrow` animation, `rotateY` tilt, grayscale filter, parallax drift, label reveal stagger). Hover/click/focus/keyboard ←→ triggers the active state; description text updates dynamically below the accordion. Collapses to vertical stacking on mobile ≤520px.
+- **AccordionGallery** (vanilla port of ReactBits component, 460px height, 5 panels): each panel shows a service illustration (monochrome line-art, `assets/image/services/service-N.webp`) with an active-expand / inactive-compress layout driven by GSAP (`flexGrow` animation, `rotateY` tilt, grayscale filter, parallax drift, label reveal stagger). Hover/click/focus/keyboard ←→ triggers the active state; description text updates dynamically below the accordion. Collapses to vertical stacking on mobile ≤520px. Panel overlay scrim is pure black globally (`rgba(0,0,0,…)` bottom gradient + dim layer).
 
 ---
 
@@ -438,8 +438,9 @@ document.querySelectorAll(".faq-item").forEach((item) => {
     - Single marker/circle indicator at center point, zoom controls bottom-right (`+`/`-`), attribution text bottom ("© CARTO, © OpenStreetMap contributors").
 - Below the 2-column block, a **3-column contact info strip** separated by a top divider line:
   - Icon (phone, Lucide `phone`) + "Call & WhatsApp" label + number
-  - Icon (clock, Lucide `clock`) + "Response Time" label + "Weekdays: 08.00–17.00 WIB / Weekend: Closed"
+  - Newsletter email form (input + submit button)
   - Icon (paper-plane, Lucide `send`) + "Write to Us" label + email address
+- On mobile ≤768px the strip becomes a 2-column grid: "Call & WhatsApp" and "Write to Us" sit side by side on the first row, while the newsletter form spans the full width beneath them (centered, max-width `360px`).
 
 ```js
 const map = L.map("contact-map", { zoomControl: false }).setView(
@@ -470,6 +471,7 @@ L.circleMarker([5.5483, 95.3238], {
   - Paragraph: "Let's turn your idea into a fast, beautiful, and functional digital experience. I'm open for new projects." (muted, centered)
   - Primary pill button: "Start a Project" (with arrow-up-right Lucide icon)
   - Small ghost link beneath: "Or reach me on WhatsApp →"
+- **Fan cards**: six tech icon cards (React, Node.js, Python, Claude, JavaScript, n8n) fan out horizontally under the heading — white rounded squares (`118px` desktop) rotated ±3–17° and offset via `--tx` custom properties, each showing its brand SVG (`52px`) with a black pill tooltip on hover. Tablet ≤1024px shrinks them to `82px`; mobile ≤480px tightens further to `56px` cards with offsets `--tx: -86px … 74px` so all six stay fully inside the viewport (no edge clipping).
 - **Decorative side columns**: on both left and right edges, a curved/arched vertical stack of circular icon badges (each ~56px white circle with shadow) showing tech tool icons (React, Next.js "N" logo, JS, GitHub, a 3D-cube icon, a code/terminal icon, an "A" caligraphy icon, Photoshop "Ps", Lightroom "Lr" on the left; HTML5, CSS3, Claude sunburst, a bit-icon, a gem/diamond icon, a square/app icon, a "C" circle icon, a pen/design icon, a calligraphy/Arabic-script icon on the right) — arranged along a curved path (achievable via absolute positioning with calculated offsets or CSS `transform: rotate()` per item along an arc).
 
 ```css

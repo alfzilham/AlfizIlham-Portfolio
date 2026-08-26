@@ -218,7 +218,7 @@ Standard CRUD tables with `id`, content fields, and `sort_order`.
 
 - All images use `.webp` for compression
 - `<img>` tags include `loading="lazy"` for below-fold images
-- CSS split into 3 files (global, components, responsive) for maintainability
+- CSS split into 3 files (global, components, responsive) for maintainability; `responsive.css` holds all breakpoint overrides (navbar spacing, marquee scale, stacked skill filters, contact strip layout, CTA fan-card sizing on mobile)
 - Single `main.js` file (consolidated, no bundler needed)
 - SQLite for lightweight, serverless database
 - `.htaccess` enables gzip compression and browser caching

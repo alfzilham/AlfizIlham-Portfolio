@@ -20,7 +20,7 @@ Functional specification: what each interactive feature must do, data shapes, ac
 | Contact | `#contact` |
 
 - Smooth scroll via Lenis.js with `scroll-behavior: smooth` fallback.
-- Mobile (<1024px): nav links collapse into hamburger menu (glassmorphism overlay).
+- Mobile (<1024px): nav links collapse into hamburger menu (glassmorphism overlay). On ≤480px the navbar keeps `20px` side padding so the brand and hamburger stay clear of the viewport edges.
 - Language toggle (EN/ID): navbar pill switch, stores preference in `$_SESSION['lang']`.
 
 **Acceptance criteria**: clicking a nav link scrolls to the correct section. Navbar hides on scroll down, reappears on scroll up. Glassmorphism effect when scrolled past intro.
@@ -51,6 +51,7 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 - Categories (8, matching `tools.category` in SQLite): `all`, `languages`, `frontend`, `backend`, `database`, `devops`, `ai-ml`, `design`, `tools`
 - Search: case-insensitive substring match on tool name; combines with active category (AND)
 - Single icon grid (7 columns desktop) renders the filtered tools — no separate card grid
+- Mobile (≤768px): filter bar stacks vertically — category pills wrap into multiple rows (no horizontal overflow/scroll) and the search input spans the full row width
 - Empty state shows "No tools match your search." when a filter/search combination yields nothing
 
 **Acceptance criteria**: clicking a category tab re-renders the icon grid with only matching icons; typing in search further narrows visible icons live; empty state appears when nothing matches; hovering an icon plays a one-shot wiggle animation and shows a tooltip with its `category_label`.
@@ -125,6 +126,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 4. Success/error toast displayed
 
 **Acceptance criteria**: form cannot submit with invalid fields; success clears form and shows confirmation; error shows retryable message with WhatsApp link.
+
+**Contact info strip (below the form)**: "Call & WhatsApp" and "Write to Us" flank a newsletter email form in a 3-column row on desktop. On mobile ≤768px, "Call & WhatsApp" and "Write to Us" sit side by side (2-column grid) with the newsletter form spanning full width beneath them.
 
 ---
 

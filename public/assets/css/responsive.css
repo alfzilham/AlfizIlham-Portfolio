@@ -237,14 +237,13 @@
   }
 
   .filter-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: var(--space-2);
-    -webkit-overflow-scrolling: touch;
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
   }
 
   .search-box {
-    min-width: 100%;
+    width: 100%;
+    min-width: 0;
   }
 
   /* Services */
@@ -313,7 +312,17 @@
   }
 
   .contact-info-strip {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* Call & WhatsApp + Write to Us side by side, newsletter below */
+  .contact-info-newsletter {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    max-width: 360px;
+    margin: 0 auto;
+    width: 100%;
   }
 
   /* Center all contact info items on mobile */
@@ -327,12 +336,6 @@
 
   .contact-info-right .contact-info-text {
     order: 0;
-  }
-
-  .contact-info-newsletter {
-    max-width: 360px;
-    margin: 0 auto;
-    width: 100%;
   }
 
   /* Footer — hide giant wordmark + shadow on mobile */
@@ -393,10 +396,14 @@
     gap: var(--space-3);
   }
 
-  /* Navbar */
+  /* Navbar — keep breathing room from viewport edges */
   .navbar-inner {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .navbar-hamburger {
+    margin-right: 0;
   }
 
   /* Mobile menu — prevent overflow on small screens */
@@ -458,7 +465,7 @@
 
   /* Curved Marquee */
   .curved-loop-svg {
-    font-size: clamp(40px, 10vw, 64px);
+    font-size: clamp(56px, 14vw, 80px);
   }
 
   /* About CTAs — side by side on mobile */
@@ -474,27 +481,27 @@
 
   /* CTA cards fan — tighter on small mobile */
   .cards-wrap {
-    height: 120px;
+    height: 110px;
   }
 
   .fan-card {
-    width: 64px;
-    height: 64px;
-    margin-left: -32px;
+    width: 56px;
+    height: 56px;
+    margin-left: -28px;
     border-radius: 8px;
   }
 
   .fan-card img {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
 
-  .fan-card-1 { --tx: -108px; --rot: -16deg; }
-  .fan-card-2 { --tx: -68px; --rot: -9deg; }
-  .fan-card-3 { --tx: -28px; --rot: -3deg; }
-  .fan-card-4 { --tx: 12px; --rot: 4deg; }
-  .fan-card-5 { --tx: 52px; --rot: 10deg; }
-  .fan-card-6 { --tx: 92px; --rot: 17deg; }
+  .fan-card-1 { --tx: -86px; --rot: -16deg; }
+  .fan-card-2 { --tx: -54px; --rot: -9deg; }
+  .fan-card-3 { --tx: -22px; --rot: -3deg; }
+  .fan-card-4 { --tx: 10px; --rot: 4deg; }
+  .fan-card-5 { --tx: 42px; --rot: 10deg; }
+  .fan-card-6 { --tx: 74px; --rot: 17deg; }
 
   /* CTA buttons — stack vertically */
   .cta-row {

@@ -2272,8 +2272,8 @@ body.card-form-open .editor-toolbar {
   inset: 0;
   pointer-events: none;
   background:
-    linear-gradient(180deg, transparent 45%, rgba(6, 0, 16, 0.78) 100%),
-    rgba(6, 0, 16, var(--ag-dim, 0.35));
+    linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.78) 100%),
+    rgba(0, 0, 0, var(--ag-dim, 0.35));
 }
 
 .ag-panel__label {
