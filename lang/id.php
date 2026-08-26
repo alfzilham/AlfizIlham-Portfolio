@@ -24,8 +24,8 @@ return [
     'hero_cta_primary' => 'Ayo Berkolaborasi',
     'hero_cta_secondary' => 'Lihat Hasil Kerja',
     'hero_stats_title' => '500+ Komisi Selesai',
-    'hero_stats_item1' => '50+ Proyek Selesai',
-    'hero_stats_item2' => '4+ Tahun Pengalaman',
+    'hero_stats_item1' => '20+ Proyek Desain',
+    'hero_stats_item2' => '4+ Tahun Berkarya',
 
     // Curved Marquee
     'curved_text' => 'Alfiz Ilham ✦ Fullstack Developer & AI Engineer ✦',
@@ -37,21 +37,21 @@ return [
     'about_cta_primary' => 'Mari Bicara',
     'about_cta_secondary' => 'Unduh CV',
     'about_role' => 'Fullstack Developer, AI-Integrated Apps',
-    'about_stat1_number' => '50+',
-    'about_stat1_label' => 'Proyek Selesai',
+    'about_stat1_number' => '20+',
+    'about_stat1_label' => 'Proyek Desain',
     'about_stat2_number' => '4+',
     'about_stat2_label' => 'Tahun Pengalaman',
 
     // Bio Stats
     'bio_statement' => 'Membangun perangkat lunak dan alur kerja AI untuk website produksi, alat, dan proyek berbasis data. Dengan latar belakang desain dan 500+ komisi, saya menghasilkan kerja yang fungsional dan rapi.',
     'bio_stat1_label' => 'Proyek Selesai',
-    'bio_stat1_value' => '50+',
+    'bio_stat1_value' => '20+',
     'bio_stat2_label' => 'Tahun Pengalaman',
     'bio_stat2_value' => '4+',
     'bio_stat3_label' => 'Tech Stack Dikuasai',
     'bio_stat3_value' => '20+',
     'bio_stat4_label' => 'Klien Puas',
-    'bio_stat4_value' => '30+',
+    'bio_stat4_value' => '10+',
 
     // Skills
     'skills_heading' => 'Keahlian Saya',

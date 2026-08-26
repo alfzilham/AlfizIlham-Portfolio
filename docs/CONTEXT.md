@@ -6,13 +6,13 @@ Project background, goals, audience, and brand context. Read this first before A
 
 ## 1. Project Summary
 
-A personal portfolio website for **Alfiz Ilham**, a Computer Engineering (Teknik Komputer) student at Universitas Syiah Kuala (Aceh, Indonesia) who positions himself professionally as a **"Software & AI Engineer"**. He is also co-founder of **althentic.dev**, a web development service startup.
+A personal portfolio website for **Alfiz Ilham**, a Computer Engineering (Teknik Komputer) student at Universitas Syiah Kuala (Aceh, Indonesia) who positions himself professionally as a **"Fullstack Developer, AI-Integrated Apps"**.
 
 The site is a single-page (`index.php`) PHP MVC portfolio combining:
 
 - Software/web development case studies (19 website projects)
 - Design work (9 pieces — posters, banners, brand assets)
-- Naskh calligraphy portfolio (18 pieces, 7-time calligraphy champion, 500+ commissions)
+- Naskh calligraphy portfolio (18 pieces, 10+ competition wins, 500+ commissions)
 - A full tech-stack directory (filterable, searchable — 56 tools)
 - A working contact form + embedded map (Banda Aceh)
 - Community/organizational activity documentation (B&W photo gallery)
@@ -26,7 +26,7 @@ The site is bilingual (EN/ID toggle in navbar) — English is the default langua
 | Goal | Why it matters |
 |------|---------------|
 | **Convert visitors into clients/leads** | Primary CTA repeats throughout ("Let's Build Something", "Start a Project", "Send Message") — this is a service-selling site, not just a resume. |
-| **Establish credibility across 3 disciplines** | Alfiz isn't just a developer — the site must convincingly present dev, design, _and_ calligraphy as serious, professional skill areas (500+ commissions, 7-time champion). |
+| **Establish credibility across 3 disciplines** | Alfiz isn't just a developer — the site must convincingly present dev, design, _and_ calligraphy as serious, professional skill areas (20+ design projects, 500+ commissions, 10+ competition wins). |
 | **Show breadth of technical skill** | The full tech-stack grid + filterable tool directory (56 tools) exists to reassure technical clients/recruiters that stack knowledge is real and current. |
 | **Feel personal and human, not templated** | Heavy use of a custom 3D mascot illustration, playful marquees, and a monochrome-but-bold visual identity — differentiates from generic portfolio templates. |
 | **Local + international reach** | Contact section centers on Banda Aceh (local market, UMKM clients via althentic.dev) while the overall English-first copy and "outside Indonesia" FAQ signal openness to international clients. |
@@ -47,7 +47,7 @@ The site is bilingual (EN/ID toggle in navbar) — English is the default langua
 - **Bold, confident, minimal** — monochrome black/white palette, oversized typography, no gradients or decorative color. Confidence communicated through scale and contrast, not color.
 - **Playful but professional** — the 3D mascot avatar, kinetic marquee text, and floating icon badges add personality without undermining the professional tone of the copy itself.
 - **Multi-disciplinary, not scattered** — dev + AI + design + calligraphy are presented as facets of one coherent identity ("Software & AI Engineer" who also does calligraphy), not as unrelated hobbies.
-- **Evidence-driven** — nearly every section backs claims with numbers: 50+ projects, 4+ years experience, 20+ tech stack, 30+ clients, 500+ calligraphy commissions, 7-time champion, 19/9/18 project breakdown.
+- **Evidence-driven** — sections back claims with CV-supported numbers: 20+ design projects, 4+ years of calligraphy, 500+ commissions, 10+ competition wins, and the 19/9/18 project breakdown.
 
 ---
 

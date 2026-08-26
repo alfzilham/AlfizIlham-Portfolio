@@ -24,8 +24,8 @@ return [
     'hero_cta_primary' => 'Let\'s Build Something',
     'hero_cta_secondary' => 'View My Work',
     'hero_stats_title' => '500+ Commissions Delivered',
-    'hero_stats_item1' => '50+ Projects Completed',
-    'hero_stats_item2' => '4+ Years Experience',
+    'hero_stats_item1' => '20+ Design Projects',
+    'hero_stats_item2' => '4+ Years of Calligraphy',
 
     // Curved Marquee
     'curved_text' => 'Alfiz Ilham ✦ Fullstack Developer & AI Engineer ✦',
@@ -37,21 +37,21 @@ return [
     'about_cta_primary' => 'Let\'s Talk',
     'about_cta_secondary' => 'Download CV',
     'about_role' => 'Fullstack Developer, AI-Integrated Apps',
-    'about_stat1_number' => '50+',
-    'about_stat1_label' => 'Projects Completed',
+    'about_stat1_number' => '20+',
+    'about_stat1_label' => 'Design Projects',
     'about_stat2_number' => '4+',
     'about_stat2_label' => 'Years Experience',
 
     // Bio Stats
     'bio_statement' => 'Building software and AI workflows for production websites, tools, and data-driven projects. With a background in design and 500+ commissions, I deliver work that\'s both functional and polished.',
     'bio_stat1_label' => 'Projects Completed',
-    'bio_stat1_value' => '50+',
+    'bio_stat1_value' => '20+',
     'bio_stat2_label' => 'Years of Experience',
     'bio_stat2_value' => '4+',
     'bio_stat3_label' => 'Tech Stack Mastered',
     'bio_stat3_value' => '20+',
     'bio_stat4_label' => 'Clients Satisfied',
-    'bio_stat4_value' => '30+',
+    'bio_stat4_value' => '10+',
 
     // Skills
     'skills_heading' => 'My Skill Set',

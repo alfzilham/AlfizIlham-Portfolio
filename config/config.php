@@ -4,8 +4,8 @@
  */
 return [
     'name' => 'Alfiz Ilham',
-    'title' => 'Alfiz Ilham — Software & AI Engineer',
-    'description' => 'Full-stack development, AI workflows, design, and digital solutions that make an impact.',
+    'title' => 'Alfiz Ilham — Fullstack Developer, AI-Integrated Apps',
+    'description' => 'Fullstack developer building AI-integrated applications, workflow automation, production websites, and polished digital experiences.',
     'url' => 'https://alfizilham.my.id',
     'email' => 'alfizilham@gmail.com',
     'phone' => '+62 852-1389-6460',
