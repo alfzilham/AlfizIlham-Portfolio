@@ -213,6 +213,7 @@ return [
     'upload_error_required' => 'Please choose an image',
     'upload_error_size' => 'Image exceeds 5 MB limit',
     'upload_error_type' => 'Only JPG, PNG, WebP, or GIF allowed',
+    'upload_error_dimensions' => 'Image dimensions are too large',
 
     // Lightbox
     'lightbox_close' => 'Close',

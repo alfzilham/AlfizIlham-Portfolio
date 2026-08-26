@@ -213,6 +213,7 @@ return [
     'upload_error_required' => 'Silakan pilih gambar',
     'upload_error_size' => 'Ukuran gambar melebihi 5 MB',
     'upload_error_type' => 'Hanya JPG, PNG, WebP, atau GIF yang diizinkan',
+    'upload_error_dimensions' => 'Dimensi gambar terlalu besar',
 
     // Lightbox
     'lightbox_close' => 'Tutup',

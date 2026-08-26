@@ -24,6 +24,8 @@ class AdminController
         $hash = config('admin_password_hash');
 
         if ($hash && $password !== '' && password_verify($password, $hash)) {
+            // Rotate the session ID on privilege elevation (session fixation defense)
+            session_regenerate_id(true);
             $_SESSION['is_admin'] = true;
             json_response(['success' => true]);
         }
@@ -292,6 +294,16 @@ class AdminController
         $mime = (new finfo(FILEINFO_MIME_TYPE))->file($file['tmp_name']);
         if (!in_array($mime, $allowed, true)) {
             return ['ok' => false, 'error' => i18n::t('upload_error_type')];
+        }
+
+        // Reject oversized pixel dimensions BEFORE decoding (decompression-bomb guard)
+        $info = @getimagesize($file['tmp_name']);
+        if ($info === false) {
+            return ['ok' => false, 'error' => i18n::t('upload_error_type')];
+        }
+        [$infoW, $infoH] = $info;
+        if ($infoW * $infoH > 24000000 || max($infoW, $infoH) > 8000) {
+            return ['ok' => false, 'error' => i18n::t('upload_error_dimensions')];
         }
 
         if (!extension_loaded('gd')) {
