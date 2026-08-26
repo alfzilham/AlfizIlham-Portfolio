@@ -171,7 +171,7 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 - Floating “Ask Alfiz” widget opens an accessible in-page conversation panel.
 - `POST /api/chat` accepts one message (2–1000 characters), enforces a configurable per-IP minute limit, and returns a concise grounded answer or a friendly unavailable message.
 - Answers use the visitor question language (EN/ID), the static CV, and relevant indexed showcase projects/certificates. The assistant must not invent portfolio facts.
-- Admin create/update/delete for showcase projects and certificates synchronizes a derived Neon pgvector knowledge index. SQLite stays authoritative and a sync failure does not discard an editor save.
+- Admin create/update/delete for showcase projects and certificates synchronizes a derived SQLite knowledge index using embeddings and PHP cosine similarity. SQLite stays authoritative and an indexing failure does not discard an editor save.
 - The widget appends answers with `textContent`; AI output is never injected as HTML.
 
 **Acceptance criteria**: keyboard users can open, close, and submit with Enter; the UI announces new responses; a chat failure is safe and understandable; newly saved editor content becomes retrievable after successful sync.

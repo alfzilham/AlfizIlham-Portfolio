@@ -37,7 +37,7 @@ class EmbeddingService
 
         $data = self::request($url, ['Authorization: Bearer ' . $token], $payload, 20);
         $vector = self::normaliseVector($data);
-        return ['vector' => $vector, 'provider' => 'huggingface', 'model' => $model];
+        return ['vector' => $vector, 'provider' => 'huggingface', 'model' => $model, 'dimension' => count($vector)];
     }
 
     private static function embedWithOpenRouter($text)
@@ -53,7 +53,8 @@ class EmbeddingService
         ], ['model' => $model, 'input' => $text], 15);
         $vector = $data['data'][0]['embedding'] ?? null;
         if (!is_array($vector)) throw new RuntimeException('OpenRouter returned no embedding.');
-        return ['vector' => self::normaliseVector($vector), 'provider' => 'openrouter', 'model' => $model];
+        $vector = self::normaliseVector($vector);
+        return ['vector' => $vector, 'provider' => 'openrouter', 'model' => $model, 'dimension' => count($vector)];
     }
 
     private static function normaliseVector($response)
@@ -65,24 +66,6 @@ class EmbeddingService
 
     private static function request($url, $headers, $payload, $timeout)
     {
-        $curl = curl_init($url);
-        curl_setopt_array($curl, [
-            CURLOPT_POST => true,
-            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => $timeout,
-            CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_HTTPHEADER => array_merge(['Content-Type: application/json', 'Accept: application/json'], $headers),
-        ]);
-        $body = curl_exec($curl);
-        $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-        $error = curl_error($curl);
-        curl_close($curl);
-        if ($body === false || $status < 200 || $status >= 300) {
-            throw new RuntimeException('Embedding request failed' . ($status ? " ({$status})" : '') . ($error ? ': ' . $error : '.'));
-        }
-        $data = json_decode($body, true);
-        if (!is_array($data)) throw new RuntimeException('Embedding response is not JSON.');
-        return $data;
+        return HttpClient::postJson($url, $headers, $payload, $timeout);
     }
 }

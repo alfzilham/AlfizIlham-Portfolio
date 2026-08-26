@@ -6,6 +6,7 @@ RewriteRule ^(?:index\.php)?/?$ /%1 [R=301,L,NE]
 
 # /index.php → redirect to root / (hanya jika tanpa query string)
 RewriteCond %{QUERY_STRING} ^$
+RewriteCond %{THE_REQUEST} \s/+[^\s?]*index\.php(?:[?\s]) [NC]
 RewriteRule ^(.*)index\.php$ / [L,R=301]
 
 # Clean URLs — strip .php extension (hanya page request, bukan API)

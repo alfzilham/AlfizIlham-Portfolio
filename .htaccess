@@ -26,6 +26,12 @@ RewriteRule ^assets/(.*)$ public/assets/$1 [L]
 RewriteRule ^(privacy|terms)$ public/$1.php [L]
 RewriteCond %{THE_REQUEST} \s/+[^\s?]*public(?:/|\?|\s) [NC]
 RewriteRule ^public(?:/index\.php)?/?$ ../ [R=301,L]
+
+# Route clean root requests (including /api/*) through the public front controller.
+RewriteRule ^api/(.*)$ public/index.php?/api/$1 [L,QSA]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ public/index.php [L,QSA]
 RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK) [NC]
 RewriteRule .* - [F]
 

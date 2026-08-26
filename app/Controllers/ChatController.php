@@ -53,23 +53,13 @@ class ChatController
 
     private function callOpenRouter($key, $model, array $messages)
     {
-        $body = json_encode(['model' => $model, 'messages' => $messages, 'temperature' => 0.2, 'max_tokens' => 450], JSON_UNESCAPED_UNICODE);
-        $curl = curl_init('https://openrouter.ai/api/v1/chat/completions');
-        curl_setopt_array($curl, [
-            CURLOPT_POST => true, CURLOPT_POSTFIELDS => $body, CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30, CURLOPT_CONNECTTIMEOUT => 5,
-            CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'Authorization: Bearer ' . $key,
-                'HTTP-Referer: ' . env('APP_URL', config('url')), 'X-OpenRouter-Title: Alfiz Ilham Portfolio'],
-        ]);
-        $response = curl_exec($curl);
-        $status = (int) curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
-        $error = curl_error($curl);
-        curl_close($curl);
-        $data = is_string($response) ? json_decode($response, true) : null;
+        $data = HttpClient::postJson('https://openrouter.ai/api/v1/chat/completions', [
+            'Authorization: Bearer ' . $key,
+            'HTTP-Referer: ' . env('APP_URL', config('url')),
+            'X-OpenRouter-Title: Alfiz Ilham Portfolio',
+        ], ['model' => $model, 'messages' => $messages, 'temperature' => 0.2, 'max_tokens' => 450], 30);
         $content = $data['choices'][0]['message']['content'] ?? null;
-        if ($status < 200 || $status >= 300 || !is_string($content) || trim($content) === '') {
-            throw new RuntimeException('OpenRouter request failed' . ($status ? " ({$status})" : '') . ($error ? ': ' . $error : '.'));
-        }
+        if (!is_string($content) || trim($content) === '') throw new RuntimeException('OpenRouter returned no answer.');
         return trim($content);
     }
 

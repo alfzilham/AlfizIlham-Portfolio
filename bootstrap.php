@@ -59,13 +59,15 @@ require_once APP_PATH . '/Models/Gallery.php';
 require_once APP_PATH . '/Models/Visitor.php';
 require_once APP_PATH . '/Models/ShowcaseProject.php';
 require_once APP_PATH . '/Models/Certificate.php';
+require_once APP_PATH . '/Models/KnowledgeChunk.php';
 
 // Load services
 require_once APP_PATH . '/Services/ContactService.php';
 require_once APP_PATH . '/Services/VisitorService.php';
 require_once APP_PATH . '/Services/EmbeddingService.php';
+require_once APP_PATH . '/Services/HttpClient.php';
 require_once APP_PATH . '/Services/RagService.php';
-require_once APP_PATH . '/Services/NeonSyncService.php';
+require_once APP_PATH . '/Services/KnowledgeIndexService.php';
 
 // Load controllers
 require_once APP_PATH . '/Controllers/PageController.php';

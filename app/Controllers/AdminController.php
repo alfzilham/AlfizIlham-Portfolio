@@ -138,7 +138,7 @@ class AdminController
 
         $id = ShowcaseProject::create($title, $description, $upload['path'], $link);
         $card = ShowcaseProject::find($id);
-        $sync = NeonSyncService::syncShowcase($card);
+        $sync = KnowledgeIndexService::syncShowcase($card);
         json_response(['success' => true, 'card' => $card, 'knowledgeSync' => $sync], 201);
     }
 
@@ -168,7 +168,7 @@ class AdminController
 
         ShowcaseProject::update($id, $title, $description, $imagePath, $link);
         $card = ShowcaseProject::find($id);
-        $sync = NeonSyncService::syncShowcase($card);
+        $sync = KnowledgeIndexService::syncShowcase($card);
         json_response(['success' => true, 'card' => $card, 'knowledgeSync' => $sync]);
     }
 
@@ -184,7 +184,7 @@ class AdminController
 
         self::deleteImageFile($existing['image']);
         ShowcaseProject::delete($id);
-        json_response(['success' => true, 'knowledgeSync' => NeonSyncService::delete('project', $id)]);
+        json_response(['success' => true, 'knowledgeSync' => KnowledgeIndexService::delete('project', $id)]);
     }
 
     // ──────────────────────────────────────────────
@@ -225,7 +225,7 @@ class AdminController
 
         $id = Certificate::create($title, $company, $credentialId, $credentialLink, $upload['path']);
         $certificate = Certificate::find($id);
-        $sync = NeonSyncService::syncCertificate($certificate);
+        $sync = KnowledgeIndexService::syncCertificate($certificate);
         json_response(['success' => true, 'certificate' => $certificate, 'knowledgeSync' => $sync], 201);
     }
 
@@ -256,7 +256,7 @@ class AdminController
 
         Certificate::update($id, $title, $company, $credentialId, $credentialLink, $imagePath);
         $certificate = Certificate::find($id);
-        $sync = NeonSyncService::syncCertificate($certificate);
+        $sync = KnowledgeIndexService::syncCertificate($certificate);
         json_response(['success' => true, 'certificate' => $certificate, 'knowledgeSync' => $sync]);
     }
 
@@ -272,7 +272,7 @@ class AdminController
 
         self::deleteImageFile($existing['image']);
         Certificate::delete($id);
-        json_response(['success' => true, 'knowledgeSync' => NeonSyncService::delete('certificate', $id)]);
+        json_response(['success' => true, 'knowledgeSync' => KnowledgeIndexService::delete('certificate', $id)]);
     }
 
     /**
