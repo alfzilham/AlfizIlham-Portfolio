@@ -2199,7 +2199,7 @@ body.card-form-open .editor-toolbar {
 
 .accordion-gallery {
   --ag-accent: #ffffff;
-  --ag-overlay: #060010;
+  --ag-overlay: #000000;
   --ag-text: #ffffff;
   --ag-gap: 10px;
   --ag-radius: 16px;
