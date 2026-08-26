@@ -12,7 +12,8 @@ class ChatController
             json_response(['error' => 'Please send a question between 2 and 1000 characters.'], 422);
         }
         if (!$this->allowRequest(Request::ip())) {
-            json_response(['error' => 'Too many requests. Please try again in a minute.'], 429);
+            header('Retry-After: 60');
+            json_response(['error' => 'Batas chat tercapai. Silakan coba lagi setelah 1 menit.'], 429);
         }
 
         try {
@@ -23,9 +24,13 @@ class ChatController
         } catch (Throwable $e) {
             error_log('Chat request failed: ' . $e->getMessage());
             $isId = $this->isIndonesian($question);
-            json_response(['error' => $isId
+            $message = $e->getMessage();
+            $isRateLimited = strpos($message, '(429)') !== false;
+            json_response(['error' => $isRateLimited
+                ? ($isId ? 'Batas penggunaan AI provider tercapai. Coba lagi dalam beberapa menit; waktu reset mengikuti window provider (dapat berkisar 1 menit hingga 24 jam).' : 'The AI provider limit has been reached. Try again in a few minutes; reset timing follows the provider window (typically 1 minute to 24 hours).')
+                : ($isId
                 ? 'Asisten sedang tidak tersedia. Silakan coba lagi sebentar lagi atau hubungi Alfiz melalui WhatsApp.'
-                : 'The assistant is temporarily unavailable. Please try again shortly or contact Alfiz on WhatsApp.'], 503);
+                : 'The assistant is temporarily unavailable. Please try again shortly or contact Alfiz on WhatsApp.')], $isRateLimited ? 429 : 503);
         }
     }
 
