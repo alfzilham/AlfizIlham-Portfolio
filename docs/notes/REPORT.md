@@ -434,3 +434,825 @@ This was a source/configuration review, not a live penetration test. The followi
 The application has useful baseline controls—prepared SQL statements, session-gated admin handlers, re-encoded image uploads, path-safe deletion, and Apache protections—but it is not safe to expose the editor while the documented default password remains configured. The confirmed reflected XSS on legal pages further raises risk because it can execute in the same origin as an authenticated editor session.
 
 Prioritize SEC-001 and SEC-002 before public deployment, then complete CSRF/session/ACL hardening and production configuration verification. No remediation was applied during this audit.
+
+---
+
+# Accessibility, Performance & Duplicate Code Audit
+
+**Audit Date:** 2026-08-26
+
+**Project:** `C:\xampp\htdocs\alfizilham`
+
+**Audit Mode:** Read-Only
+
+## 1. Executive Summary
+
+The project is a server-rendered vanilla PHP portfolio application with a custom MVC structure, SQLite/PDO, vanilla CSS/JavaScript, and a single-page UI with custom interactive controls. This audit found confirmed accessibility issues in keyboard operation and programmatic form feedback, a likely first-visit performance cost from synchronous external geolocation, and structural duplication in the admin CRUD and legal-page templates.
+
+The highest usability concern is that custom dropdown triggers are deliberately removed from the tab order. The highest performance concern is a synchronous outbound HTTP lookup during request processing for a new visitor. The most material maintainability duplication is the parallel card/certificate CRUD implementation, which has already grown separate but substantially similar controller/model paths.
+
+No runtime benchmark, browser assistive-technology session, Lighthouse run, database mutation, dependency installation, or source modification was performed. Findings whose practical impact depends on runtime/deployment conditions are labelled accordingly.
+
+## 2. Audit Scope
+
+The read-only review covered the application architecture and all source areas relevant to rendered UI and performance: `public/index.php`, custom routing, controllers, models, services, PHP views/partials/layouts, JavaScript UI code, CSS/asset loading declarations, `.htaccess`, configuration, database-access code, and third-party resource declarations.
+
+### Project reconnaissance
+
+* **Architecture/framework:** Vanilla PHP MVC; no application framework or Composer manifest was found.
+* **PHP/database:** PHP 8.x is documented in `AGENT.md`; SQLite is accessed via PDO in `app/Core/Database.php`.
+* **Frontend:** Server-rendered PHP templates, vanilla CSS, and vanilla JavaScript in `public/assets/js/main.js`; no CSS framework was identified.
+* **Routing/controllers:** `public/index.php` registers a custom `Router`, `PageController`, `ApiController`, and `AdminController`.
+* **Views:** `views/layouts/main.php` composes section and partial templates through `View`.
+* **Endpoints:** Public contact/visitor/tools/projects/cards routes plus session-protected editor CRUD routes for showcase cards and certificates.
+* **Assets:** CSS is loaded in the document head; JavaScript and third-party scripts are loaded near the end of `main.php`. Fonts, icon libraries, maps, animation libraries, and Chart.js are CDN resources.
+* **Image handling:** Admin uploads are re-encoded to WebP by GD; most content images declare `loading="lazy"`.
+
+## 3. Methodology
+
+The audit used static source-code and configuration inspection. Accessibility review considered applicable WCAG 2.1/2.2 concepts—semantic controls, keyboard access, labels, validation feedback, accessible names, dialogs, landmarks, headings, and dynamic content. Performance review classified observations as static code findings, likely runtime issues, or needs-benchmark items. Duplicate-code review compared exact and structural similarities across controllers, models, templates, and JavaScript.
+
+The installed UI-guideline skill could not be read because the environment repeatedly failed to create a Windows subprocess for that path; no substitute external scanner was used. This limitation does not affect the direct source evidence cited below, but visual contrast and runtime assistive-technology behavior remain unverified.
+
+## 4. Accessibility Findings
+
+## [HIGH] Custom Dropdown Triggers Are Removed From Keyboard Tab Navigation
+
+**ID:** AUDIT-001
+
+**Category:** Accessibility
+
+**Status:** Confirmed Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File: `views/sections/contact.php`
+* Class: N/A
+* Function: Contact form custom dropdown markup
+* Line/reference: country-code and service custom dropdown trigger buttons, including `tabindex="-1"`; JavaScript dropdown initialization is in `public/assets/js/main.js`
+
+**Evidence:**
+
+The country-code and service dropdown trigger elements are native `<button>` elements but explicitly include `tabindex="-1"`. They open custom dropdown popups, while the actual associated values are stored in hidden inputs. No native `<select>` alternative is present in the rendered template.
+
+**Problem:**
+
+Removing the primary trigger from sequential keyboard navigation prevents keyboard-only users from reaching and operating those custom choices through normal Tab navigation. Because the visible control holds the interaction and the form value is hidden, this affects completion of the contact form rather than merely a cosmetic control.
+
+**Impact:**
+
+Keyboard-only users, users of switch devices, and some screen-reader workflows may be unable to choose country/service values or understand how to activate them. This can block contact-form submission.
+
+**Root Cause:**
+
+A custom dropdown pattern was implemented while intentionally suppressing focusability of its visible buttons.
+
+**Recommendation:**
+
+Prefer a semantic `<select>` when the design permits. If a custom combobox is necessary, keep its trigger focusable, expose an accessible name, implement Arrow/Enter/Escape keyboard behavior, maintain focus/state, and synchronize the hidden value.
+
+**Implementation Guidance:**
+
+Do not add ARIA alone to a non-working control. Either use a labelled native select, or follow the WAI-ARIA combobox/listbox interaction model with one tab stop and predictable focus handling.
+
+**Regression Risk:**
+
+Changing focus order can expose assumptions in existing JavaScript popup handling and mobile styling.
+
+**Verification:**
+
+Using keyboard only, Tab to every contact field, open each choice, select an option, close it with Escape, and submit the form. Test with at least one screen reader and browser combination.
+
+---
+
+## [MEDIUM] Custom Form Fields Lack Reliably Associated Programmatic Labels
+
+**ID:** AUDIT-002
+
+**Category:** Accessibility
+
+**Status:** Confirmed Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File: `views/sections/contact.php`
+* Class: N/A
+* Function: Contact form field markup
+* Line/reference: phone, service, and budget label/group markup; visible `<label>` elements preceding wrapper `<div>` elements instead of targeting the nested input/control
+
+**Evidence:**
+
+Several labels are standalone elements without a `for` attribute and do not wrap the relevant nested control. For example, the phone label is followed by a wrapper containing `#contactPhone`; similarly, the service and budget labels precede custom-control wrappers. The input elements do not declare `aria-label` or `aria-labelledby` linking them to those labels.
+
+**Problem:**
+
+A visible caption is not necessarily an accessible name. Assistive technologies can announce an unlabeled telephone input or a generic button, leaving users without the field purpose.
+
+**Impact:**
+
+Screen-reader users can have difficulty identifying and completing important contact fields; voice-control users may also lack a stable visible-label target.
+
+**Root Cause:**
+
+Visual grouping was used in place of explicit HTML label/control association.
+
+**Recommendation:**
+
+Associate each label with exactly one form control via `for`/`id`, or use `aria-labelledby` for composite widgets. Use `fieldset`/`legend` for genuinely grouped controls such as phone country code plus local number.
+
+**Implementation Guidance:**
+
+Give the phone label `for="contactPhone"`; for a custom service combobox, reference the visible service label from the focusable trigger. Keep the semantic relationship independent of styling wrappers.
+
+**Regression Risk:**
+
+Low. CSS selectors or JavaScript that target a particular DOM nesting may need a small compatibility check.
+
+**Verification:**
+
+Inspect the accessibility tree and confirm each interactive form field has a single, meaningful accessible name matching its visible label.
+
+---
+
+## [MEDIUM] Client-Side Validation Feedback Is Not Programmatically Announced
+
+**ID:** AUDIT-003
+
+**Category:** Accessibility
+
+**Status:** Confirmed Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File: `views/sections/contact.php`, `views/layouts/main.php`
+* Class: N/A
+* Function: contact/editor form error and status regions
+* Line/reference: `form` elements use `novalidate`; errors are plain `<span>` elements such as `#nameError`; status is `<div class="form-status" id="formStatus" hidden>`
+
+**Evidence:**
+
+The contact and editor forms opt out of browser constraint validation via `novalidate`. Their error/status elements have no `role="alert"`, `aria-live`, `aria-describedby`, or `aria-invalid` relationship in the rendered markup. The same pattern appears in the login/card/certificate modal forms.
+
+**Problem:**
+
+When JavaScript reveals or changes a visually displayed error, assistive technologies are not given a reliable announcement or a programmatic relation between the input and its error.
+
+**Impact:**
+
+Users of screen readers may submit an invalid form without hearing why it failed, especially where focus remains on the submit button or another field.
+
+**Root Cause:**
+
+Custom validation UI replaces native validation without corresponding accessible-error semantics.
+
+**Recommendation:**
+
+On validation failure, mark affected controls with `aria-invalid="true"`, reference concise error text with `aria-describedby`, announce a summary/status through a suitable live region, and move focus predictably to the first invalid control or an error summary.
+
+**Implementation Guidance:**
+
+Use a single persistent `aria-live="polite"` status region for non-critical updates and an alert/summary for submission failures. Do not make every field a live region, because that produces noisy announcements.
+
+**Regression Risk:**
+
+Incorrectly broad live regions can cause duplicate announcements; test asynchronous submit success and failure paths.
+
+**Verification:**
+
+Submit empty/invalid fields using a screen reader. Confirm the first invalid field is reached or clearly identified and that its associated error is announced once.
+
+---
+
+## [LOW] Focus Management for Custom Modals Requires Runtime Verification
+
+**ID:** AUDIT-004
+
+**Category:** Accessibility
+
+**Status:** Needs Verification
+
+**Confidence:** Medium
+
+**Location:**
+
+* File: `views/layouts/main.php`, `public/assets/js/main.js`
+* Class: N/A
+* Function: editor login, card, certificate, delete, timeline, and lightbox dialog handling
+* Line/reference: dialog containers include `role="dialog"` and `aria-modal="true"`; custom open/close behavior is implemented in `main.js`
+
+**Evidence:**
+
+The templates define multiple custom dialogs and overlays. They correctly expose dialog semantics in several places, but static template evidence alone does not establish that focus moves into a dialog on open, remains contained while open, returns to its invoking control on close, or that Escape behavior works across all paths.
+
+**Problem:**
+
+Dialogs without complete focus management can allow keyboard focus to move behind the overlay or leave users stranded after close.
+
+**Impact:**
+
+Potential keyboard-navigation failure in editor, timeline, and lightbox workflows.
+
+**Root Cause:**
+
+Custom dialogs require JavaScript lifecycle behavior beyond static ARIA attributes.
+
+**Recommendation:**
+
+Perform a runtime keyboard review before changing code. If absent, implement initial focus, focus containment, Escape close where appropriate, focus restoration, and accessible dialog labels consistently.
+
+**Implementation Guidance:**
+
+Use a tested focus-trap utility or one shared dialog helper; avoid implementing divergent focus logic independently for each overlay.
+
+**Regression Risk:**
+
+Focus trapping can interfere with nested dialogs and the custom timeline popup if stack state is not managed.
+
+**Verification:**
+
+Open each dialog with keyboard, cycle Tab/Shift+Tab, close it with keyboard, and verify focus returns to the trigger. Repeat with a screen reader.
+
+## 5. Performance Findings
+
+## [MEDIUM] New-Visitor Requests Perform a Synchronous External Geolocation Call
+
+**ID:** AUDIT-005
+
+**Category:** Performance
+
+**Status:** Likely Runtime Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File: `public/index.php`, `app/Services/VisitorService.php`
+* Class: `VisitorService`
+* Function: `track()`, `getCountry()`
+* Line/reference: `public/index.php:20`; `VisitorService::track()` calls `getCountry()`; `getCountry()` calls `file_get_contents("http://ip-api.com/json/{$ip}..." )` with a two-second timeout
+
+**Evidence:**
+
+Visitor tracking runs before every routed page/API response, except once the session flag is set. For a new non-private/non-local visitor, `getCountry()` executes a blocking HTTP request to ip-api.com. The stream context timeout is two seconds and no asynchronous queue/cache is used.
+
+**Problem:**
+
+Availability and latency of an external service are placed on the request critical path. A slow/unreachable lookup can delay the initial page response by up to the configured timeout.
+
+**Impact:**
+
+Likely elevated first-visit TTFB and degraded perceived performance for new visitors, especially when the third-party service is slow. Subsequent requests in the same session are skipped.
+
+**Root Cause:**
+
+Synchronous enrichment is coupled to request-time analytics recording.
+
+**Recommendation:**
+
+Decouple geolocation from the page response: use a short-lived cache, background/queue processing, deferred analytics, or accept a default/unknown country if the lookup is not immediately available.
+
+**Implementation Guidance:**
+
+Keep visitor counting local and make country enrichment best-effort. If a synchronous fallback is retained, lower the timeout and monitor lookup failure/latency.
+
+**Regression Risk:**
+
+Country statistics may arrive later or be less complete; define whether analytics accuracy or page responsiveness has priority.
+
+**Verification:**
+
+Measure server response timings for a fresh session with normal, delayed, and blocked ip-api connectivity. Confirm the revised path does not block page rendering.
+
+---
+
+## [LOW] Homepage Performs Numerous Independent Reads and Schema Checks Per Request
+
+**ID:** AUDIT-006
+
+**Category:** Performance
+
+**Status:** Potential Issue / Needs Benchmark
+
+**Confidence:** High
+
+**Location:**
+
+* File: `app/Controllers/PageController.php`, `app/Models/Service.php`, `app/Models/ShowcaseProject.php`, `app/Models/Certificate.php`
+* Class: `PageController`, `Service`, `ShowcaseProject`, `Certificate`
+* Function: `PageController::index()`, `all()`, `ensureImageColumn()`, `ensureTable()`
+* Line/reference: `PageController::index()` calls multiple `::all()` methods plus visitor count; the model ensure methods use `PRAGMA table_info`, `CREATE TABLE IF NOT EXISTS`, and/or `ALTER TABLE` checks
+
+**Evidence:**
+
+One homepage render loads projects, showcase cards, tools, FAQs, FAQ categories, testimonials, services, gallery, certificates, and a visitor count. `Service::all()`, `ShowcaseProject::all()`, and `Certificate::all()` each include migration/schema-check logic on their first invocation in a PHP request. The visitor API similarly performs multiple aggregate queries.
+
+**Problem:**
+
+The application makes several separate SQLite reads and repeats schema-introspection/DDL eligibility checks during ordinary web requests. This is structurally avoidable work, although current seeded data is small and no measured slowdown was obtained.
+
+**Impact:**
+
+Potentially higher database/filesystem overhead as traffic or SQLite data grows. The current impact is not quantifiable without a benchmark.
+
+**Root Cause:**
+
+All page data is assembled eagerly and schema migration responsibilities reside in runtime model reads.
+
+**Recommendation:**
+
+Move migrations to deployment/maintenance tasks, keep read models read-only, and benchmark request/query counts before introducing caching or combining queries. Consider modest cache lifetimes only for public, infrequently changing portfolio data.
+
+**Implementation Guidance:**
+
+Instrument query count and request timing first. A cache should be invalidated by editor writes; otherwise, caching can make updated portfolio content appear stale.
+
+**Regression Risk:**
+
+Moving migrations can cause deployment failures if the migration is not run. Caching can create stale public content after admin updates.
+
+**Verification:**
+
+Benchmark a cold and warm homepage/API response, capture SQLite query counts, and confirm schema checks no longer occur in normal requests.
+
+---
+
+## [LOW] Full Third-Party UI Library Set Is Loaded for the Single Page
+
+**ID:** AUDIT-007
+
+**Category:** Performance
+
+**Status:** Potential Issue / Needs Benchmark
+
+**Confidence:** Medium
+
+**Location:**
+
+* File: `views/layouts/main.php`, `public/assets/js/main.js`
+* Class: N/A
+* Function: document asset loading and UI initialization
+* Line/reference: `views/layouts/main.php:21,24,265-269`; consolidated UI initialization in `main.js`
+
+**Evidence:**
+
+The main layout loads Google Fonts, Bootstrap Icons, Leaflet, Lucide, Lenis, GSAP, and Chart.js for the single page. Third-party scripts are loaded on all visits, and `main.js` initializes numerous interactive sections. Several assets are functionally relevant, but source review alone cannot quantify their transfer/execution cost or prove that every library is used on every rendered route.
+
+**Problem:**
+
+The critical page path includes multiple remote resources and a broad JS feature set, which may add network, parse, and execution cost on constrained devices.
+
+**Impact:**
+
+Potential slower interaction readiness and increased transfer size, particularly on mobile/high-latency connections.
+
+**Root Cause:**
+
+Feature libraries are globally included rather than conditionally loaded by need.
+
+**Recommendation:**
+
+Use a performance budget and real-user/Lighthouse measurements before removing or deferring anything. Load route/feature-specific libraries conditionally where measurements show benefit; retain only resources essential for initial content.
+
+**Implementation Guidance:**
+
+Audit actual runtime use of Chart.js and other libraries, pin versions, and consider `defer`/feature-level dynamic imports when compatible with required initialization order.
+
+**Regression Risk:**
+
+Deferring animation/map/icon code can cause visual regressions or race conditions if initialization expects globals synchronously.
+
+**Verification:**
+
+Record a performance trace on mobile and desktop, including transfer sizes, long tasks, LCP, INP, and unused JavaScript. Compare before/after only after a measured change.
+
+## 6. Duplicate Code Findings
+
+## [MEDIUM] Parallel Showcase-Card and Certificate CRUD Flows Duplicate Controller Logic
+
+**ID:** AUDIT-008
+
+**Category:** Duplicate Code
+
+**Status:** Confirmed Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File A: `app/Controllers/AdminController.php`
+* Location A: `createCard()`, `updateCard()`, `deleteCard()` (approximately lines 61-137)
+* File B: `app/Controllers/AdminController.php`
+* Location B: `createCertificate()`, `updateCertificate()`, `deleteCertificate()` (approximately lines 153-231)
+* Similarity/type: Structural duplication
+
+**Evidence:**
+
+Both CRUD families repeat the same sequence: `requireAdmin()`, read/cast route ID where applicable, load existing record, validate fields, optionally call `handleUpload()`, delete the previous image on replacement/deletion, persist through a model, then emit a JSON response. They differ mainly in field names and model calls.
+
+**Problem:**
+
+Cross-cutting behavior such as authorization, upload replacement, not-found handling, error status conventions, or audit logging must be maintained in two parallel paths. A future fix can easily reach one content type but not the other.
+
+**Impact:**
+
+Medium maintainability and consistency risk in a privileged content-management surface; it also increases the test matrix.
+
+**Root Cause:**
+
+Two domain entities were implemented as separate end-to-end CRUD workflows without extracting their shared administrative operation pattern.
+
+**Recommendation:**
+
+When a future feature requires changes to both, extract only the genuinely common pieces: authorization middleware, upload-replacement helper, entity lookup/error helper, and a small interface/metadata map. Keep entity-specific validation and response payloads explicit.
+
+**Implementation Guidance:**
+
+Avoid a large generic CRUD abstraction prematurely. Start with a shared `replaceUploadedImage()`/`deleteOwnedUpload()` helper and consistent request/response helpers, then reassess whether the remaining structural duplication warrants a domain service.
+
+**Regression Risk:**
+
+Over-generalization can obscure the differences between card links/descriptions and certificate fields. Preserve existing response shapes for JavaScript clients.
+
+**Verification:**
+
+After any future refactor, regression-test create/update/delete/error cases for both resource types, including image replacement and missing IDs.
+
+---
+
+## [MEDIUM] Privacy and Terms Pages Duplicate Their Standalone Document Shell
+
+**ID:** AUDIT-009
+
+**Category:** Duplicate Code
+
+**Status:** Confirmed Issue
+
+**Confidence:** High
+
+**Location:**
+
+* File A: `public/privacy.php`
+* Location A: document head, stylesheet links, page wrapper, and back link
+* File B: `public/terms.php`
+* Location B: equivalent document head, stylesheet links, page wrapper, and back link
+* Similarity/type: Exact/structural template duplication
+
+**Evidence:**
+
+Both standalone pages require `bootstrap.php`, render their own HTML document shell, load the same Google Fonts and three local stylesheets, and render nearly identical page/container/back-link markup. They also duplicate the unsafe direct `lang` output previously documented in security finding SEC-002.
+
+**Problem:**
+
+Shared layout behavior must be corrected in two files. The duplicated unsafe language handling demonstrates the practical consistency cost rather than merely a stylistic preference.
+
+**Impact:**
+
+Medium maintenance risk and repeat defect risk for accessibility, security, and asset-loading changes across legal pages.
+
+**Root Cause:**
+
+Legal pages bypass the existing `View` layout/partial system and each own a complete document shell.
+
+**Recommendation:**
+
+At the next planned template change, use a shared legal-page layout/partial or route these pages through the existing view renderer. Centralize language normalization, document metadata, stylesheet inclusion, landmarks, and the return link.
+
+**Implementation Guidance:**
+
+Keep only the legal-page title/body as per-page content. Do not refactor solely for abstraction if the page architecture is scheduled to change; first address the confirmed security issue in both locations.
+
+**Regression Risk:**
+
+URL rewriting and relative asset paths may change when moving files through the main layout. Check `/privacy`, `/terms`, and direct `.php` redirects.
+
+**Verification:**
+
+Compare rendered legal pages before/after for title, styling, navigation target, language behavior, and semantic landmarks.
+
+---
+
+## [LOW] Repeated Lazy-Migration Pattern Exists Across Read Models
+
+**ID:** AUDIT-010
+
+**Category:** Duplicate Code
+
+**Status:** Improvement Recommendation
+
+**Confidence:** High
+
+**Location:**
+
+* File A: `app/Models/Service.php`
+* Location A: `ensureImageColumn()`
+* File B: `app/Models/ShowcaseProject.php`
+* Location B: `ensureTable()`
+* File C: `app/Models/Certificate.php`
+* Location C: `ensureTable()`
+* Similarity/type: Structural/logical duplication
+
+**Evidence:**
+
+Each model holds a request-static `$done` guard, inspects schema with `PRAGMA table_info`, then conditionally executes DDL before read operations. The table/column details differ, but the migration-on-read pattern is repeated.
+
+**Problem:**
+
+Schema-evolution responsibility is duplicated among domain read models. This duplicates error handling and makes normal request behavior depend on migration state.
+
+**Impact:**
+
+Low direct maintainability impact, with a related potential performance/operational cost described in AUDIT-006.
+
+**Root Cause:**
+
+No dedicated deployment migration mechanism is used.
+
+**Recommendation:**
+
+Adopt one controlled migration entry point when the project next changes schema. Do not create an abstraction simply to remove a few lines; the primary goal is to eliminate DDL from ordinary reads.
+
+**Implementation Guidance:**
+
+Use ordered/idempotent migration files or a single CLI migration command with recorded schema version, executed before web traffic is served.
+
+**Regression Risk:**
+
+Migration ordering and rollback need operational discipline; do not remove legacy checks until deployment procedures are proven.
+
+**Verification:**
+
+Run migration from an empty and an existing database copy, then confirm normal read paths perform no DDL/schema check.
+
+## 7. Cross-Cutting Findings
+
+* The custom dropdown issue (AUDIT-001) and label issue (AUDIT-002) stem from custom visual controls replacing native form semantics. A shared, accessible form-control pattern would reduce both accessibility defects and future duplicated JavaScript.
+* The lazy-migration duplication (AUDIT-010) directly contributes to the potential per-request work in AUDIT-006. This is a relationship between findings, not an additional performance claim.
+* Legal-page duplication (AUDIT-009) has already propagated a security defect recorded in SEC-002. Centralizing shared rendering reduces future security, accessibility, and asset-consistency drift.
+* The global third-party loading observation (AUDIT-007) must be assessed with real measurements; removing dependencies merely because they are third-party would be an unsupported optimization.
+
+## 8. Strengths / Good Practices
+
+* The main page uses structural landmarks including `main`; templates also use native buttons and links extensively rather than clickable generic elements.
+* Multiple dialog templates provide `role="dialog"`, `aria-modal="true"`, and visible labels. Runtime focus behavior still requires verification.
+* Many images use descriptive `alt` text or intentional empty alternative text for decorative content, and many use native `loading="lazy"`.
+* The main layout includes a viewport meta tag and uses responsive CSS files.
+* Public data access uses a small number of simple PDO prepared-query model methods; no N+1 loop query was found in the inspected controller/model flows.
+* Apache configuration enables gzip compression and sets cache lifetimes for common static asset types.
+* Reusable layout/partial/section primitives already exist for the primary site, providing an appropriate foundation for future consolidation.
+
+## 9. Recommended Improvements
+
+### Priority 1 — High
+
+1. Restore keyboard-operable, labelled contact selectors (AUDIT-001 and AUDIT-002).
+2. Add programmatic form validation feedback and test all contact/editor flows with keyboard and screen reader (AUDIT-003).
+3. Decouple visitor geolocation from the synchronous page request path (AUDIT-005).
+
+### Priority 2 — Medium
+
+1. Runtime-test and, if needed, standardize modal focus lifecycle (AUDIT-004).
+2. Consolidate shared admin CRUD behaviors incrementally, retaining explicit entity-specific validation (AUDIT-008).
+3. Centralize legal-page document/layout behavior while preserving public URLs (AUDIT-009).
+
+### Priority 3 — Low / Evidence-Gated
+
+1. Benchmark database/request work before caching or query consolidation (AUDIT-006).
+2. Establish a performance budget and measure third-party transfer/execution before deferring assets (AUDIT-007).
+3. Move migrations out of request-time read paths in a scheduled schema-management improvement (AUDIT-010).
+
+## 10. Verification Plan
+
+1. Complete keyboard-only and screen-reader acceptance tests for navigation, contact form, editor, dropdowns, dialogs, delete confirmation, timeline picker, and lightbox.
+2. Use browser accessibility-tree inspection and automated checks (for example axe) as support, then manually validate dynamic states and focus order.
+3. Measure cold/warm response times and database query counts with fresh sessions and controlled external-geolocation latency.
+4. Capture mobile and desktop performance traces before any asset-loading change; compare LCP, INP, transfer, long tasks, and unused JavaScript.
+5. Establish regression tests for both card and certificate CRUD flows before consolidating common code.
+6. Compare rendered `/privacy` and `/terms` routes after any template consolidation, including the pre-existing security remediation.
+
+## 11. Audit Limitations
+
+* No live browser, assistive technology, automated accessibility scanner, or visual contrast measurement was run. Color contrast, responsive focus visibility, dynamic ARIA state changes, and modal keyboard behavior need runtime verification.
+* No performance benchmark or production telemetry was collected; no finding claims measured timing, CPU, memory, Core Web Vitals, or transfer sizes.
+* Source evidence cannot prove effective PHP/Apache production configuration, CDN behavior, network latency, browser cache state, or database index definitions.
+* The UI-guideline skill was unavailable to read because the local Windows process launcher repeatedly returned error 1920. Static source inspection continued without it.
+* Exact duplication percentages were intentionally not provided because no similarity tool was run; all duplicate findings cite concrete matching structures instead.
+
+## 12. Final Assessment
+
+The application has a reasonable foundation—native HTML is common, responsive assets are separated, image lazy-loading is present, and the main site already uses reusable templates. However, custom form controls currently undermine keyboard and screen-reader access, and synchronous visitor geolocation can directly delay first-visit responses. Structural duplication in admin and legal-page code raises the probability that fixes will be applied inconsistently.
+
+Address the keyboard/form-feedback issues and external request path first. Then use measured performance data and targeted shared helpers/layouts to improve maintainability without speculative refactoring. This audit applied no source, configuration, database, dependency, or formatting changes; it only appended this report section.
+
+---
+
+# Browser Console Warning & Runtime Intervention Audit
+
+**Audit Date:** 2026-08-26  
+**Project:** `C:\xampp\htdocs\alfizilham`  
+**Audit Mode:** Read-Only static source review
+
+## 1. Executive Summary
+
+Two console-message classes were audited: the repeated browser Tracking Prevention storage notice and the native lazy-image intervention reported at `public/#service:610`. Neither message is evidence of a security vulnerability or of broken functionality by itself.
+
+The project directly loads several third-party browser resources (Google Fonts, jsDelivr, unpkg, Leaflet/CARTO map resources, dynamically loaded EmailJS, and dynamic module resources), any of which could be the origin shown in a Tracking Prevention message. However, the exact blocked URL was not supplied and no project-owned frontend use of `localStorage`, `sessionStorage`, IndexedDB, `document.cookie`, or an iframe was identified in the reviewed source. The Tracking Prevention message therefore cannot be attributed to a particular domain or fixed responsibly without a DevTools capture of the complete message/initiator.
+
+The image intervention is a browser informational behavior triggered by native `loading="lazy"`. The `#service` portion is a URL fragment, not a project file named `public/#service`; it identifies the rendered document/fragment context. Source contains lazy-loaded images and service data passed to JavaScript, but the supplied message does not identify which rendered image was involved. No source evidence shows that project JavaScript depends on that image's deferred `load` event. Lazy loading should not be removed merely to silence the browser message.
+
+## 2. Console Messages Audited
+
+| ID | Exact message | Initial classification | Can be eliminated from application? |
+| --- | --- | --- | --- |
+| CONSOLE-001 | `Tracking Prevention blocked access to storage for <URL>.` | Needs Verification; browser privacy control affecting an unknown third-party resource | Needs Verification |
+| CONSOLE-002 | `public/#service:610 [Intervention] Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113` | Browser behavior / Informational | Partially |
+
+## 3. Tracking Prevention Analysis
+
+### Source reconnaissance relevant to tracking/storage
+
+Project-owned code reviewed in the PHP templates and `public/assets/js/main.js` did not reveal direct calls to `localStorage`, `sessionStorage`, IndexedDB, `document.cookie`, or a project-owned iframe. PHP uses server-side sessions (`session_start()`), which are not equivalent to a third-party browser-storage API call. `VisitorService` records a visitor server-side and calls ip-api.com from PHP; that server-to-server request cannot itself produce a browser console Tracking Prevention warning.
+
+The following externally loaded resources are project-controlled inclusions and are plausible candidates only until the actual blocked URL is captured:
+
+| Resource | Domain | Type | Loaded from | Purpose | Storage API evidenced in project source | First/third party | Can application control inclusion? |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Plus Jakarta Sans | `fonts.googleapis.com`, `fonts.gstatic.com` | stylesheet/font | `views/layouts/main.php` head | typography | None | Third-party | Yes |
+| Bootstrap Icons / Chart.js / dynamic EmailJS | `cdn.jsdelivr.net` | CSS/JavaScript | `views/layouts/main.php`; EmailJS loader in `public/assets/js/main.js` | icons, chart capability, contact email | None in project source; library internals not verified | Third-party | Yes |
+| Leaflet, Lucide, Lenis, GSAP | `unpkg.com` | CSS/JavaScript | `views/layouts/main.php` | map, icons, scrolling, animation | None in project source; library internals not verified | Third-party | Yes |
+| Map tiles/attribution | CARTO/OpenStreetMap domains | image/tile API | map initialization in `public/assets/js/main.js` | map display | Not verified | Third-party | Yes |
+| OGL/module imports, if exercised | `esm.sh` | JavaScript module | dynamic loader in `public/assets/js/main.js` | circular gallery rendering | Not verified | Third-party | Yes |
+| ip-api | `ip-api.com` | server-side HTTP API | `app/Services/VisitorService.php` | country lookup | Not browser storage; PHP request | Third-party server-side | Yes |
+
+No advertising pixel, analytics SDK, project-owned iframe, or explicit browser-storage implementation was established from the reviewed source. External anchor links (for example social media) are navigation links, not automatically loaded embedded resources.
+
+### Per-resource attribution result
+
+The required `<URL>` is absent from the supplied message. Consequently, source cannot determine the resource type, exact domain, actual storage API, or whether the call is direct versus inside a dependency. The browser can block a third-party resource's cookie/localStorage/other storage access independently of whether the application itself reads storage. This is normal privacy-protection behavior and is not a vulnerability finding.
+
+## 4. Lazy Loading Image Intervention Analysis
+
+### Source evidence
+
+* Many template and dynamically rendered image elements declare `loading="lazy"`, including gallery, testimonial, project/card, certificate, and dynamically generated UI images.
+* `views/sections/services.php` does not itself contain a static service `<img>` element; it serializes service data to `window.__SERVICES` for JavaScript rendering.
+* The `#service` token in `public/#service:610` is an in-page fragment pointing at the service section, not a filesystem path. There is no source file named `public/#service` to inspect.
+* The main layout loads `main.js`, which renders/initializes interactive sections. The supplied browser message does not identify the individual image URL, DOM selector, or initiator stack needed to distinguish a service image from another image near that viewport position.
+* No project-owned lazy-loading library was identified; the relevant implementation is the standard HTML `loading` attribute. No project-owned image `load` event dependency was established in the reviewed source.
+
+### Strategy assessment
+
+The service section is below the primary hero content in `views/layouts/main.php`, so lazy loading of its non-critical content images is generally an appropriate native strategy. The browser may replace offscreen lazy images with placeholders and defer their load events. This intervention preserves bandwidth/initial rendering work; it becomes a project problem only if an image is actually required before interaction/visibility, if layout shifts occur, or if application code relies on its early load event. None of those effects is proven by the console line alone.
+
+## 5. Root Cause Analysis
+
+### Tracking Prevention
+
+**Project trigger:** The project includes third-party origins.  
+**Probable direct actor:** A third-party resource/library attempting storage access, or browser privacy logic evaluating it.  
+**Unverified detail:** Exact URL/domain, resource type, storage API, and initiator.  
+**Browser reason:** Tracking Prevention commonly restricts storage for cross-site content to limit cross-site tracking.  
+**Application control:** The project can remove, replace, self-host, or defer a resource only after identifying it; it cannot and should not disable a visitor's privacy protections.
+
+### Lazy-image intervention
+
+**Project trigger:** Native `loading="lazy"` attributes on non-critical images.  
+**Direct actor:** Browser lazy-loading/intervention logic.  
+**Browser reason:** Offscreen image loading is intentionally delayed and represented with placeholders.  
+**Application control:** The project can change an individual image's loading strategy, but doing so solely to remove the message is not justified.  
+**Relevant condition to verify:** Whether the actual affected image is critical/above-the-fold or has JavaScript depending on its early `load` event.
+
+## 6. Findings
+
+### [INFORMATIONAL] Tracking Prevention Warning Cannot Be Attributed Without the Blocked URL
+
+**ID:** CONSOLE-001
+
+**Type:** Needs Verification
+
+**Message:**
+
+`Tracking Prevention blocked access to storage for <URL>.`
+
+**Status:** Needs Verification
+
+**Source:** Unknown external resource; project includes third-party CDN/font/map/email resources.
+
+**Location:** Exact DevTools URL and initiator were not supplied. Candidate inclusions are in `views/layouts/main.php`, with dynamic EmailJS/map/module loading in `public/assets/js/main.js`.
+
+**Root Cause:**
+
+The browser reports an attempted storage access for a resource but the audit input redacts/replaces the identifying URL. Project source has third-party inclusions but no direct project-owned browser-storage call establishing causation.
+
+**Evidence:**
+
+The layout loads Google Fonts, jsDelivr, and unpkg resources; main JavaScript loads EmailJS dynamically and initializes external map/module functionality. Project-owned frontend source reviewed for this audit contains no identified direct `localStorage`, `sessionStorage`, IndexedDB, `document.cookie`, or iframe usage.
+
+**Impact:**
+
+* Functionality: Unknown until the resource is identified; many such blocks are harmless.
+* Performance: Repeated console output can complicate debugging but is not itself a measured performance issue.
+* Accessibility: No direct impact established.
+* Privacy: The browser is applying a privacy protection; this is normally protective.
+* User experience: Usually no visible effect, unless the blocked dependency requires storage for a feature.
+
+**Recommended Fix:**
+
+Capture the full console entry in a clean browser profile, including the complete URL, `Initiator`/stack, Network request, resource type, and whether the feature fails. Only then decide whether the corresponding inclusion should be retained, self-hosted, replaced, or loaded after user consent/action.
+
+**Alternative:**
+
+If the captured URL is a nonessential third-party widget, remove or replace that widget. If it is an essential library feature, accept the browser message when the feature works without storage, rather than advising users to disable Tracking Prevention.
+
+**Verification:**
+
+Use DevTools Console and Network with cache disabled; preserve logs; reproduce from a fresh profile. Record the full URL, `Sec-Fetch-Site`, request initiator, and storage access. Test after any targeted resource change.
+
+**Can Be Eliminated?:** Needs Verification
+
+---
+
+### [INFORMATIONAL] Native Lazy-Image Intervention at the Service Fragment
+
+**ID:** CONSOLE-002
+
+**Type:** Browser
+
+**Message:**
+
+`public/#service:610 [Intervention] Images loaded lazily and replaced with placeholders. Load events are deferred. See https://go.microsoft.com/fwlink/?linkid=2048113`
+
+**Status:** Not an Application Issue
+
+**Source:** Native browser lazy-loading behavior triggered by project image markup using `loading="lazy"`.
+
+**Location:** Rendered `#service` fragment; relevant static source is `views/sections/services.php` (service data hand-off), `views/layouts/main.php` (section order), and image-rendering code in `public/assets/js/main.js`. Exact image/DOM line is Needs Verification because the console message does not include it.
+
+**Root Cause:**
+
+The browser detected native lazy-loaded offscreen image content and deferred its loading event while displaying a placeholder. `#service` is an anchor fragment, not an invalid file or a JavaScript error location.
+
+**Evidence:**
+
+Project templates and JS-generated cards use native `loading="lazy"`; the service section occurs after the hero and several other sections. There is no identified third-party lazy-load library or established project image-load handler whose execution is broken by the deferral.
+
+**Impact:**
+
+* Functionality: No broken functionality demonstrated.
+* Performance: Usually beneficial for initial bandwidth and rendering work; eager loading can worsen initial load.
+* Accessibility: No direct impact demonstrated.
+* Privacy: None.
+* User experience: Potential issue only if the specific image is visually critical, shifts layout, or is needed before user interaction.
+
+**Recommended Fix:**
+
+Keep native lazy loading for confirmed below-the-fold service images. Identify the exact rendered image before changing it. If measurement shows a genuinely critical image is deferred, make only that image eager and consider `fetchpriority="high"` only when it is a primary visual/LCP candidate. Provide dimensions/responsive sources where missing to control layout shift.
+
+**Alternative:**
+
+Accept the intervention message as normal browser behavior when the service image is below the fold and no load-event dependency/visual defect is observed. Do not remove lazy loading globally for console cleanliness.
+
+**Verification:**
+
+In DevTools, select the console message and inspect the DOM/network initiator for the exact image. Throttle network, scroll to `#service`, and check image visibility, layout stability, and any dependent scripts. Measure LCP/CLS before changing a loading attribute.
+
+**Can Be Eliminated?:** Partially
+
+## 7. Recommended Fixes
+
+1. **Capture first, change second:** obtain the full URL and initiator for CONSOLE-001. A resource-specific remediation is impossible without it.
+2. **Audit third-party resources by necessity:** after attribution, remove/replace only nonessential resources that require blocked third-party storage. Prefer direct user action/consent before loading optional widgets.
+3. **Retain below-fold lazy loading:** treat CONSOLE-002 as informational unless runtime verification ties it to an image that is critical or functionally depended on.
+4. **Target individual critical images only:** use eager/high priority only with measured evidence for the actual hero/LCP visual; preserve lazy loading for service/gallery/card content below the fold.
+5. **Improve future diagnosability:** retain source maps/clear resource names in development and capture browser/version/privacy-mode context with console reports.
+
+## 8. Warnings That Cannot Be Eliminated From Application Code
+
+* **Browser Tracking Prevention itself:** application code cannot control a visitor's privacy settings or prevent a browser from reporting storage restrictions. Once the exact resource is known, the project may control only whether it loads that resource.
+* **Native lazy-loading intervention behavior:** browsers may emit this informational intervention for valid `loading="lazy"` images. The project can suppress it only by changing the loading strategy, which may be a performance regression and is not a valid default remedy.
+
+## 9. Verification Plan
+
+1. Reproduce each message in a clean Edge/Chrome profile and preserve the full console text, timestamp, browser version, privacy-mode setting, and complete blocked URL.
+2. Use the Network panel's Initiator column/stack to map Tracking Prevention to one project inclusion or third-party dependency.
+3. Temporarily block only the identified third-party request in DevTools to establish whether any visible functionality actually depends on it; do not change project source during diagnosis.
+4. For the lazy-image message, inspect the exact DOM node, computed `loading`, visibility, dimensions, and network priority. Test scroll-to-service under throttling.
+5. If a change is later approved, retest functionality and measure LCP/CLS/transfer before and after; confirm no new console errors or broken map/contact/gallery behavior.
+
+## 10. Audit Limitations
+
+* The exact `<URL>` in the Tracking Prevention message was not provided. No browser console, Network log, initiator stack, HAR, or runtime DOM was available.
+* The `:610` component of the lazy message is a runtime rendered-document location; it cannot be mapped reliably to a PHP source line without the browser's inspected DOM/source view.
+* This audit did not execute third-party code, inspect minified dependency internals, send requests, alter browser privacy configuration, or benchmark rendering.
+* The local command launcher repeatedly failed with Windows error 1920 during this audit, so no additional filesystem search or graph query could be run. Findings rely on the project source already inspected in the ongoing read-only audit context and explicitly mark unresolved attribution as Needs Verification.
+
+## 11. Final Assessment
+
+Neither requested console message should be treated as a vulnerability or automatically “fixed.” CONSOLE-001 is a browser privacy notice whose source cannot be assigned without the missing URL; project code may only control the inclusion of an identified external resource. CONSOLE-002 is expected browser behavior for a valid performance optimization and should remain unless the exact image is demonstrated to be critical or to break dependent code.
+
+No source code, configuration, database, dependency, asset, or prior report content was changed. This section was appended to the bottom of the existing report only.
