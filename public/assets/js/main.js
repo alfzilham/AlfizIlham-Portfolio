@@ -5,6 +5,7 @@
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  initContentProtection();
   // Data from PHP (passed via window.__* globals in views)
   window.TOOLS_DATA = window.__TOOLS || [];
   window.FAQS_DATA = window.__FAQS || [];
@@ -44,6 +45,38 @@ document.addEventListener("DOMContentLoaded", () => {
   initChatbot();
   initLucideIcons();
 });
+
+/* --------------------------------------------------------------------------
+   CONTENT PROTECTION (casual download/copy deterrence)
+   -------------------------------------------------------------------------- */
+
+function initContentProtection() {
+  const isEditable = (target) => {
+    if (!target || !(target instanceof Element)) return false;
+    return target.matches("input, textarea, select, button, [contenteditable='true']") || !!target.closest("input, textarea, select, button, [contenteditable='true']");
+  };
+
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
+  document.addEventListener("selectstart", (event) => {
+    if (!isEditable(event.target)) event.preventDefault();
+  });
+  document.addEventListener("dragstart", (event) => event.preventDefault());
+  document.addEventListener("copy", (event) => {
+    if (!isEditable(event.target)) event.preventDefault();
+  });
+  document.addEventListener("cut", (event) => {
+    if (!isEditable(event.target)) event.preventDefault();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (isEditable(event.target)) return;
+    const key = String(event.key || "").toLowerCase();
+    const blocked = event.key === "F12" ||
+      (event.ctrlKey && ["c", "s", "u", "p"].includes(key)) ||
+      (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+      (event.metaKey && ["c", "s", "u", "p"].includes(key));
+    if (blocked) event.preventDefault();
+  });
+}
 
 /* --------------------------------------------------------------------------
    LENIS SMOOTH SCROLL

@@ -495,3 +495,6 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+/* Discourage casual text selection; form controls remain interactive. */
+body { user-select: none; -webkit-user-select: none; }
+input, textarea, select, button, [contenteditable="true"] { user-select: text; -webkit-user-select: text; }
