@@ -2683,7 +2683,7 @@ body.card-form-open .editor-toolbar {
 }
 
 .cert-card:hover .cert-card-info {
-  max-height: 140px;
+  max-height: 240px;
   padding: 16px;
 }
 
@@ -2692,9 +2692,9 @@ body.card-form-open .editor-toolbar {
   font-weight: var(--fw-semibold);
   color: #0a0a0a;
   margin-bottom: 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
 }
 
 .cert-card-company {
