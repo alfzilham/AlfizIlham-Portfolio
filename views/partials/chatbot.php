@@ -7,7 +7,7 @@
       <div><strong id="chatbotTitle"><?= i18n::t('chat_title') ?></strong><p><?= i18n::t('chat_subtitle') ?></p></div>
       <button type="button" id="chatbotClose" aria-label="<?= i18n::t('chat_close') ?>"><i data-lucide="x"></i></button>
     </div>
-    <div class="chatbot-messages" id="chatbotMessages" role="log" aria-live="polite">
+    <div class="chatbot-messages" id="chatbotMessages" data-lenis-prevent role="log" aria-live="polite">
       <p class="chatbot-message chatbot-message--assistant"><?= i18n::t('chat_welcome') ?></p>
     </div>
     <form class="chatbot-form" id="chatbotForm" novalidate>
