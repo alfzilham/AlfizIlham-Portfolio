@@ -2608,6 +2608,33 @@ function initContactForm() {
     if (window.lucide) lucide.createIcons();
 
     statusEl.hidden = true;
+    let adminNotificationSent = false;
+
+    const resetContactForm = () => {
+      form.reset();
+      document.querySelectorAll(".custom-dropdown .dropdown-value").forEach(function(el) {
+        var dd = el.closest(".custom-dropdown");
+        var type = dd ? dd.dataset.type : "";
+        if (type === "service") el.textContent = lang.service_default || "Choose a service...";
+        else if (type === "currency") el.textContent = "USD";
+        else if (type === "country") el.textContent = "🇮🇩 +62";
+      });
+      document.querySelectorAll(".custom-dropdown input[type='hidden']").forEach(function(el) {
+        var dd = el.closest(".custom-dropdown");
+        var type = dd ? dd.dataset.type : "";
+        if (type === "service") el.value = "";
+        else if (type === "currency") el.value = "USD";
+        else if (type === "country") el.value = "+62";
+      });
+      if (serviceOther) { serviceOther.value = ""; serviceOther.hidden = true; }
+      var serviceDropdown = document.getElementById("serviceDropdown");
+      if (serviceDropdown) serviceDropdown.hidden = false;
+      var tlDisplay = document.getElementById("timelineDisplay");
+      if (tlDisplay && tlDisplay.dataset.placeholder) {
+        tlDisplay.textContent = tlDisplay.dataset.placeholder;
+        tlDisplay.style.color = "";
+      }
+    };
 
     try {
       const config = window.EMAILJS_CONFIG || {};
@@ -2642,6 +2669,7 @@ function initContactForm() {
         },
         config.public_key
       );
+      adminNotificationSent = true;
 
       // Send auto-reply to sender
       await emailjs.send(
@@ -2664,36 +2692,37 @@ function initContactForm() {
       statusEl.className = "form-status success";
       statusEl.textContent = lang.success || "Message Sent! I'll get back to you within 24 hours.";
       statusEl.hidden = false;
-      form.reset();
-
-      // Reset custom dropdowns
-      document.querySelectorAll(".custom-dropdown .dropdown-value").forEach(function(el) {
-        var dd = el.closest(".custom-dropdown");
-        var type = dd ? dd.dataset.type : "";
-        if (type === "service") el.textContent = lang.service_default || "Choose a service...";
-        else if (type === "currency") el.textContent = "USD";
-        else if (type === "country") el.textContent = "🇮🇩 +62";
-      });
-      document.querySelectorAll(".custom-dropdown input[type='hidden']").forEach(function(el) {
-        var dd = el.closest(".custom-dropdown");
-        var type = dd ? dd.dataset.type : "";
-        if (type === "service") el.value = "";
-        else if (type === "currency") el.value = "USD";
-        else if (type === "country") el.value = "+62";
-      });
-
-      // Reset timeline picker display
-      var tlDisplay = document.getElementById("timelineDisplay");
-      if (tlDisplay && tlDisplay.dataset.placeholder) {
-        tlDisplay.textContent = tlDisplay.dataset.placeholder;
-        tlDisplay.style.color = "";
-      }
+      resetContactForm();
 
       setTimeout(() => { statusEl.hidden = true; }, 5000);
     } catch (err) {
-      statusEl.className = "form-status error";
-      statusEl.textContent = (lang.error || 'Failed to send. Try via WhatsApp:') + ' ' + (window.__WHATSAPP || 'https://wa.me/6285213896460');
-      statusEl.hidden = false;
+      if (adminNotificationSent) {
+        statusEl.className = "form-status success";
+        statusEl.textContent = lang.success || "Message sent successfully.";
+        statusEl.hidden = false;
+        resetContactForm();
+      } else {
+        try {
+          const fallbackResponse = await fetch('index.php?/api/contact', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              name: name.value.trim(), email: email.value.trim(), phone: fullPhone,
+              service: service.value, budget: budgetValue, timeline: form.querySelector("#contactTimeline").value.trim(),
+              message: message.value.trim(),
+            }),
+          });
+          const fallbackData = await fallbackResponse.json().catch(() => ({}));
+          if (!fallbackResponse.ok || fallbackData.success !== true) throw new Error(fallbackData.message || fallbackData.error || 'Fallback failed');
+          statusEl.className = "form-status success";
+          statusEl.textContent = fallbackData.message || lang.success || "Message sent successfully.";
+          statusEl.hidden = false;
+          resetContactForm();
+        } catch (fallbackError) {
+          statusEl.className = "form-status error";
+          statusEl.textContent = (lang.error || 'Failed to send. Try via WhatsApp:') + ' ' + (window.__WHATSAPP || 'https://wa.me/6285213896460');
+          statusEl.hidden = false;
+        }
+      }
     } finally {
       submitBtn.disabled = false;
       submitBtn.innerHTML = `${lang.submit || 'Send Message'} <i data-lucide="external-link"></i>`;
