@@ -4180,6 +4180,11 @@ body.editor-mode .cert-menu-btn {
   height: 16px;
 }
 
+.chatbot-thinking-label {
+  display: inline-block;
+  margin-right: 8px;
+}
+
 .chatbot-thinking i {
   width: 5px;
   height: 5px;

@@ -3409,7 +3409,7 @@ function initChatbot() {
     const pending = document.createElement("p");
     pending.className = "chatbot-message chatbot-message--assistant is-pending";
     pending.innerHTML =
-      '<span class="sr-only">' +
+      '<span class="chatbot-thinking-label">' +
       (labels.sending || "Thinking…") +
       '</span><span class="chatbot-thinking" aria-hidden="true"><i></i><i></i><i></i></span>';
     messages.appendChild(pending);

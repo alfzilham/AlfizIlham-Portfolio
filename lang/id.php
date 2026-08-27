@@ -293,6 +293,6 @@ return [
     'chat_input_label' => 'Pertanyaan Anda',
     'chat_placeholder' => 'Tulis pertanyaan…',
     'chat_send' => 'Kirim pertanyaan',
-    'chat_sending' => 'Sedang berpikir…',
+    'chat_sending' => 'Sedang berpikir ',
     'chat_error' => 'Asisten sedang tidak tersedia. Coba lagi atau hubungi Alfiz melalui WhatsApp.',
 ];

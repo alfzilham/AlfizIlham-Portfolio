@@ -260,6 +260,6 @@ return [
     'chat_input_label' => 'Your question',
     'chat_placeholder' => 'Ask a question…',
     'chat_send' => 'Send question',
-    'chat_sending' => 'Thinking…',
+    'chat_sending' => 'Thinking ',
     'chat_error' => 'I’m temporarily unavailable. Please try again or contact Alfiz on WhatsApp.',
 ];
