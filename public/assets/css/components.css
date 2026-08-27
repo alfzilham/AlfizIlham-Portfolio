@@ -1767,14 +1767,17 @@ body.bulk-import-open .editor-toolbar {
   position: relative;
 }
 
-.bulk-import-select-wrap select {
+.bulk-import-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  appearance: none;
   padding: 13px 42px 13px 14px;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-bg-soft);
   color: var(--color-text);
+  text-align: left;
   font: inherit;
   font-size: var(--fs-body-sm);
   cursor: pointer;
@@ -1782,21 +1785,60 @@ body.bulk-import-open .editor-toolbar {
   transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
-.bulk-import-select-wrap select:hover,
-.bulk-import-select-wrap select:focus {
+.bulk-import-select-trigger:hover,
+.bulk-import-select-trigger:focus,
+.bulk-import-select-trigger[aria-expanded="true"] {
   border-color: var(--color-text);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(0, 0, 0, .06);
 }
 
-.bulk-import-select-wrap svg {
-  position: absolute;
-  top: 50%;
-  right: 14px;
+.bulk-import-select-trigger svg {
   width: 17px;
-  pointer-events: none;
-  transform: translateY(-50%);
+  flex: 0 0 auto;
   color: var(--color-text-muted);
+  transition: transform .2s ease;
+}
+
+.bulk-import-select-trigger[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.bulk-import-options {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 7px);
+  right: 0;
+  left: 0;
+  padding: 6px;
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .14);
+}
+
+.bulk-import-options[hidden] {
+  display: none;
+}
+
+.bulk-import-options button {
+  display: block;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--color-text);
+  text-align: left;
+  font: inherit;
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+}
+
+.bulk-import-options button:hover,
+.bulk-import-options button[aria-selected="true"] {
+  background: var(--color-bg-soft);
+  font-weight: var(--fw-semibold);
 }
 
 .bulk-import-file-input {

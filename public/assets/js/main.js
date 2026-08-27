@@ -3334,10 +3334,37 @@ function initChatbot() {
   const bulkImportBtn = document.getElementById("bulkImportBtn");
   const bulkImportFile = document.getElementById("bulkImportFile");
   const bulkImportType = document.getElementById("bulkImportType");
+  const bulkImportTypeTrigger = document.getElementById("bulkImportTypeTrigger");
+  const bulkImportTypeValue = document.getElementById("bulkImportTypeValue");
+  const bulkImportTypeOptions = document.getElementById("bulkImportTypeOptions");
   const bulkImportError = document.getElementById("bulkImportError");
   const bulkImportResult = document.getElementById("bulkImportResult");
   const bulkImportSubmit = document.getElementById("bulkImportSubmit");
   const bulkImportFileName = document.getElementById("bulkImportFileName");
+  const closeBulkImportTypeOptions = () => {
+    if (!bulkImportTypeOptions || !bulkImportTypeTrigger) return;
+    bulkImportTypeOptions.hidden = true;
+    bulkImportTypeTrigger.setAttribute("aria-expanded", "false");
+  };
+  bulkImportTypeTrigger?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const open = bulkImportTypeOptions && bulkImportTypeOptions.hidden;
+    if (bulkImportTypeOptions) bulkImportTypeOptions.hidden = !open;
+    bulkImportTypeTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  bulkImportTypeOptions?.addEventListener("click", (event) => {
+    const option = event.target.closest("[data-value]");
+    if (!option || !bulkImportType) return;
+    bulkImportType.value = option.dataset.value;
+    if (bulkImportTypeValue) bulkImportTypeValue.textContent = option.textContent;
+    bulkImportTypeOptions.querySelectorAll("[role='option']").forEach((item) => {
+      item.setAttribute("aria-selected", item === option ? "true" : "false");
+    });
+    closeBulkImportTypeOptions();
+  });
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".bulk-import-select-wrap")) closeBulkImportTypeOptions();
+  });
   const openBulkImportOverlay = () => {
     if (!bulkImportOverlay) return;
     bulkImportOverlay.hidden = false;
@@ -3356,6 +3383,7 @@ function initChatbot() {
     bulkImportError.textContent = "";
     bulkImportResult.hidden = true;
     if (bulkImportFileName) bulkImportFileName.textContent = "No file selected";
+    closeBulkImportTypeOptions();
     openBulkImportOverlay();
   });
   bulkImportFile?.addEventListener("change", () => {

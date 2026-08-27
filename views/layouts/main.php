@@ -280,8 +280,15 @@
       <div class="bulk-import-field">
         <label for="bulkImportType">Content type</label>
         <div class="bulk-import-select-wrap">
-          <select id="bulkImportType"><option value="projects">Projects</option><option value="certificates">Certificates</option></select>
-          <i data-lucide="chevron-down" aria-hidden="true"></i>
+          <button type="button" class="bulk-import-select-trigger" id="bulkImportTypeTrigger" aria-haspopup="listbox" aria-expanded="false">
+            <span id="bulkImportTypeValue">Projects</span>
+            <i data-lucide="chevron-down" aria-hidden="true"></i>
+          </button>
+          <div class="bulk-import-options" id="bulkImportTypeOptions" role="listbox" hidden>
+            <button type="button" role="option" aria-selected="true" data-value="projects">Projects</button>
+            <button type="button" role="option" aria-selected="false" data-value="certificates">Certificates</button>
+          </div>
+          <input type="hidden" id="bulkImportType" value="projects" />
         </div>
       </div>
       <div class="bulk-import-field">
