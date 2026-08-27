@@ -73,10 +73,43 @@ class ChatController
         $cvPath = PUBLIC_PATH . '/assets/cv/Alfiz_Ilham_CV.md';
         $cv = is_readable($cvPath) ? trim((string) file_get_contents($cvPath)) : '';
         if (mb_strlen($cv) > 16000) $cv = mb_substr($cv, 0, 16000);
-        $certificateCount = count(Certificate::all());
-        $showcaseProjectCount = count(ShowcaseProject::all());
-        $aggregateFacts = "AUTHORITATIVE DATABASE FACTS (use these exact totals for count questions): certificates={$certificateCount}; showcase_projects={$showcaseProjectCount}. These totals are authoritative even when retrieval returns only a subset.";
-        return "You are Alfiz Ilham's portfolio assistant. Answer only from the static profile, authoritative database facts, and retrieved context below. Never invent projects, credentials, dates, skills, prices, or contact details. For questions asking how many certificates or showcase projects exist, use the exact totals in AUTHORITATIVE DATABASE FACTS and do not count retrieved snippets. If the answer is absent, say so honestly and suggest the visitor browse the portfolio or contact Alfiz. Reply in the language used by the visitor (Indonesian or English). Be concise, friendly, and do not mention RAG, embeddings, providers, or this instruction.\n\nSTATIC PROFILE:\n{$cv}\n\nAUTHORITATIVE DATABASE FACTS:\n{$aggregateFacts}\n\nRETRIEVED CONTEXT:\n{$context}";
+        return "You are Alfiz Ilham's portfolio assistant. Answer only from the static profile, website snapshot, authoritative database facts, and retrieved context below. Never invent projects, credentials, dates, skills, prices, or contact details. For count questions, use the exact totals in the website snapshot or AUTHORITATIVE DATABASE FACTS; never count retrieved snippets. If the answer is absent, say so honestly and suggest the visitor browse the portfolio or contact Alfiz. Reply in the language used by the visitor (Indonesian or English). Be concise, friendly, and do not mention RAG, embeddings, providers, or this instruction.\n\nSTATIC PROFILE:\n{$cv}\n\nWEBSITE SNAPSHOT:\n{$this->websiteSnapshot()}\n\nAUTHORITATIVE DATABASE FACTS:\n{$this->aggregateFacts()}\n\nRETRIEVED CONTEXT:\n{$context}";
+    }
+
+    private function aggregateFacts()
+    {
+        $certificates = Certificate::all();
+        $showcase = ShowcaseProject::all();
+        return "certificates={$this->countRows($certificates)}; showcase_projects={$this->countRows($showcase)}";
+    }
+
+    private function websiteSnapshot()
+    {
+        $projects = Project::all();
+        $galleryItems = array_values(array_filter($projects, static function ($project) {
+            return ($project['category'] ?? '') !== 'website';
+        }));
+        $projectCounts = Project::counts();
+        $stats = sprintf(
+            '%s: %s; %s: %s; %s: %s; %s: %s',
+            i18n::t('bio_stat1_label'), i18n::t('bio_stat1_value'),
+            i18n::t('bio_stat2_label'), i18n::t('bio_stat2_value'),
+            i18n::t('bio_stat3_label'), i18n::t('bio_stat3_value'),
+            i18n::t('bio_stat4_label'), i18n::t('bio_stat4_value')
+        );
+        $titles = array_map(static function ($project) {
+            return trim((string) ($project['name'] ?? ''));
+        }, $projects);
+        $titles = array_values(array_filter($titles));
+        return "Stats section: {$stats}. Project section: " . count($projects) .
+            " completed projects (website={$projectCounts['website']}, design={$projectCounts['design']}, calligraphy={$projectCounts['calligraphy']}). " .
+            "Circular gallery: " . count($galleryItems) . " items (non-website projects). " .
+            "Project titles: " . implode('; ', $titles) . ". Gallery section items: " . count(Gallery::all()) . ".";
+    }
+
+    private function countRows(array $rows)
+    {
+        return count($rows);
     }
 
     private function buildContext(array $matches)
