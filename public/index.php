@@ -53,6 +53,8 @@ $router->post('/api/admin/certificates', ['AdminController', 'createCertificate'
 $router->post('/api/admin/certificates/{id}', ['AdminController', 'updateCertificate']);
 $router->delete('/api/admin/certificates/{id}', ['AdminController', 'deleteCertificate']);
 $router->post('/api/admin/certificates/{id}/pin', ['AdminController', 'toggleCertificatePin']);
+$router->post('/api/admin/certificates/bulk-import', ['AdminController', 'bulkImportCertificates']);
+$router->post('/api/admin/projects/bulk-import', ['AdminController', 'bulkImportProjects']);
 
 // Language switcher
 $router->get('/lang/{lang}', function () {

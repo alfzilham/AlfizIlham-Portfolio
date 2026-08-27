@@ -3093,6 +3093,37 @@ function initChatbot() {
     if (event.key === 'Escape') setOpen(false);
   });
 
+  const bulkImportOverlay = document.getElementById("bulkImportOverlay");
+  const bulkImportBtn = document.getElementById("bulkImportBtn");
+  const bulkImportFile = document.getElementById("bulkImportFile");
+  const bulkImportType = document.getElementById("bulkImportType");
+  const bulkImportError = document.getElementById("bulkImportError");
+  const bulkImportResult = document.getElementById("bulkImportResult");
+  const bulkImportSubmit = document.getElementById("bulkImportSubmit");
+  bulkImportBtn?.addEventListener("click", () => { bulkImportError.textContent = ""; bulkImportResult.hidden = true; openOverlay(bulkImportOverlay); });
+  document.querySelector("[data-close-bulk-import]")?.addEventListener("click", () => closeOverlay(bulkImportOverlay));
+  bulkImportOverlay?.addEventListener("pointerdown", (event) => { if (event.target === bulkImportOverlay) closeOverlay(bulkImportOverlay); });
+  bulkImportSubmit?.addEventListener("click", async () => {
+    bulkImportError.textContent = ""; bulkImportResult.hidden = true;
+    const file = bulkImportFile?.files?.[0];
+    if (!file) { bulkImportError.textContent = "Choose a JSON file."; return; }
+    try {
+      const payload = JSON.parse(await file.text());
+      if (!Array.isArray(payload)) throw new Error("JSON root must be an array.");
+      if (payload.length > 50) throw new Error("Maximum 50 entries per file.");
+      const type = bulkImportType.value;
+      bulkImportSubmit.disabled = true;
+      const response = await fetch("index.php?/api/admin/" + (type === "certificates" ? "certificates" : "projects") + "/bulk-import", { method: "POST", headers: csrfHeaders({ "Content-Type": "application/json" }), body: JSON.stringify(payload) });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.success !== true) throw new Error(data.error || "Import failed.");
+      bulkImportResult.className = "form-status success";
+      bulkImportResult.textContent = "Imported: " + data.imported + ". Failed: " + (data.failed || []).length + "." + ((data.failed || []).length ? " " + data.failed.map((item) => "Row " + item.row + ": " + item.error).join(" | ") : "");
+      bulkImportResult.hidden = false;
+      if (data.imported) setTimeout(() => location.reload(), 900);
+    } catch (error) { bulkImportError.textContent = error.message || "Invalid JSON."; }
+    finally { bulkImportSubmit.disabled = false; }
+  });
+
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     const message = input.value.trim();

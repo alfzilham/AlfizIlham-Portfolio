@@ -285,6 +285,77 @@ class AdminController
         json_response(['success' => true, 'certificate' => $certificate]);
     }
 
+    /** POST /api/admin/certificates/bulk-import */
+    public function bulkImportCertificates()
+    {
+        self::requireAdmin(); self::verifyCsrf();
+        $rows = Request::json();
+        if (!is_array($rows) || count($rows) > 50) json_response(['success'=>false, 'error'=>'JSON must contain at most 50 entries.'], 422);
+        $results = ['imported'=>0, 'failed'=>[]];
+        foreach ($rows as $index => $row) {
+            try {
+                if (!is_array($row)) throw new InvalidArgumentException('Entry must be an object.');
+                $title = sanitize($row['title'] ?? ''); $image = self::validateRemoteImageUrl($row['image'] ?? '');
+                if (mb_strlen($title) < 2) throw new InvalidArgumentException('Missing or invalid title.');
+                if (Certificate::findByTitle($title)) throw new InvalidArgumentException('Duplicate title skipped.');
+                $localImage = self::downloadRemoteImage($image);
+                Certificate::create($title, sanitize($row['company'] ?? ''), sanitize($row['credential_id'] ?? ''), self::normalizeLink($row['credential_link'] ?? ''), $localImage);
+                $results['imported']++;
+            } catch (Throwable $e) { $results['failed'][] = ['row'=>(int)$index + 1, 'error'=>$e->getMessage()]; }
+        }
+        json_response(['success'=>true] + $results);
+    }
+
+    /** POST /api/admin/projects/bulk-import */
+    public function bulkImportProjects()
+    {
+        self::requireAdmin(); self::verifyCsrf();
+        $rows = Request::json();
+        if (!is_array($rows) || count($rows) > 50) json_response(['success'=>false, 'error'=>'JSON must contain at most 50 entries.'], 422);
+        $results = ['imported'=>0, 'failed'=>[]];
+        foreach ($rows as $index => $row) {
+            try {
+                if (!is_array($row)) throw new InvalidArgumentException('Entry must be an object.');
+                $title = sanitize($row['title'] ?? ''); $description = sanitize($row['description'] ?? ''); $image = self::validateRemoteImageUrl($row['image'] ?? '');
+                if (mb_strlen($title) < 2) throw new InvalidArgumentException('Missing or invalid title.');
+                if (mb_strlen($description) < 10) throw new InvalidArgumentException('Missing or invalid description.');
+                if (ShowcaseProject::findByTitle($title)) throw new InvalidArgumentException('Duplicate title skipped.');
+                $localImage = self::downloadRemoteImage($image);
+                ShowcaseProject::create($title, $description, $localImage, self::normalizeLink($row['link'] ?? ''));
+                $results['imported']++;
+            } catch (Throwable $e) { $results['failed'][] = ['row'=>(int)$index + 1, 'error'=>$e->getMessage()]; }
+        }
+        json_response(['success'=>true] + $results);
+    }
+
+    private static function validateRemoteImageUrl($raw)
+    {
+        $url = trim((string)$raw); $parts = parse_url($url);
+        if (!$parts || !in_array(strtolower($parts['scheme'] ?? ''), ['http','https'], true) || empty($parts['host']) || !empty($parts['user']) || !empty($parts['pass'])) throw new InvalidArgumentException('Image must be a public HTTP(S) URL.');
+        $host = strtolower($parts['host']); $ip = gethostbyname($host);
+        if ($ip === $host || filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) === false) throw new InvalidArgumentException('Image host is not publicly routable.');
+        return $url;
+    }
+
+    private static function downloadRemoteImage($url)
+    {
+        $context = stream_context_create(['http'=>['timeout'=>15, 'follow_location'=>0, 'ignore_errors'=>true], 'ssl'=>['verify_peer'=>true, 'verify_peer_name'=>true]]);
+        $binary = @file_get_contents($url, false, $context);
+        if ($binary === false || strlen($binary) > 5 * 1024 * 1024) throw new RuntimeException('Image download failed or exceeds 5 MB.');
+        $tmp = tempnam(sys_get_temp_dir(), 'portfolio-import-'); file_put_contents($tmp, $binary);
+        try {
+            $mime = (new finfo(FILEINFO_MIME_TYPE))->file($tmp);
+            if (!in_array($mime, ['image/jpeg','image/png','image/webp','image/gif'], true)) throw new InvalidArgumentException('Unsupported image type.');
+            $info = @getimagesize($tmp); if (!$info || $info[0] * $info[1] > 24000000 || max($info[0], $info[1]) > 8000) throw new InvalidArgumentException('Image dimensions are too large.');
+            if (!extension_loaded('gd')) throw new RuntimeException('GD extension not available.');
+            $source = @imagecreatefromstring(file_get_contents($tmp)); if (!$source) throw new InvalidArgumentException('Image could not be decoded.');
+            $w=imagesx($source); $h=imagesy($source); if (max($w,$h)>1600) { $ratio=1600/max($w,$h); $scaled=imagescale($source,(int)round($w*$ratio),(int)round($h*$ratio)); if ($scaled) { imagedestroy($source); $source=$scaled; } }
+            $dir = PUBLIC_PATH . '/assets/uploads/showcase'; if (!is_dir($dir)) mkdir($dir, 0775, true);
+            $filename = date('Ymd') . '-' . bin2hex(random_bytes(6)) . '.webp'; $target=$dir.'/'.$filename; $ok=imagewebp($source,$target,85); imagedestroy($source);
+            if (!$ok) throw new RuntimeException('WebP conversion failed.'); return 'assets/uploads/showcase/'.$filename;
+        } finally { @unlink($tmp); }
+    }
+
     /**
      * Validate certificate fields
      */

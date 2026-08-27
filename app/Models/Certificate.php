@@ -61,6 +61,12 @@ class Certificate
         return $db->fetchOne("SELECT * FROM certificates WHERE id = ?", [(int) $id]);
     }
 
+    public static function findByTitle($title)
+    {
+        self::ensureTable();
+        return Database::getInstance()->fetchOne('SELECT * FROM certificates WHERE lower(title) = lower(?) LIMIT 1', [trim($title)]);
+    }
+
     /**
      * Create a new certificate
      */

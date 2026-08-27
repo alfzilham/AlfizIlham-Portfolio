@@ -140,6 +140,8 @@ HTML Output → Browser
 
 `POST /api/chat` is handled by `ChatController`. It rate-limits by IP in SQLite, embeds the visitor question, scans same-provider vectors from SQLite, ranks them with PHP cosine similarity, then sends grounded context plus the static CV to OpenRouter. `EmbeddingService` uses the shared HTTP client (cURL when available, PHP streams otherwise); retrieval filters by provider, model, and dimension so incompatible vectors are never compared. `KnowledgeIndexService` runs after successful admin project/certificate writes. A failed index update never rolls back SQLite, which remains the source of truth; `scripts/rebuild-knowledge.php` can rebuild the local index.
 
+Admin certificate records support a `pinned` SQLite flag and are ordered before unpinned records. Bulk JSON import endpoints are session- and CSRF-protected, capped at 50 rows, skip duplicate titles, and normalize remote images into local WebP assets.
+
 ---
 
 ## 4. Database Schema (SQLite)

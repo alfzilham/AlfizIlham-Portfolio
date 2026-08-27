@@ -58,6 +58,12 @@ class ShowcaseProject
         return $db->fetchOne("SELECT * FROM showcase_projects WHERE id = ?", [(int) $id]);
     }
 
+    public static function findByTitle($title)
+    {
+        self::ensureTable();
+        return Database::getInstance()->fetchOne('SELECT * FROM showcase_projects WHERE lower(title) = lower(?) LIMIT 1', [trim($title)]);
+    }
+
     /**
      * Create a new showcase project
      */

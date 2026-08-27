@@ -270,6 +270,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 Public certificate pagination shows 12 items initially on desktop and 8 on mobile, with Load More revealing the next page. The current implementation uses the `certGrid` pool rendered from SQLite.
 
+Editor mode also supports JSON bulk import for certificates and showcase projects. Each file accepts up to 50 records; titles matching an existing row (case-insensitive) are skipped. External image URLs are validated, downloaded, dimension-checked, and converted to local WebP files before insertion. Imports return per-row failures without aborting valid rows.
+
 All original open questions from the pre-MVC spec have been resolved:
 
 | # | Question | Resolution |

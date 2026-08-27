@@ -258,9 +258,26 @@
       <i data-lucide="plus"></i><?= i18n::t('editor_add_certificate') ?>
     </button>
     <span class="editor-toolbar-divider"></span>
+    <button type="button" id="bulkImportBtn" class="editor-toolbar-cta">Import JSON</button>
+    <span class="editor-toolbar-divider"></span>
     <button type="button" id="editorLogoutBtn" class="editor-toolbar-btn editor-toolbar-muted">
       <i data-lucide="user-x"></i><?= i18n::t('editor_logout') ?>
     </button>
+  </div>
+
+  <div class="editor-overlay" id="bulkImportOverlay" data-lenis-prevent hidden>
+    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="bulkImportTitle">
+      <button type="button" class="modal-close" data-close-bulk-import aria-label="Close">&times;</button>
+      <h2 id="bulkImportTitle">Bulk import JSON</h2>
+      <p class="editor-modal-sub">Import up to 50 records. Existing titles are skipped. Images must be public HTTP(S) URLs and are downloaded as local WebP files.</p>
+      <label for="bulkImportType">Content type</label>
+      <select id="bulkImportType"><option value="projects">Projects</option><option value="certificates">Certificates</option></select>
+      <label for="bulkImportFile">JSON file</label>
+      <input type="file" id="bulkImportFile" accept="application/json,.json" />
+      <p class="form-error" id="bulkImportError" aria-live="polite"></p>
+      <button type="button" class="btn btn-primary btn-block" id="bulkImportSubmit">Import</button>
+      <p class="form-status" id="bulkImportResult" role="status" hidden></p>
+    </div>
   </div>
 
   <!-- Scripts -->
