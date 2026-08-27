@@ -3337,16 +3337,28 @@ function initChatbot() {
   const bulkImportError = document.getElementById("bulkImportError");
   const bulkImportResult = document.getElementById("bulkImportResult");
   const bulkImportSubmit = document.getElementById("bulkImportSubmit");
+  const openBulkImportOverlay = () => {
+    if (!bulkImportOverlay) return;
+    bulkImportOverlay.hidden = false;
+    document.body.style.overflow = "hidden";
+    if (window.__lenis) window.__lenis.stop();
+  };
+  const closeBulkImportOverlay = () => {
+    if (!bulkImportOverlay) return;
+    bulkImportOverlay.hidden = true;
+    document.body.style.overflow = "";
+    if (window.__lenis) window.__lenis.start();
+  };
   bulkImportBtn?.addEventListener("click", () => {
     bulkImportError.textContent = "";
     bulkImportResult.hidden = true;
-    openOverlay(bulkImportOverlay);
+    openBulkImportOverlay();
   });
   document
     .querySelector("[data-close-bulk-import]")
-    ?.addEventListener("click", () => closeOverlay(bulkImportOverlay));
+    ?.addEventListener("click", closeBulkImportOverlay);
   bulkImportOverlay?.addEventListener("pointerdown", (event) => {
-    if (event.target === bulkImportOverlay) closeOverlay(bulkImportOverlay);
+    if (event.target === bulkImportOverlay) closeBulkImportOverlay();
   });
   bulkImportSubmit?.addEventListener("click", async () => {
     bulkImportError.textContent = "";
