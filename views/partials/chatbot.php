@@ -11,8 +11,7 @@
       <p class="chatbot-message chatbot-message--assistant"><?= i18n::t('chat_welcome') ?></p>
     </div>
     <form class="chatbot-form" id="chatbotForm" novalidate>
-      <label class="sr-only" for="chatbotInput"><?= i18n::t('chat_input_label') ?></label>
-      <textarea id="chatbotInput" maxlength="1000" rows="1" placeholder="<?= i18n::t('chat_placeholder') ?>"></textarea>
+      <textarea id="chatbotInput" aria-label="<?= i18n::t('chat_input_label') ?>" maxlength="1000" rows="1" placeholder="<?= i18n::t('chat_placeholder') ?>"></textarea>
       <button type="submit" aria-label="<?= i18n::t('chat_send') ?>"><i data-lucide="send"></i></button>
     </form>
   </div>
