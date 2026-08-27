@@ -85,6 +85,8 @@ class ChatController
         $answer = preg_replace('/<\/?(?:think|thinking|analysis|reasoning)>.*?<\/?(?:think|thinking|analysis|reasoning)>/is', '', $answer);
         $answer = preg_replace('/\[\/?(?:think|thinking|analysis|reasoning)\]/i', '', $answer);
         $answer = preg_replace('/```(?:think|thinking|analysis|reasoning)\s*.*?```/is', '', $answer);
+        // Safety-specialist models can return a classifier label instead of the requested answer.
+        $answer = preg_replace('/^\s*user\s+safety\s*:\s*(?:safe|unsafe)\s*$/im', '', $answer);
         // If a model still emits a prose thinking preamble, keep only an explicit final section.
         if (preg_match('/^\s*(?:here(?:\'s| is)\s+)?(?:a\s+)?thinking\s+process\s*:/i', $answer)) {
             if (preg_match('/(?:^|\n)\s*(?:final answer|jawaban akhir)\s*:\s*(.*)$/is', $answer, $final)) {
