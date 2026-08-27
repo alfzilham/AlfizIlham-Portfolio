@@ -52,6 +52,7 @@ $router->get('/api/admin/certificates', ['AdminController', 'listCertificates'])
 $router->post('/api/admin/certificates', ['AdminController', 'createCertificate']);
 $router->post('/api/admin/certificates/{id}', ['AdminController', 'updateCertificate']);
 $router->delete('/api/admin/certificates/{id}', ['AdminController', 'deleteCertificate']);
+$router->post('/api/admin/certificates/{id}/pin', ['AdminController', 'toggleCertificatePin']);
 
 // Language switcher
 $router->get('/lang/{lang}', function () {

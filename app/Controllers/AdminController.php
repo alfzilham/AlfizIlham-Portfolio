@@ -275,6 +275,16 @@ class AdminController
         json_response(['success' => true, 'knowledgeSync' => KnowledgeIndexService::delete('certificate', $id)]);
     }
 
+    /** POST /api/admin/certificates/{id}/pin */
+    public function toggleCertificatePin()
+    {
+        self::requireAdmin();
+        self::verifyCsrf();
+        [$id] = self::requireExisting('Certificate::find', 'Certificate not found');
+        $certificate = Certificate::togglePinned($id);
+        json_response(['success' => true, 'certificate' => $certificate]);
+    }
+
     /**
      * Validate certificate fields
      */

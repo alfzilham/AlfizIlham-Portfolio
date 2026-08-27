@@ -21,6 +21,7 @@ class Certificate
                 credential_link TEXT,
                 image TEXT NOT NULL,
                 sort_order INTEGER DEFAULT 0,
+                pinned INTEGER NOT NULL DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
@@ -32,6 +33,11 @@ class Certificate
         if (!$hasCompany) {
             $db->exec("ALTER TABLE certificates ADD COLUMN company TEXT");
         }
+        $hasPinned = false;
+        foreach ($db->fetchAll("PRAGMA table_info(certificates)") as $col) {
+            if ($col['name'] === 'pinned') { $hasPinned = true; break; }
+        }
+        if (!$hasPinned) $db->exec("ALTER TABLE certificates ADD COLUMN pinned INTEGER NOT NULL DEFAULT 0");
         $done = true;
     }
 
@@ -42,7 +48,7 @@ class Certificate
     {
         self::ensureTable();
         $db = Database::getInstance();
-        return $db->fetchAll("SELECT * FROM certificates ORDER BY sort_order ASC, id ASC");
+        return $db->fetchAll("SELECT * FROM certificates ORDER BY pinned DESC, sort_order ASC, id ASC");
     }
 
     /**
@@ -97,5 +103,13 @@ class Certificate
         self::ensureTable();
         $db = Database::getInstance();
         return $db->getPdo()->prepare("DELETE FROM certificates WHERE id = ?")->execute([(int) $id]);
+    }
+
+    public static function togglePinned($id)
+    {
+        self::ensureTable();
+        $db = Database::getInstance();
+        $db->getPdo()->prepare("UPDATE certificates SET pinned = CASE WHEN pinned = 1 THEN 0 ELSE 1 END WHERE id = ?")->execute([(int) $id]);
+        return self::find($id);
     }
 }

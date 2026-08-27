@@ -3202,6 +3202,7 @@ function initCertificates() {
       card.dataset.credentialId = item.credential_id || "";
       card.dataset.credentialLink = item.credential_link || "";
       card.dataset.image = item.image || "";
+      card.dataset.pinned = item.pinned ? "1" : "0";
       card.dataset.index = i;
 
       var img = document.createElement("img");
@@ -3260,8 +3261,13 @@ function initCertificates() {
       deleteBtn.dataset.action = "delete";
       deleteBtn.className = "danger";
       deleteBtn.textContent = "Delete";
+      var pinBtn = document.createElement("button");
+      pinBtn.type = "button";
+      pinBtn.dataset.action = "pin";
+      pinBtn.textContent = item.pinned ? "Unpin" : "Pin";
       menu.appendChild(editBtn);
       menu.appendChild(deleteBtn);
+      menu.appendChild(pinBtn);
 
       card.appendChild(img);
       card.appendChild(info);
@@ -3325,6 +3331,19 @@ function initCertificates() {
         var certDeleteCardNameEl = document.getElementById("deleteCardName");
         if (certDeleteCardNameEl) certDeleteCardNameEl.textContent = card.dataset.title || "";
         certOpenOverlay(document.getElementById("deleteOverlay"));
+      } else if (actionBtn.dataset.action === "pin") {
+        fetch("index.php?/api/admin/certificates/" + card.dataset.id + "/pin", { method: "POST", headers: csrfHeaders() })
+          .then(function (res) { return res.json().then(function (data) { return { res: res, data: data }; }); })
+          .then(function (result) {
+            if (result.res.ok && result.data.success && result.data.certificate) {
+              var updated = result.data.certificate;
+              items = items.map(function (entry) { return Number(entry.id) === Number(updated.id) ? updated : entry; });
+              items.sort(function (a, b) { return (Number(b.pinned) - Number(a.pinned)) || (Number(a.sort_order || 0) - Number(b.sort_order || 0)) || (Number(a.id) - Number(b.id)); });
+              renderCards();
+              applyVisibility();
+            }
+          })
+          .catch(function () {});
       }
       return;
     }
