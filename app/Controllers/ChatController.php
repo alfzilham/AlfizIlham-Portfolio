@@ -101,10 +101,21 @@ class ChatController
             return trim((string) ($project['name'] ?? ''));
         }, $projects);
         $titles = array_values(array_filter($titles));
+        $faqSummary = array_map(static function ($faq) {
+            $question = trim((string) ($faq['question'] ?? ''));
+            $answer = trim((string) ($faq['answer'] ?? ''));
+            return $question . ' => ' . mb_substr($answer, 0, 300);
+        }, Faq::all());
+        $serviceSummary = array_map(static function ($service) {
+            $title = trim((string) ($service['title'] ?? $service['name'] ?? ''));
+            $description = trim((string) ($service['description'] ?? ''));
+            return $title . ' => ' . mb_substr($description, 0, 300);
+        }, Service::all());
         return "Stats section: {$stats}. Project section: " . count($projects) .
             " completed projects (website={$projectCounts['website']}, design={$projectCounts['design']}, calligraphy={$projectCounts['calligraphy']}). " .
             "Circular gallery: " . count($galleryItems) . " items (non-website projects). " .
-            "Project titles: " . implode('; ', $titles) . ". Gallery section items: " . count(Gallery::all()) . ".";
+            "Project titles: " . implode('; ', $titles) . ". Gallery section items: " . count(Gallery::all()) . ". " .
+            "FAQ entries: " . implode(' | ', array_filter($faqSummary)) . ". Services: " . implode(' | ', array_filter($serviceSummary)) . ".";
     }
 
     private function countRows(array $rows)
