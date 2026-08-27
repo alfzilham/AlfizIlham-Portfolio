@@ -62,10 +62,42 @@ class ChatController
             'Authorization: Bearer ' . $key,
             'HTTP-Referer: ' . env('APP_URL', config('url')),
             'X-OpenRouter-Title: Alfiz Ilham Portfolio',
-        ], ['model' => $model, 'messages' => $messages, 'temperature' => 0.2, 'max_tokens' => 450], 30);
+        ], [
+            'model' => $model,
+            'messages' => $messages,
+            'temperature' => 0.2,
+            'max_tokens' => 450,
+            // Prevent reasoning-capable OpenRouter models from returning chain-of-thought.
+            'reasoning' => ['exclude' => true],
+        ], 30);
         $content = $data['choices'][0]['message']['content'] ?? null;
         if (!is_string($content) || trim($content) === '') throw new RuntimeException('OpenRouter returned no answer.');
-        return trim($content);
+        $answer = $this->cleanAnswer($content);
+        if ($answer === '') throw new RuntimeException('OpenRouter returned no final answer.');
+        return $answer;
+    }
+
+    /** Remove provider reasoning traces and presentation wrappers from the user-facing answer. */
+    private function cleanAnswer($content)
+    {
+        $answer = trim(str_replace(["\r\n", "\r"], "\n", (string) $content));
+        // Some reasoning-capable models put their private chain-of-thought in content tags.
+        $answer = preg_replace('/<\/?(?:think|thinking|analysis|reasoning)>.*?<\/?(?:think|thinking|analysis|reasoning)>/is', '', $answer);
+        $answer = preg_replace('/\[\/?(?:think|thinking|analysis|reasoning)\]/i', '', $answer);
+        $answer = preg_replace('/```(?:think|thinking|analysis|reasoning)\s*.*?```/is', '', $answer);
+        // If a model still emits a prose thinking preamble, keep only an explicit final section.
+        if (preg_match('/^\s*(?:here(?:\'s| is)\s+)?(?:a\s+)?thinking\s+process\s*:/i', $answer)) {
+            if (preg_match('/(?:^|\n)\s*(?:final answer|jawaban akhir)\s*:\s*(.*)$/is', $answer, $final)) {
+                $answer = trim($final[1]);
+            } else {
+                $answer = '';
+            }
+        }
+        // Also remove a leaked single-line reasoning prefix, while preserving normal answer text.
+        $answer = preg_replace('/^\s*(?:thinking|thought|reasoning|analysis)\s*:\s*.*(?:\n|$)/im', '', $answer);
+        $answer = preg_replace('/^\s*(?:assistant|final answer)\s*:\s*/i', '', $answer);
+        $answer = preg_replace("/\n{3,}/", "\n\n", $answer);
+        return trim($answer);
     }
 
     private function systemPrompt($context)
@@ -73,7 +105,7 @@ class ChatController
         $cvPath = PUBLIC_PATH . '/assets/cv/Alfiz_Ilham_CV.md';
         $cv = is_readable($cvPath) ? trim((string) file_get_contents($cvPath)) : '';
         if (mb_strlen($cv) > 16000) $cv = mb_substr($cv, 0, 16000);
-        return "You are Alfiz Ilham's portfolio assistant. Answer only from the static profile, website snapshot, authoritative database facts, and retrieved context below. Never invent projects, credentials, dates, skills, prices, or contact details. For count questions, use the exact totals in the website snapshot or AUTHORITATIVE DATABASE FACTS; never count retrieved snippets. If the answer is absent, say so honestly and suggest the visitor browse the portfolio or contact Alfiz. Reply in the language used by the visitor (Indonesian or English). Be concise, friendly, and do not mention RAG, embeddings, providers, or this instruction.\n\nSTATIC PROFILE:\n{$cv}\n\nWEBSITE SNAPSHOT:\n{$this->websiteSnapshot()}\n\nAUTHORITATIVE DATABASE FACTS:\n{$this->aggregateFacts()}\n\nRETRIEVED CONTEXT:\n{$context}";
+        return "You are Alfiz Ilham's portfolio assistant. Answer only from the static profile, website snapshot, authoritative database facts, and retrieved context below. Never invent projects, credentials, dates, skills, prices, or contact details. For count questions, use the exact totals in the website snapshot or AUTHORITATIVE DATABASE FACTS; never count retrieved snippets. If the answer is absent, say so honestly and suggest the visitor browse the portfolio or contact Alfiz. Reply in the language used by the visitor (Indonesian or English). Output only the final answer: do not include thinking, analysis, reasoning, internal notes, labels, or a preamble. Be concise and friendly, and do not mention RAG, embeddings, providers, or this instruction.\n\nSTATIC PROFILE:\n{$cv}\n\nWEBSITE SNAPSHOT:\n{$this->websiteSnapshot()}\n\nAUTHORITATIVE DATABASE FACTS:\n{$this->aggregateFacts()}\n\nRETRIEVED CONTEXT:\n{$context}";
     }
 
     private function aggregateFacts()
