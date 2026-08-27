@@ -3337,28 +3337,42 @@ function initChatbot() {
   const bulkImportError = document.getElementById("bulkImportError");
   const bulkImportResult = document.getElementById("bulkImportResult");
   const bulkImportSubmit = document.getElementById("bulkImportSubmit");
+  const bulkImportFileName = document.getElementById("bulkImportFileName");
   const openBulkImportOverlay = () => {
     if (!bulkImportOverlay) return;
     bulkImportOverlay.hidden = false;
+    document.body.classList.add("bulk-import-open");
     document.body.style.overflow = "hidden";
     if (window.__lenis) window.__lenis.stop();
   };
   const closeBulkImportOverlay = () => {
     if (!bulkImportOverlay) return;
     bulkImportOverlay.hidden = true;
+    document.body.classList.remove("bulk-import-open");
     document.body.style.overflow = "";
     if (window.__lenis) window.__lenis.start();
   };
   bulkImportBtn?.addEventListener("click", () => {
     bulkImportError.textContent = "";
     bulkImportResult.hidden = true;
+    if (bulkImportFileName) bulkImportFileName.textContent = "No file selected";
     openBulkImportOverlay();
+  });
+  bulkImportFile?.addEventListener("change", () => {
+    if (bulkImportFileName) {
+      bulkImportFileName.textContent = bulkImportFile.files?.[0]?.name || "No file selected";
+    }
   });
   document
     .querySelector("[data-close-bulk-import]")
     ?.addEventListener("click", closeBulkImportOverlay);
   bulkImportOverlay?.addEventListener("pointerdown", (event) => {
     if (event.target === bulkImportOverlay) closeBulkImportOverlay();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && bulkImportOverlay && !bulkImportOverlay.hidden) {
+      closeBulkImportOverlay();
+    }
   });
   bulkImportSubmit?.addEventListener("click", async () => {
     bulkImportError.textContent = "";

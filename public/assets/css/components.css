@@ -1618,7 +1618,8 @@ body.editor-mode .editor-toolbar {
 }
 
 /* Toolbar slides away while the card form modal is open */
-body.card-form-open .editor-toolbar {
+body.card-form-open .editor-toolbar,
+body.bulk-import-open .editor-toolbar {
   transform: translateX(-50%) translateY(calc(100% + 80px));
   opacity: 0;
   pointer-events: none;
@@ -1736,6 +1737,145 @@ body.card-form-open .editor-toolbar {
 
 .editor-modal-wide {
   max-width: 520px;
+}
+
+.bulk-import-modal {
+  max-width: 500px;
+  padding: 32px;
+  border: 1px solid rgba(0, 0, 0, .08);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .28);
+}
+
+.bulk-import-eyebrow {
+  margin: 0 0 8px;
+  color: var(--color-text-muted);
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: .16em;
+}
+
+.bulk-import-field {
+  margin-top: 18px;
+}
+
+.bulk-import-field label,
+.bulk-import-label {
+  margin: 0 0 7px;
+}
+
+.bulk-import-select-wrap {
+  position: relative;
+}
+
+.bulk-import-select-wrap select {
+  width: 100%;
+  appearance: none;
+  padding: 13px 42px 13px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-bg-soft);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.bulk-import-select-wrap select:hover,
+.bulk-import-select-wrap select:focus {
+  border-color: var(--color-text);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, .06);
+}
+
+.bulk-import-select-wrap svg {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 17px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+}
+
+.bulk-import-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.bulk-import-file {
+  display: grid !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 0 !important;
+  padding: 14px;
+  border: 1px dashed #b8b8b8;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #fafafa, #f2f2f2);
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+
+.bulk-import-file:hover,
+.bulk-import-file:focus-within {
+  border-color: var(--color-text);
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.bulk-import-file-icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 11px;
+  background: #111;
+  color: #fff;
+}
+
+.bulk-import-file-icon svg {
+  width: 19px;
+}
+
+.bulk-import-file-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bulk-import-file-copy strong {
+  font-size: var(--fs-body-sm);
+}
+
+.bulk-import-file-copy small,
+.bulk-import-file-name {
+  overflow: hidden;
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bulk-import-file-name {
+  grid-column: 2;
+  margin-top: -5px;
+}
+
+.bulk-import-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bulk-import-submit svg {
+  width: 16px;
 }
 
 .editor-modal h2 {

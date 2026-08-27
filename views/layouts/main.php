@@ -272,16 +272,29 @@
   </div>
 
   <div class="editor-overlay" id="bulkImportOverlay" data-lenis-prevent hidden>
-    <div class="editor-modal" role="dialog" aria-modal="true" aria-labelledby="bulkImportTitle">
+    <div class="editor-modal bulk-import-modal" role="dialog" aria-modal="true" aria-labelledby="bulkImportTitle">
       <button type="button" class="modal-close" data-close-bulk-import aria-label="Close">&times;</button>
+      <p class="bulk-import-eyebrow">EDITOR TOOLS</p>
       <h2 id="bulkImportTitle">Bulk import JSON</h2>
       <p class="editor-modal-sub">Import up to 50 records. Existing titles are skipped. Images must be public HTTP(S) URLs and are downloaded as local WebP files.</p>
-      <label for="bulkImportType">Content type</label>
-      <select id="bulkImportType"><option value="projects">Projects</option><option value="certificates">Certificates</option></select>
-      <label for="bulkImportFile">JSON file</label>
-      <input type="file" id="bulkImportFile" accept="application/json,.json" />
+      <div class="bulk-import-field">
+        <label for="bulkImportType">Content type</label>
+        <div class="bulk-import-select-wrap">
+          <select id="bulkImportType"><option value="projects">Projects</option><option value="certificates">Certificates</option></select>
+          <i data-lucide="chevron-down" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="bulk-import-field">
+        <span class="bulk-import-label">JSON file</span>
+        <label class="bulk-import-file" for="bulkImportFile">
+          <span class="bulk-import-file-icon"><i data-lucide="upload-cloud" aria-hidden="true"></i></span>
+          <span class="bulk-import-file-copy"><strong>Choose a JSON file</strong><small>Maximum 50 records</small></span>
+          <span class="bulk-import-file-name" id="bulkImportFileName">No file selected</span>
+        </label>
+        <input type="file" id="bulkImportFile" class="bulk-import-file-input" accept="application/json,.json" />
+      </div>
       <p class="form-error" id="bulkImportError" aria-live="polite"></p>
-      <button type="button" class="btn btn-primary btn-block" id="bulkImportSubmit">Import</button>
+      <button type="button" class="btn btn-primary btn-block bulk-import-submit" id="bulkImportSubmit"><i data-lucide="upload"></i>Import records</button>
       <p class="form-status" id="bulkImportResult" role="status" hidden></p>
     </div>
   </div>
