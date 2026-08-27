@@ -5,6 +5,7 @@
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  initPageLoadingOverlay();
   initContentProtection();
   // Data from PHP (passed via window.__* globals in views)
   window.TOOLS_DATA = window.__TOOLS || [];
@@ -45,6 +46,21 @@ document.addEventListener("DOMContentLoaded", () => {
   initChatbot();
   initLucideIcons();
 });
+
+function initPageLoadingOverlay() {
+  const overlay = document.getElementById("pageLoadingOverlay");
+  if (!overlay) return;
+  const startedAt = performance.now();
+  const finish = () => {
+    const remaining = Math.max(0, 280 - (performance.now() - startedAt));
+    setTimeout(() => {
+      overlay.classList.add("is-ready");
+      setTimeout(() => { overlay.hidden = true; }, 360);
+    }, remaining);
+  };
+  if (document.readyState === "complete") finish();
+  else window.addEventListener("load", finish, { once: true });
+}
 
 /* --------------------------------------------------------------------------
    CONTENT PROTECTION (casual download/copy deterrence)

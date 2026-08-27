@@ -30,6 +30,12 @@
 </head>
 <body>
 
+  <div class="loading-overlay" id="pageLoadingOverlay" role="status" aria-label="Loading">
+    <div class="honeycomb" aria-hidden="true">
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+  </div>
+
   <div id="scrollProgress" aria-hidden="true"></div>
 
   <!-- NAVBAR -->
