@@ -268,6 +268,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 
 **Acceptance criteria**: unauthenticated writes get 401; created cards persist in SQLite (`showcase_projects`, newest first) and appear for all visitors after reload; uploaded images are served as `.webp`; deleting a card removes its image file.
 
+Public certificate pagination shows 12 items initially on desktop and 8 on mobile, with Load More revealing the next page. The current implementation uses the `certGrid` pool rendered from SQLite.
+
 All original open questions from the pre-MVC spec have been resolved:
 
 | # | Question | Resolution |

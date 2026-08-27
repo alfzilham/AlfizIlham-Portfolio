@@ -3184,9 +3184,9 @@ function initCertificates() {
   var loadBtn = document.getElementById("certLoadMoreBtn");
   if (!grid) return;
 
-  // Pagination: 6 per page on mobile (2 cols × 3 rows), 8 on desktop
+  // Pagination: 8 per page on mobile, 12 on desktop
   function getCertPage() {
-    return window.matchMedia("(max-width: 768px)").matches ? 6 : 8;
+    return window.matchMedia("(max-width: 768px)").matches ? 8 : 12;
   }
   var certShown = getCertPage();
 
