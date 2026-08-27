@@ -15,10 +15,25 @@
 }
 
 @media (max-width: 480px) {
-  .chatbot { right: 16px; bottom: 16px; }
-  .chatbot-toggle span { display: none; }
-  .chatbot-toggle { width: 48px; height: 48px; justify-content: center; padding: 0; }
-  .chatbot-panel { bottom: 58px; }
+  .chatbot {
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .chatbot-toggle span {
+    display: none;
+  }
+
+  .chatbot-toggle {
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .chatbot-panel {
+    bottom: 58px;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -109,12 +124,35 @@
     height: 36px;
   }
 
-  .fan-card-1 { --tx: -140px; --rot: -16deg; }
-  .fan-card-2 { --tx: -88px; --rot: -9deg; }
-  .fan-card-3 { --tx: -38px; --rot: -3deg; }
-  .fan-card-4 { --tx: 14px; --rot: 4deg; }
-  .fan-card-5 { --tx: 66px; --rot: 10deg; }
-  .fan-card-6 { --tx: 118px; --rot: 17deg; }
+  .fan-card-1 {
+    --tx: -140px;
+    --rot: -16deg;
+  }
+
+  .fan-card-2 {
+    --tx: -88px;
+    --rot: -9deg;
+  }
+
+  .fan-card-3 {
+    --tx: -38px;
+    --rot: -3deg;
+  }
+
+  .fan-card-4 {
+    --tx: 14px;
+    --rot: 4deg;
+  }
+
+  .fan-card-5 {
+    --tx: 66px;
+    --rot: 10deg;
+  }
+
+  .fan-card-6 {
+    --tx: 118px;
+    --rot: 17deg;
+  }
 
   .cta-row {
     gap: 18px;
@@ -149,19 +187,49 @@
     font-size: 90px;
   }
 
-  .education-ghost-num-1 { left: 2%;  top: 60%; }
-  .education-ghost-num-2 { left: 30%; top: 12%; }
-  .education-ghost-num-3 { left: 58%; top: 50%; }
-  .education-ghost-num-4 { left: 82%; top: 0%; }
+  .education-ghost-num-1 {
+    left: 2%;
+    top: 60%;
+  }
+
+  .education-ghost-num-2 {
+    left: 30%;
+    top: 12%;
+  }
+
+  .education-ghost-num-3 {
+    left: 58%;
+    top: 50%;
+  }
+
+  .education-ghost-num-4 {
+    left: 82%;
+    top: 0%;
+  }
 
   .education-step {
     width: 200px;
   }
 
-  .education-step-1 { left: 0%;  top: 48%; }
-  .education-step-2 { left: 26%; top: 6%; }
-  .education-step-3 { left: 52%; top: 42%; }
-  .education-step-4 { left: 76%; top: 8%; }
+  .education-step-1 {
+    left: 0%;
+    top: 48%;
+  }
+
+  .education-step-2 {
+    left: 26%;
+    top: 6%;
+  }
+
+  .education-step-3 {
+    left: 52%;
+    top: 42%;
+  }
+
+  .education-step-4 {
+    left: 76%;
+    top: 8%;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -338,10 +406,10 @@
   }
 
   /* Hide strip icons on mobile (i + svg — lucide replaces <i> with <svg>) */
-  .contact-info-center > i,
-  .contact-info-center > svg,
-  .contact-info-right > i,
-  .contact-info-right > svg {
+  .contact-info-center>i,
+  .contact-info-center>svg,
+  .contact-info-right>i,
+  .contact-info-right>svg {
     display: none;
   }
 
@@ -514,12 +582,35 @@
     height: 24px;
   }
 
-  .fan-card-1 { --tx: -65px; --rot: -16deg; }
-  .fan-card-2 { --tx: -41px; --rot: -9deg; }
-  .fan-card-3 { --tx: -17px; --rot: -3deg; }
-  .fan-card-4 { --tx: 7px; --rot: 4deg; }
-  .fan-card-5 { --tx: 31px; --rot: 10deg; }
-  .fan-card-6 { --tx: 55px; --rot: 17deg; }
+  .fan-card-1 {
+    --tx: -65px;
+    --rot: -16deg;
+  }
+
+  .fan-card-2 {
+    --tx: -41px;
+    --rot: -9deg;
+  }
+
+  .fan-card-3 {
+    --tx: -17px;
+    --rot: -3deg;
+  }
+
+  .fan-card-4 {
+    --tx: 7px;
+    --rot: 4deg;
+  }
+
+  .fan-card-5 {
+    --tx: 31px;
+    --rot: 10deg;
+  }
+
+  .fan-card-6 {
+    --tx: 55px;
+    --rot: 17deg;
+  }
 
   /* CTA buttons — stack vertically */
   .cta-row {
@@ -611,11 +702,18 @@
   }
 
   @keyframes edu-draw-line-vertical {
-    to { transform: scaleY(1); }
+    to {
+      transform: scaleY(1);
+    }
   }
 
-  .education-wave { display: none; }
-  .education-ghost-num { display: none; }
+  .education-wave {
+    display: none;
+  }
+
+  .education-ghost-num {
+    display: none;
+  }
 
   .education-step {
     position: relative;
@@ -626,8 +724,19 @@
     padding-left: 8px;
   }
 
-  .education-step-1 { animation-delay: 0.3s; }
-  .education-step-2 { animation-delay: 0.8s; }
-  .education-step-3 { animation-delay: 1.3s; }
-  .education-step-4 { animation-delay: 1.8s; }
+  .education-step-1 {
+    animation-delay: 0.3s;
+  }
+
+  .education-step-2 {
+    animation-delay: 0.8s;
+  }
+
+  .education-step-3 {
+    animation-delay: 1.3s;
+  }
+
+  .education-step-4 {
+    animation-delay: 1.8s;
+  }
 }
