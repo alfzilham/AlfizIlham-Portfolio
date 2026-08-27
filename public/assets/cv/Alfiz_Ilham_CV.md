@@ -27,7 +27,7 @@ _June 2026 – Present_
 _March 2025 – June 2026_
 
 - Built and shipped a client website for a school counselor — services section, blog layout, testimonials, and a working contact form — in plain HTML, CSS, and vanilla JavaScript.
-- Built two self-initiated landing pages (Mekatron, a 3D robot showcase; a scroll-driven creative portfolio) using React and Next.js to practice animation and scroll-based interaction.
+- Built a scroll-driven landing page using React and Next.js, implementing custom scroll-triggered image animations.
 - Live projects and source code: [github.com/alfzilham](https://github.com/alfzilham)
 
 ### Imam Travel — Aceh, Indonesia
