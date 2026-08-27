@@ -3895,3 +3895,25 @@ body.editor-mode .cert-menu-btn {
 @keyframes chatbot-word-in { to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .chatbot-panel.t-panel-slide, .chatbot-panel.t-panel-slide[data-open="true"] { transition: none !important; transform: none; filter: none; }.chatbot-thinking i, .chatbot-word { animation: none !important; opacity: 1; transform: none; } }
 .service-other-input { width: 100%; min-height: 48px; padding: 12px 14px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-bg-soft); font-size: var(--fs-body-sm); outline: none; }.service-other-input:focus { border-color: var(--color-text); box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
+.form-status.success {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: contact-success-in 420ms cubic-bezier(.22,1,.36,1) both;
+}
+.form-status.success::before {
+  content: "✓";
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-weight: 800;
+  animation: contact-success-check 500ms cubic-bezier(.34,1.56,.64,1) 80ms both;
+}
+@keyframes contact-success-in { from { opacity: 0; transform: translateY(6px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes contact-success-check { from { opacity: 0; transform: rotate(-18deg) scale(.5); } to { opacity: 1; transform: rotate(0) scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .form-status.success, .form-status.success::before { animation: none; }
+}
