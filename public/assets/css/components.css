@@ -2697,6 +2697,12 @@ body.card-form-open .editor-toolbar {
   line-height: 1.35;
 }
 
+/* Pagination hides cards beyond the active public-page threshold. */
+.chroma-extra,
+.cert-extra {
+  display: none !important;
+}
+
 .cert-card-company {
   font-size: var(--fs-body-sm);
   color: rgba(0, 0, 0, 0.55);
