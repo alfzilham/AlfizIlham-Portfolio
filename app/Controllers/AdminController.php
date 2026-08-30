@@ -343,7 +343,18 @@ class AdminController
         $ca = env('HTTP_CA_BUNDLE');
         if (!$ca) foreach (['C:/xampp/php/extras/ssl/cacert.pem', 'C:/xampp/phpMyAdmin/vendor/composer/ca-bundle/res/cacert.pem'] as $candidate) if (is_readable($candidate)) { $ca = $candidate; break; }
         if ($ca && is_readable($ca)) $ssl['cafile'] = $ca;
-        $context = stream_context_create(['http'=>['timeout'=>15, 'follow_location'=>0, 'ignore_errors'=>true], 'ssl'=>$ssl]);
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'timeout' => 15,
+                // GitHub raw URLs commonly redirect to a CDN; follow only a small bounded chain.
+                'follow_location' => 1,
+                'max_redirects' => 3,
+                'ignore_errors' => true,
+                'header' => "User-Agent: AlfizIlham-Portfolio-Importer\r\nAccept: image/*\r\n",
+            ],
+            'ssl' => $ssl,
+        ]);
         $binary = @file_get_contents($url, false, $context);
         if ($binary === false || strlen($binary) > 5 * 1024 * 1024) throw new RuntimeException('Image download failed or exceeds 5 MB.');
         $tmp = tempnam(sys_get_temp_dir(), 'portfolio-import-'); file_put_contents($tmp, $binary);
