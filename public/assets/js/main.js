@@ -3744,10 +3744,12 @@ function initChatbot() {
         const msgHash = await hashString(questionText + "\n" + text);
         const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
         if (!feedbackResult.success) button.classList.remove("is-selected");
+        else if (feedbackResult.feedbackCount !== undefined) document.getElementById("visitorFeedback").textContent = feedbackResult.feedbackCount;
       } else {
         const msgHash = await hashString(questionText + "\n" + text);
         const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
         if (!feedbackResult.success) button.classList.add("is-selected");
+        else if (feedbackResult.feedbackCount !== undefined) document.getElementById("visitorFeedback").textContent = feedbackResult.feedbackCount;
       }
     } else if (action === "rewrite" && (button.dataset.question || lastQuestion) && !isRewriting) {
       isRewriting = true;

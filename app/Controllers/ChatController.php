@@ -228,7 +228,7 @@ class ChatController
         }
 
         $result = ChatFeedback::save($messageHash, $feedbackType, $question, $answer, Request::ip());
-        json_response(['success' => true] + $result);
+        json_response(['success' => true, 'feedbackCount' => ChatFeedback::count()] + $result);
     }
 
     private function allowFeedbackRequest($ip)
