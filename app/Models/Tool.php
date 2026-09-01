@@ -10,7 +10,7 @@ class Tool
     public static function all()
     {
         $db = Database::getInstance();
-        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase', 'Amazon Bedrock', 'AWS Bedrock', 'Vertex AI', 'Scratch')");
+        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase', 'Amazon Bedrock', 'AWS Bedrock', 'Vertex AI', 'Scratch', 'Antigravity', 'Google AI Studio', 'Stitch')");
         $googleTools = [
             ['Antigravity', 'ai-ml', 'AI & ML', 38],
             ['Google AI Studio', 'ai-ml', 'AI & ML', 39],
