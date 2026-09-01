@@ -3732,7 +3732,7 @@ function initChatbot() {
         textarea.style.opacity = "0";
         document.body.appendChild(textarea);
         textarea.select();
-        try { document.execCommand("copy"); button.innerHTML = '<i data-lucide="check" aria-hidden="true"></i>'; button.title = "Copied"; button.setAttribute("aria-label", "Copied"); button.classList.add("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); setTimeout(() => { button.innerHTML = '<i data-lucide="copy" aria-hidden="true"></i>'; button.title = "Copy"; button.setAttribute("aria-label", "Copy response"); button.classList.remove("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); }, 1500); } catch (_) {}
+        try { document.execCommand("copy"); button.innerHTML = '<i data-lucide="check" aria-hidden="true"></i>'; button.title = "Copied"; button.setAttribute("aria-label", "Copied"); button.classList.add("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); setTimeout(() => { button.innerHTML = '<i data-lucide="copy" aria-hidden="true"></i>'; button.title = "Copy"; button.setAttribute("aria-label", "Copy response"); button.classList.remove("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); }, 1500); } catch (_) { button.classList.add("is-error"); button.title = "Copy failed"; setTimeout(() => button.classList.remove("is-error"), 1800); }
         document.body.removeChild(textarea);
       }
     } else if (action === "good" || action === "bad") {
@@ -3743,12 +3743,12 @@ function initChatbot() {
         button.classList.add("is-selected");
         const msgHash = await hashString(questionText + "\n" + text);
         const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
-        if (!feedbackResult.success) button.classList.remove("is-selected");
+        if (!feedbackResult.success) { button.classList.remove("is-selected"); button.classList.add("is-error"); setTimeout(() => button.classList.remove("is-error"), 1800); }
         else if (feedbackResult.feedbackCount !== undefined) document.getElementById("visitorFeedback").textContent = feedbackResult.feedbackCount;
       } else {
         const msgHash = await hashString(questionText + "\n" + text);
         const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
-        if (!feedbackResult.success) button.classList.add("is-selected");
+        if (!feedbackResult.success) { button.classList.add("is-selected"); button.classList.add("is-error"); setTimeout(() => button.classList.remove("is-error"), 1800); }
         else if (feedbackResult.feedbackCount !== undefined) document.getElementById("visitorFeedback").textContent = feedbackResult.feedbackCount;
       }
     } else if (action === "rewrite" && (button.dataset.question || lastQuestion) && !isRewriting) {

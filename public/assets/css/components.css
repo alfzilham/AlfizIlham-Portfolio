@@ -3284,6 +3284,11 @@ body.editor-mode .cert-menu-btn {
   border: 1px solid #fecaca;
 }
 
+.form-status.success strong,
+.form-status.success a { color: #15803d; }
+.form-status.error strong,
+.form-status.error a { color: #b91c1c; }
+
 /* Custom Dropdown */
 .custom-dropdown {
   position: relative;
@@ -4513,6 +4518,7 @@ body.editor-mode .cert-menu-btn {
 .chatbot-action.is-selected { color: var(--color-bg); background: var(--color-text); }
 .chatbot-action.is-selected svg { fill: currentColor; stroke: var(--color-bg); }
 .chatbot-action.is-confirmed { color: #16803c; background: #eaf7ef; }
+.chatbot-action.is-error { color: #b91c1c; background: #fef2f2; }
 .chatbot-action:disabled { cursor: wait; opacity: .55; transform: none; }
 .chatbot-edit-input { width: 100%; min-width: 220px; resize: vertical; border: 1px solid var(--color-text); border-radius: 12px; padding: 11px 12px; background: var(--color-bg); color: var(--color-text); font: inherit; line-height: 1.5; box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-text) 10%, transparent); }
 
