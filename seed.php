@@ -251,8 +251,8 @@ $tools = [
     // ai-ml (9)
     ['Claude', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/claude.svg', 36],
     ['OpenRouter', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/openrouter.svg', 37],
-    ['Amazon Bedrock', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/aws-bedrock.svg', 38],
-    ['Vertex AI', 'ai-ml', 'AI Platform', 'assets/image/icons/ai/vertex-ai.svg', 39],
+    ['Antigravity', 'ai-ml', 'AI & ML', 'assets/image/icons/ai/antigravity.svg', 38],
+    ['Google AI Studio', 'ai-ml', 'AI & ML', 'assets/image/icons/ai/google-ai-studio.svg', 39],
     ['TensorFlow', 'ai-ml', 'ML Framework', 'assets/image/icons/ai/tensorflow.svg', 41],
     ['NumPy', 'ai-ml', 'Data Science', 'assets/image/icons/ai/numpy.svg', 42],
     ['Pandas', 'ai-ml', 'Data Analysis', 'assets/image/icons/ai/pandas.svg', 43],
@@ -271,7 +271,7 @@ $tools = [
     ['Obsidian', 'tools', 'Note-taking', 'assets/image/icons/ai/obsidian.svg', 47],
     ['OpenCode', 'tools', 'AI Coding', 'assets/image/icons/ai/opencode.svg', 48],
     ['Android Studio', 'tools', 'IDE', 'assets/image/icons/platform/android-studio.svg', 54],
-    ['Scratch', 'tools', 'Education', 'assets/image/icons/platform/scratch.svg', 55],
+    ['Stitch', 'ai-ml', 'AI & ML', 'assets/image/icons/ai/stitch.svg', 55],
     ['n8n', 'tools', 'Automation', 'assets/image/icons/platform/n8n.svg', 56],
 ];
 

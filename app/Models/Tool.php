@@ -10,11 +10,11 @@ class Tool
     public static function all()
     {
         $db = Database::getInstance();
-        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase')");
+        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase', 'Amazon Bedrock', 'AWS Bedrock', 'Vertex AI', 'Scratch')");
         $googleTools = [
-            ['Antigravity', 'ai', 'AI & ML', 62],
-            ['Google AI Studio', 'ai', 'AI & ML', 61],
-            ['Stitch', 'ai', 'AI & ML', 63],
+            ['Antigravity', 'ai-ml', 'AI & ML', 38],
+            ['Google AI Studio', 'ai-ml', 'AI & ML', 39],
+            ['Stitch', 'ai-ml', 'AI & ML', 55],
         ];
         foreach ($googleTools as [$name, $category, $label, $sort]) {
             $icon = match ($name) {
