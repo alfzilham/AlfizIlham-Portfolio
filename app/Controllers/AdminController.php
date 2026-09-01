@@ -328,6 +328,28 @@ class AdminController
         json_response(['success'=>true] + $results);
     }
 
+    public function exportCertificates()
+    {
+        self::requireAdmin();
+        $rows = array_map(static function ($row) { return ['title'=>$row['title'], 'company'=>$row['company'] ?? '', 'credential_id'=>$row['credential_id'] ?? '', 'credential_link'=>$row['credential_link'] ?? '', 'image'=>$row['image']]; }, Certificate::all());
+        self::downloadJson('certificates-export.json', $rows);
+    }
+
+    public function exportProjects()
+    {
+        self::requireAdmin();
+        $rows = array_map(static function ($row) { return ['title'=>$row['title'], 'description'=>$row['description'], 'link'=>$row['link'] ?? '', 'image'=>$row['image']]; }, ShowcaseProject::all());
+        self::downloadJson('projects-export.json', $rows);
+    }
+
+    private static function downloadJson($filename, array $rows)
+    {
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        echo json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
     private static function validateRemoteImageUrl($raw)
     {
         $url = trim((string)$raw); $parts = parse_url($url);
