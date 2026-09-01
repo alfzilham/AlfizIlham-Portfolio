@@ -67,6 +67,10 @@ return [
     'skills_filter_tools' => 'TOOLS',
     'skills_search_placeholder' => 'Search tools...',
     'skills_empty' => 'No tools match your search.',
+    'google_program_eyebrow' => 'GOOGLE DEVELOPER PROGRAM',
+    'google_program_heading' => 'Building with Google\'s developer ecosystem',
+    'google_program_desc' => 'I continuously explore Google Developer Program resources and apply Google Cloud, Firebase, Apps Script, and AI tooling to practical products.',
+    'google_program_cta' => 'Explore Google Developer Program',
 
     // Education
     'education_eyebrow' => 'Academic Background',

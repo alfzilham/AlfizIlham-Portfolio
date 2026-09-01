@@ -10,6 +10,17 @@ class Tool
     public static function all()
     {
         $db = Database::getInstance();
+        $googleTools = [
+            ['Google Developer Program', 'tools', 'Developer Program', 57],
+            ['Google Apps Script', 'tools', 'Automation', 58],
+            ['Google Cloud', 'devops', 'Cloud Platform', 59],
+            ['Firebase', 'backend', 'Backend Platform', 60],
+            ['Google AI Studio', 'ai', 'AI & ML', 61],
+        ];
+        $stmt = $db->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, 'assets/image/icons/ai/google-colab.svg', :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");
+        foreach ($googleTools as [$name, $category, $label, $sort]) {
+            $stmt->execute(['name' => $name, 'category' => $category, 'label' => $label, 'sort' => $sort, 'name_check' => $name]);
+        }
         return $db->fetchAll("SELECT * FROM tools ORDER BY sort_order ASC, name ASC");
     }
 

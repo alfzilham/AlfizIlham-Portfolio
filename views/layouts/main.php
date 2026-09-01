@@ -67,6 +67,8 @@
     <!-- SECTION 7: MY SKILL SET -->
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
+    <?php echo View::section('google-developer'); ?>
+
     <!-- SECTION 7: PROJECTS TEASER -->
     <?php echo View::section('projects-teaser', ['projects' => $projects, 'showcase' => $showcase]); ?>
 
@@ -265,6 +267,9 @@
     </button>
     <span class="editor-toolbar-divider"></span>
     <button type="button" id="bulkImportBtn" class="editor-toolbar-cta">Import JSON</button>
+    <span class="editor-toolbar-divider"></span>
+    <button type="button" id="exportProjectBtn" class="editor-toolbar-btn"><i data-lucide="download"></i>Projects JSON</button>
+    <button type="button" id="exportCertBtn" class="editor-toolbar-btn"><i data-lucide="download"></i>Certificates JSON</button>
     <span class="editor-toolbar-divider"></span>
     <button type="button" id="editorLogoutBtn" class="editor-toolbar-btn editor-toolbar-muted">
       <i data-lucide="user-x"></i><?= i18n::t('editor_logout') ?>
