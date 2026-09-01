@@ -1310,6 +1310,8 @@ function initEditorMode() {
   const dzName = document.getElementById("dropzoneName");
 
   const lightbox = document.getElementById("lightbox");
+  document.getElementById("exportProjectBtn")?.addEventListener("click", () => { window.location.href = "index.php?/api/admin/projects/export"; });
+  document.getElementById("exportCertBtn")?.addEventListener("click", () => { window.location.href = "index.php?/api/admin/certificates/export"; });
 
   const isId = () => window.LANG === "id";
   const isDesktop = () => window.innerWidth > 1024;
@@ -3294,6 +3296,7 @@ function initChatbot() {
   if (!toggle || !panel || !form || !input || !messages) return;
 
   let closeTimer;
+  let lastQuestion = "";
   const setOpen = (open) => {
     clearTimeout(closeTimer);
     if (open) {
@@ -3309,11 +3312,35 @@ function initChatbot() {
       }, 360);
     }
   };
+  const addActions = (group, role, text) => {
+    if (role === "visitor") {
+      const edit = document.createElement("button");
+      edit.type = "button"; edit.className = "chatbot-action"; edit.dataset.chatAction = "edit";
+      edit.textContent = "Edit"; edit.dataset.message = text;
+      group.appendChild(edit);
+      return;
+    }
+    [
+      ["copy", "Copy"], ["good", "Good"], ["bad", "Bad"], ["rewrite", "Rewrite"],
+    ].forEach(([action, label]) => {
+      const button = document.createElement("button");
+      button.type = "button"; button.className = "chatbot-action"; button.dataset.chatAction = action;
+      button.textContent = label; button.dataset.message = text;
+      group.appendChild(button);
+    });
+  };
   const addMessage = (text, role) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "chatbot-message-group chatbot-message-group--" + role;
     const item = document.createElement("p");
     item.className = "chatbot-message chatbot-message--" + role;
     item.textContent = text;
-    messages.appendChild(item);
+    wrapper.appendChild(item);
+    const actions = document.createElement("div");
+    actions.className = "chatbot-message-actions";
+    addActions(actions, role, text);
+    wrapper.appendChild(actions);
+    messages.appendChild(wrapper);
     messages.scrollTop = messages.scrollHeight;
     return item;
   };
@@ -3430,12 +3457,14 @@ function initChatbot() {
       const data = await response.json().catch(() => ({}));
       if (!response.ok || data.success !== true)
         throw new Error(data.error || "Import failed.");
-      bulkImportResult.className = "form-status success";
+      const failedCount = (data.failed || []).length;
+      bulkImportResult.className =
+        "form-status " + (data.imported > 0 && failedCount > 0 ? "warning" : data.imported > 0 ? "success" : "error");
       bulkImportResult.textContent =
         "Imported: " +
         data.imported +
         ". Failed: " +
-        (data.failed || []).length +
+        failedCount +
         "." +
         ((data.failed || []).length
           ? " " +
@@ -3457,6 +3486,7 @@ function initChatbot() {
     const message = input.value.trim();
     if (message.length < 2) return;
     const labels = window.__CHAT_LANG || {};
+    lastQuestion = message;
     addMessage(message, "visitor");
     input.value = "";
     input.disabled = true;
@@ -3531,6 +3561,8 @@ function initChatbot() {
     appendAnimatedText(parent, text.slice(cursor), container);
   };
   const appendRichMessage = (text) => {
+    const wrapper = document.createElement("div");
+    wrapper.className = "chatbot-message-group chatbot-message-group--assistant";
     const item = document.createElement("div");
     item.className = "chatbot-message chatbot-message--assistant chatbot-rich";
     String(text)
@@ -3554,9 +3586,41 @@ function initChatbot() {
         });
         item.appendChild(content);
       });
-    messages.appendChild(item);
+    wrapper.appendChild(item);
+    const actions = document.createElement("div");
+    actions.className = "chatbot-message-actions";
+    addActions(actions, "assistant", String(text));
+    wrapper.appendChild(actions);
+    messages.appendChild(wrapper);
     messages.scrollTop = messages.scrollHeight;
   };
+
+  messages.addEventListener("click", async (event) => {
+    const button = event.target.closest("[data-chat-action]");
+    if (!button) return;
+    const action = button.dataset.chatAction;
+    const group = button.closest(".chatbot-message-group");
+    const bubble = group?.querySelector(".chatbot-message");
+    const text = button.dataset.message || bubble?.textContent || "";
+    if (action === "copy") {
+      try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; } catch (_) {}
+    } else if (action === "good" || action === "bad") {
+      group.querySelectorAll('[data-chat-action="good"],[data-chat-action="bad"]').forEach((b) => b.classList.remove("is-selected"));
+      button.classList.add("is-selected");
+    } else if (action === "rewrite" && lastQuestion) {
+      input.value = lastQuestion; form.requestSubmit();
+    } else if (action === "edit" && bubble) {
+      const original = bubble.textContent;
+      const editor = document.createElement("textarea"); editor.className = "chatbot-edit-input"; editor.value = original; editor.rows = 2;
+      bubble.replaceWith(editor); button.textContent = "Save"; button.dataset.chatAction = "save-edit"; button.dataset.original = original;
+      const cancel = document.createElement("button"); cancel.type = "button"; cancel.className = "chatbot-action"; cancel.dataset.chatAction = "cancel-edit"; cancel.dataset.original = original; cancel.textContent = "Cancel"; button.parentElement.appendChild(cancel);
+    } else if (action === "save-edit" && bubble === null) {
+      const editor = group.querySelector(".chatbot-edit-input"); const value = editor?.value.trim();
+      if (value) { lastQuestion = value; const p = document.createElement("p"); p.className = "chatbot-message chatbot-message--visitor"; p.textContent = value; editor.replaceWith(p); button.textContent = "Edit"; button.dataset.chatAction = "edit"; button.dataset.message = value; group.querySelector('[data-chat-action="cancel-edit"]')?.remove(); }
+    } else if (action === "cancel-edit") {
+      const editor = group.querySelector(".chatbot-edit-input"); const p = document.createElement("p"); p.className = "chatbot-message chatbot-message--visitor"; p.textContent = button.dataset.original || ""; editor?.replaceWith(p); group.querySelector('[data-chat-action="save-edit"]')?.remove(); button.remove();
+    }
+  });
 }
 
 function initLucideIcons() {

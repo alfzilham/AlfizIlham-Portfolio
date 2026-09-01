@@ -1394,6 +1394,9 @@
   opacity: 1;
 }
 
+.chroma-card:hover .chroma-img-wrapper img { transform: scale(1.035); }
+.chroma-card .chroma-img-wrapper img { transition: transform .45s cubic-bezier(.2,.7,.2,1); }
+
 .chroma-img-wrapper {
   position: relative;
   z-index: 1;
@@ -4361,6 +4364,43 @@ body.editor-mode .cert-menu-btn {
   gap: 4px;
   height: 16px;
 }
+
+.chatbot-message-group { display: flex; flex-direction: column; gap: 6px; max-width: 92%; }
+.chatbot-message-group--visitor { align-self: flex-end; align-items: flex-end; }
+.chatbot-message-group--assistant { align-self: flex-start; align-items: flex-start; }
+.chatbot-message-actions { display: flex; gap: 4px; padding: 0 4px; opacity: .72; }
+.chatbot-action { border: 0; background: transparent; color: var(--color-text-muted); font: inherit; font-size: 11px; padding: 3px 5px; cursor: pointer; border-radius: 4px; }
+.chatbot-action:hover, .chatbot-action.is-selected { color: var(--color-text); background: var(--color-bg-soft); }
+.chatbot-edit-input { width: 100%; min-width: 220px; resize: vertical; border: 1px solid var(--color-border); border-radius: 10px; padding: 10px; font: inherit; }
+
+.form-status.warning {
+  background: #fffbeb;
+  color: #a16207;
+  border: 1px solid #fde68a;
+}
+
+.google-developer {
+  padding: clamp(64px, 9vw, 120px) 0;
+}
+
+.google-developer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: clamp(28px, 5vw, 64px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-soft);
+}
+
+.google-developer-copy { max-width: 680px; }
+.google-developer-copy h2 { margin: 8px 0 16px; }
+.google-developer-copy p:not(.section-eyebrow) { color: var(--color-text-muted); margin-bottom: 24px; }
+.google-developer-mark { display: grid; place-items: center; min-width: 150px; aspect-ratio: 1; border-radius: 32px; background: #fff; box-shadow: var(--neu-shadow-out); }
+.google-developer-mark span { font: 700 72px/1 Arial, sans-serif; color: #4285f4; }
+.google-developer-mark small { margin-top: -20px; color: var(--color-text-muted); }
+@media (max-width: 640px) { .google-developer-inner { flex-direction: column; align-items: flex-start; } .google-developer-mark { min-width: 110px; } }
 
 .chatbot-thinking-label {
   display: inline-block;
