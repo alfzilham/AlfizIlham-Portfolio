@@ -1,74 +1,51 @@
 # CONTEXT.md — Alfiz Ilham Portfolio
 
-Project background, goals, audience, and brand context. Read this first before ARCHITECTURE.md, SPEC.md, or DESIGN.md — it explains **why** the site is built the way it is.
+## Ringkasan
 
----
+Alfiz Ilham adalah mahasiswa Teknik Komputer Universitas Syiah Kuala di Banda Aceh yang memosisikan diri sebagai **Fullstack Developer, AI-Integrated Apps**. Website ini adalah portfolio single-page yang juga memuat layanan, karya desain dan kaligrafi, kredensial, contact flow, serta assistant AI yang menjawab berdasarkan data portfolio.
 
-## 1. Project Summary
+## Tujuan produk
 
-A personal portfolio website for **Alfiz Ilham**, a Computer Engineering (Teknik Komputer) student at Universitas Syiah Kuala (Aceh, Indonesia) who positions himself professionally as a **"Fullstack Developer, AI-Integrated Apps"**.
+1. Mengubah pengunjung menjadi calon klien melalui CTA, service list, FAQ, contact form, WhatsApp, email, dan map Banda Aceh.
+2. Menunjukkan kemampuan fullstack, AI integration, automation, design, dan calligraphy melalui data serta karya yang dapat dijelajahi.
+3. Memberi recruiter dan calon klien jawaban cepat melalui chatbot grounded tanpa mengarang fakta.
+4. Menjaga konten yang berubah—showcase project dan certificate—dapat dikelola melalui editor mode tanpa CMS eksternal.
 
-The site is a single-page (`index.php`) PHP MVC portfolio combining:
+## Audiens
 
-- Software/web development case studies (19 website projects)
-- Design work (9 pieces — posters, banners, brand assets)
-- Naskh calligraphy portfolio (18 pieces, 10+ competition wins, 500+ commissions)
-- A full tech-stack directory (filterable, searchable — 56 tools)
-- A working contact form + embedded map (Banda Aceh)
-- Community/organizational activity documentation (B&W photo gallery)
+- UMKM dan bisnis kecil/menengah yang memerlukan website, aplikasi, automasi, atau integrasi AI.
+- Recruiter/hiring manager untuk posisi software, AI, atau fullstack junior.
+- Klien commission kaligrafi Naskh.
+- Komunitas akademik dan organisasi di Aceh.
 
-The site is bilingual (EN/ID toggle in navbar) — English is the default language.
+## Positioning dan tone
 
----
+Identitas visual monochrome, tegas, minimal, dan kontras tinggi. Mascot 3D, marquee, kartu interaktif, dan motion memberi sisi personal; copy tetap profesional dan berbasis bukti. Developer, designer, AI builder, dan calligrapher dipresentasikan sebagai satu identitas multidisiplin.
 
-## 2. Goals
+Default bahasa UI adalah Indonesia, dengan English sebagai pilihan penuh melalui session toggle. Copy data berulang dapat dilokalkan lewat `dynamic_content` di dictionary bahasa.
 
-| Goal | Why it matters |
-|------|---------------|
-| **Convert visitors into clients/leads** | Primary CTA repeats throughout ("Let's Build Something", "Start a Project", "Send Message") — this is a service-selling site, not just a resume. |
-| **Establish credibility across 3 disciplines** | Alfiz isn't just a developer — the site must convincingly present dev, design, _and_ calligraphy as serious, professional skill areas (20+ design projects, 500+ commissions, 10+ competition wins). |
-| **Show breadth of technical skill** | The full tech-stack grid + filterable tool directory (56 tools) exists to reassure technical clients/recruiters that stack knowledge is real and current. |
-| **Feel personal and human, not templated** | Heavy use of a custom 3D mascot illustration, playful marquees, and a monochrome-but-bold visual identity — differentiates from generic portfolio templates. |
-| **Local + international reach** | Contact section centers on Banda Aceh (local market, UMKM clients via althentic.dev) while the overall English-first copy and "outside Indonesia" FAQ signal openness to international clients. |
+## Domain konten
 
----
+| Domain | Source | Fungsi |
+|---|---|---|
+| Website/design/calligraphy | tabel `projects` + folder image | project teaser dan filter kategori |
+| Showcase terkurasi | `showcase_projects` + `uploads/showcase` | ChromaGrid, CRUD editor, chatbot knowledge |
+| Skills | tabel `tools` + icon SVG | kategori/search dan tech marquee |
+| Services | tabel `services` | accordion layanan |
+| Aktivitas | tabel `gallery` + `assets/image/gallery` | masonry gallery |
+| Social proof | `testimonials` | testimonial/rating/avatar |
+| Credentials | `certificates` | pinned card, credential link, editor |
+| Profile authority | `public/assets/cv/Alfiz_Ilham_CV.md` | sumber chatbot |
 
-## 3. Target Audience
+## Batasan yang disengaja
 
-1. **Prospective clients (freelance/agency work)** — small-to-medium Indonesian businesses (UMKM) needing websites, plus potential international clients for full-stack/AI work via althentic.dev.
-2. **Recruiters / hiring managers** — evaluating Alfiz for internship or junior software/AI engineering roles.
-3. **Calligraphy commission clients** — a distinct audience segment interested in Naskh calligraphy work, separate from tech clients.
-4. **Academic/peer network** — university peers, USK community, and organizations Alfiz has volunteered with (visible in the Gallery section).
+- PHP MVC vanilla, tanpa framework, Composer, npm, bundler, atau server API terpisah.
+- SQLite dipilih agar deployment ringan dan sesuai hosting sederhana; `seed.php` hanya dapat dijalankan dari CLI.
+- Halaman utama tetap single-page, sedangkan privacy/terms adalah page entry point terpisah.
+- Contact memakai EmailJS dari browser dengan fallback PHP; konfigurasi provider dan AI dibaca dari config/env.
+- Chatbot hanya boleh menyampaikan fakta dari CV, snapshot website, database, dan retrieval context. Ia memiliki rate limit dan graceful error.
+- Editor bukan CMS publik: login session, CSRF, validasi upload, WebP normalization, dan remote-image SSRF protection wajib dipertahankan.
 
----
+## Source of truth
 
-## 4. Brand Personality
-
-- **Bold, confident, minimal** — monochrome black/white palette, oversized typography, no gradients or decorative color. Confidence communicated through scale and contrast, not color.
-- **Playful but professional** — the 3D mascot avatar, kinetic marquee text, and floating icon badges add personality without undermining the professional tone of the copy itself.
-- **Multi-disciplinary, not scattered** — dev + AI + design + calligraphy are presented as facets of one coherent identity ("Software & AI Engineer" who also does calligraphy), not as unrelated hobbies.
-- **Evidence-driven** — sections back claims with CV-supported numbers: 20+ design projects, 4+ years of calligraphy, 500+ commissions, 10+ competition wins, and the 19/9/18 project breakdown.
-
----
-
-## 5. Content Domains
-
-| Domain | Asset folder | Count |
-|--------|-------------|-------|
-| Website projects | `public/assets/image/projects/website/` | 19 |
-| Design work | `public/assets/image/projects/design/` | 9 |
-| Calligraphy | `public/assets/image/projects/calligraphy/` | 18 |
-| Community/activity gallery | `public/assets/image/gallery/` | 16 |
-
----
-
-## 6. Known Constraints
-
-- **PHP MVC (vanilla)** — no frontend framework, no CSS framework beyond Bootstrap Icons (icon font only). Vanilla routing, no Composer dependencies.
-- **SQLite database** — lightweight, serverless. No MySQL/PostgreSQL required. Data seeded via `seed.php` (CLI only).
-- **Single page** — all sections live on `index.php`; nav links are anchor scrolls (`#about`, `#skills`, etc.).
-- **Static assets, no CMS** — all project/gallery images are pre-exported `.webp` files in `public/assets/image/`.
-- **Contact form** — EmailJS as primary submission method, PHP `mail()` as fallback. No dedicated email service configured yet.
-- **i18n** — English complete, Indonesian complete. Toggle via PHP session.
-- **Visitor counter** — real tracking via SQLite. Session-based deduplication. Bot filtering included.
-- **Mobile responsiveness** — tuned per-section in `responsive.css` (4 breakpoints): navbar keeps side padding from viewport edges, the curved marquee scales up on small screens, skill filters stack instead of scrolling, contact strip pairs "Call & WhatsApp" with "Write to Us" (icons hidden, newsletter below), and the CTA fan cards scale down so all six icons stay inside small viewports.
+Perilaku aktual ditentukan oleh `public/index.php`, controller/service/model, dan template di `views/`. Database SQLite adalah source of truth untuk record runtime. `graphify-out/2026-09-01/GRAPH_REPORT.md` membantu navigasi dependency, tetapi dapat stale setelah perubahan dan bukan source code. Jalankan Graphify update setelah perubahan code bila graph diperlukan kembali.
