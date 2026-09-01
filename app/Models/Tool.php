@@ -10,11 +10,8 @@ class Tool
     public static function all()
     {
         $db = Database::getInstance();
+        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase')");
         $googleTools = [
-            ['Google Developer Program', 'tools', 'Developer Program', 57],
-            ['Google Apps Script', 'tools', 'Automation', 58],
-            ['Google Cloud', 'devops', 'Cloud Platform', 59],
-            ['Firebase', 'backend', 'Backend Platform', 60],
             ['Antigravity', 'ai', 'AI & ML', 62],
             ['Google AI Studio', 'ai', 'AI & ML', 61],
             ['Stitch', 'ai', 'AI & ML', 63],
