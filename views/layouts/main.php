@@ -298,16 +298,22 @@
       </div>
       <div class="bulk-import-field">
         <span class="bulk-import-label">JSON file</span>
-        <label class="bulk-import-file" for="bulkImportFile">
-          <span class="bulk-import-file-icon"><i data-lucide="upload-cloud" aria-hidden="true"></i></span>
-          <span class="bulk-import-file-copy"><strong>Choose a JSON file</strong><small>Maximum 50 records</small></span>
-          <span class="bulk-import-file-name" id="bulkImportFileName">No file selected</span>
-        </label>
-        <input type="file" id="bulkImportFile" class="bulk-import-file-input" accept="application/json,.json" />
+        <div class="bulk-import-dropzone" id="bulkImportDropzone">
+          <input type="file" id="bulkImportFile" class="bulk-import-file-input" accept="application/json,.json" />
+          <div class="bulk-import-dropzone-inner">
+            <span class="bulk-import-dropzone-icon"><i data-lucide="upload-cloud" aria-hidden="true"></i></span>
+            <span class="bulk-import-dropzone-text"><strong>Drag & drop a JSON file here</strong></span>
+            <span class="bulk-import-dropzone-sub">or click to browse · Maximum 50 records · .json only</span>
+            <span class="bulk-import-dropzone-fileinfo">
+              <span id="bulkImportFileName">No file selected</span>
+              <span id="bulkImportFileSize" class="bulk-import-filesize"></span>
+            </span>
+          </div>
+        </div>
       </div>
       <p class="form-error" id="bulkImportError" aria-live="polite"></p>
       <button type="button" class="btn btn-primary btn-block bulk-import-submit" id="bulkImportSubmit"><i data-lucide="upload"></i>Import records</button>
-      <p class="form-status" id="bulkImportResult" role="status" hidden></p>
+      <div class="form-status" id="bulkImportResult" role="status" hidden></div>
     </div>
   </div>
 
