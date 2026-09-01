@@ -33,6 +33,7 @@ $router->get('/api/visitor', ['ApiController', 'visitorCount']);
 $router->get('/api/tools', ['ApiController', 'tools']);
 $router->get('/api/projects', ['ApiController', 'projects']);
 $router->post('/api/chat', ['ChatController', 'ask']);
+$router->post('/api/chat/feedback', ['ChatController', 'feedback']);
 
 // Showcase cards (public read)
 $router->get('/api/cards', ['AdminController', 'listCards']);

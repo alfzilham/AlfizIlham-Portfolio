@@ -191,6 +191,49 @@ class ChatController
         return true;
     }
 
+    /**
+     * POST /api/chat/feedback — save Good/Bad feedback
+     */
+    public function feedback()
+    {
+        if (!Request::isPost()) json_response(['error' => 'Method not allowed'], 405);
+
+        $payload = Request::json() ?: Request::all();
+        $messageHash = trim((string) ($payload['message_hash'] ?? ''));
+        $feedbackType = trim((string) ($payload['feedback_type'] ?? ''));
+        $question = trim((string) ($payload['question'] ?? ''));
+        $answer = trim((string) ($payload['answer'] ?? ''));
+
+        if (mb_strlen($messageHash) < 4) {
+            json_response(['error' => 'Invalid message hash.'], 422);
+        }
+        if (!in_array($feedbackType, ['good', 'bad'], true)) {
+            json_response(['error' => 'Feedback type must be "good" or "bad".'], 422);
+        }
+        if (mb_strlen($question) < 1 || mb_strlen($answer) < 1) {
+            json_response(['error' => 'Question and answer are required.'], 422);
+        }
+
+        // Simple rate limiting: 30 feedback per IP per hour
+        if (!$this->allowFeedbackRequest(Request::ip())) {
+            json_response(['error' => 'Too many feedback requests. Please try again later.'], 429);
+        }
+
+        $result = ChatFeedback::save($messageHash, $feedbackType, $question, $answer, Request::ip());
+        json_response(['success' => true] + $result);
+    }
+
+    private function allowFeedbackRequest($ip)
+    {
+        $db = Database::getInstance();
+        $db->exec('CREATE TABLE IF NOT EXISTS feedback_rate_limits (id INTEGER PRIMARY KEY AUTOINCREMENT, ip_address TEXT NOT NULL, requested_at DATETIME NOT NULL)');
+        $db->getPdo()->prepare("DELETE FROM feedback_rate_limits WHERE requested_at < datetime('now', '-1 hour')")->execute();
+        $count = $db->fetchOne("SELECT COUNT(*) AS count FROM feedback_rate_limits WHERE ip_address = ? AND requested_at >= datetime('now', '-1 hour')", [$ip]);
+        if ((int) $count['count'] >= 30) return false;
+        $db->insert('feedback_rate_limits', ['ip_address' => $ip, 'requested_at' => date('Y-m-d H:i:s')]);
+        return true;
+    }
+
     private function isIndonesian($text)
     {
         return (bool) preg_match('/\b(apa|bagaimana|saya|kamu|tentang|dan|yang|dengan|proyek)\b/ui', $text);
