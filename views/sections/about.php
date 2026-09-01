@@ -55,7 +55,7 @@
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/antigravity.svg" alt="Antigravity" /><span>Antigravity</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/google-ai-studio.svg" alt="Google AI Studio" /><span>Google AI Studio</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/stitch.svg" alt="Stitch" /><span>Stitch</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/stitch.svg" alt="Google Stitch" /><span>Google Stitch</span></div>
         <!-- Design -->
         <div class="tech-ticker-item"><img src="assets/image/icons/design/photoshop.svg" alt="Photoshop" /><span>Photoshop</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/design/lightroom.svg" alt="Lightroom" /><span>Lightroom</span></div>
@@ -87,7 +87,7 @@
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/antigravity.svg" alt="Antigravity" /><span>Antigravity</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/google-ai-studio.svg" alt="Google AI Studio" /><span>Google AI Studio</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/stitch.svg" alt="Stitch" /><span>Stitch</span></div>
+        <div class="tech-ticker-item"><img src="assets/image/icons/ai/stitch.svg" alt="Google Stitch" /><span>Google Stitch</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/design/photoshop.svg" alt="Photoshop" /><span>Photoshop</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/design/lightroom.svg" alt="Lightroom" /><span>Lightroom</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/design/coreldraw.svg" alt="CorelDRAW" /><span>CorelDRAW</span></div>

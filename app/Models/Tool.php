@@ -10,17 +10,17 @@ class Tool
     public static function all()
     {
         $db = Database::getInstance();
-        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase', 'Amazon Bedrock', 'AWS Bedrock', 'Vertex AI', 'Scratch', 'Antigravity', 'Google AI Studio', 'Stitch')");
+        $db->getPdo()->exec("DELETE FROM tools WHERE name IN ('Google Developer Program', 'Google Apps Script', 'Google Cloud', 'Firebase', 'Amazon Bedrock', 'AWS Bedrock', 'Vertex AI', 'Scratch', 'Antigravity', 'Google AI Studio', 'Stitch', 'Google Stitch')");
         $googleTools = [
             ['Antigravity', 'ai-ml', 'AI & ML', 38],
             ['Google AI Studio', 'ai-ml', 'AI & ML', 39],
-            ['Stitch', 'ai-ml', 'AI & ML', 55],
+            ['Google Stitch', 'design', 'Design & AI', 55],
         ];
         foreach ($googleTools as [$name, $category, $label, $sort]) {
             $icon = match ($name) {
                 'Antigravity' => 'assets/image/icons/ai/antigravity.svg',
                 'Google AI Studio' => 'assets/image/icons/ai/google-ai-studio.svg',
-                'Stitch' => 'assets/image/icons/ai/stitch.svg',
+                'Google Stitch' => 'assets/image/icons/ai/stitch.svg',
                 default => 'assets/image/icons/ai/google-colab.svg',
             };
             $stmt = $db->getPdo()->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, :icon, :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");

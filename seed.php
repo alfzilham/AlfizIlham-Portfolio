@@ -271,7 +271,7 @@ $tools = [
     ['Obsidian', 'tools', 'Note-taking', 'assets/image/icons/ai/obsidian.svg', 47],
     ['OpenCode', 'tools', 'AI Coding', 'assets/image/icons/ai/opencode.svg', 48],
     ['Android Studio', 'tools', 'IDE', 'assets/image/icons/platform/android-studio.svg', 54],
-    ['Stitch', 'ai-ml', 'AI & ML', 'assets/image/icons/ai/stitch.svg', 55],
+    ['Google Stitch', 'design', 'Design & AI', 'assets/image/icons/ai/stitch.svg', 55],
     ['n8n', 'tools', 'Automation', 'assets/image/icons/platform/n8n.svg', 56],
 ];
 
