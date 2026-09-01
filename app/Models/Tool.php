@@ -26,7 +26,7 @@ class Tool
                 'Stitch' => 'assets/image/icons/ai/stitch.svg',
                 default => 'assets/image/icons/ai/google-colab.svg',
             };
-            $stmt = $db->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, :icon, :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");
+            $stmt = $db->getPdo()->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, :icon, :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");
             $stmt->execute(['name' => $name, 'category' => $category, 'label' => $label, 'icon' => $icon, 'sort' => $sort, 'name_check' => $name]);
         }
         return $db->fetchAll("SELECT * FROM tools ORDER BY sort_order ASC, name ASC");
