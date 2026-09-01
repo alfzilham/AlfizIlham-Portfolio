@@ -67,8 +67,6 @@
     <!-- SECTION 7: MY SKILL SET -->
     <?php echo View::section('skills', ['tools' => $tools]); ?>
 
-    <?php echo View::section('google-developer'); ?>
-
     <!-- SECTION 7: PROJECTS TEASER -->
     <?php echo View::section('projects-teaser', ['projects' => $projects, 'showcase' => $showcase]); ?>
 

@@ -52,8 +52,6 @@
         <!-- AI -->
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/claude.svg" alt="Claude API" /><span>Claude API</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /><span>OpenRouter</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/aws-bedrock.svg" alt="AWS Bedrock" /><span>AWS Bedrock</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/vertex-ai.svg" alt="Vertex AI" /><span>Vertex AI</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/antigravity.svg" alt="Antigravity" /><span>Antigravity</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/google-ai-studio.svg" alt="Google AI Studio" /><span>Google AI Studio</span></div>
@@ -86,8 +84,6 @@
         <div class="tech-ticker-item"><img src="assets/image/icons/fullstack/sql.svg" alt="SQL" /><span>SQL</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/claude.svg" alt="Claude API" /><span>Claude API</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/openrouter.svg" alt="OpenRouter" /><span>OpenRouter</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/aws-bedrock.svg" alt="AWS Bedrock" /><span>AWS Bedrock</span></div>
-        <div class="tech-ticker-item"><img src="assets/image/icons/ai/vertex-ai.svg" alt="Vertex AI" /><span>Vertex AI</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/tensorflow.svg" alt="TensorFlow" /><span>TensorFlow</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/antigravity.svg" alt="Antigravity" /><span>Antigravity</span></div>
         <div class="tech-ticker-item"><img src="assets/image/icons/ai/google-ai-studio.svg" alt="Google AI Studio" /><span>Google AI Studio</span></div>

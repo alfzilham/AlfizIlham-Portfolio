@@ -67,10 +67,6 @@ return [
     'skills_filter_tools' => 'TOOLS',
     'skills_search_placeholder' => 'Cari tools...',
     'skills_empty' => 'Tidak ada tools yang cocok.',
-    'google_program_eyebrow' => 'GOOGLE DEVELOPER PROGRAM',
-    'google_program_heading' => 'Berkarya dengan ekosistem developer Google',
-    'google_program_desc' => 'Saya terus mengeksplorasi resource Google Developer Program dan menerapkan Google Cloud, Firebase, Apps Script, serta tools AI untuk produk nyata.',
-    'google_program_cta' => 'Jelajahi Google Developer Program',
 
     // Education
     'education_eyebrow' => 'Latar Belakang Pendidikan',
