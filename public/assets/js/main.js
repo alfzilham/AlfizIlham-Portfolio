@@ -485,7 +485,6 @@ function initScrollProgress() {
 
 function renderIconGrid(filter = "all", search = "") {
   const grid = document.getElementById("iconGrid");
-  const newGrid = document.getElementById("iconGridNew");
   if (!grid) return;
 
   const tools = window.TOOLS_DATA;
@@ -499,14 +498,12 @@ function renderIconGrid(filter = "all", search = "") {
 
   if (!filtered.length) {
     grid.innerHTML = "";
-    if (newGrid) newGrid.innerHTML = "";
     if (emptyState) emptyState.hidden = false;
     return;
   }
 
   if (emptyState) emptyState.hidden = true;
 
-  const newSkillNames = ["Antigravity", "Google AI Studio", "Stitch"];
   const renderTools = (list) => list
     .map(
       (tool) => `
@@ -516,10 +513,7 @@ function renderIconGrid(filter = "all", search = "") {
     </div>`,
     )
     .join("");
-  const mainTools = filtered.filter((tool) => !newSkillNames.includes(tool.name));
-  const additionalTools = filtered.filter((tool) => newSkillNames.includes(tool.name));
-  grid.innerHTML = renderTools(mainTools);
-  if (newGrid) newGrid.innerHTML = renderTools(additionalTools);
+  grid.innerHTML = renderTools(filtered);
 }
 
 function initSkillFilters() {
@@ -3722,9 +3716,10 @@ function initChatbot() {
     if (action === "copy") {
       try {
         await navigator.clipboard.writeText(text);
-        const original = button.textContent;
-        button.textContent = "Copied";
-        setTimeout(() => { button.textContent = original; }, 1500);
+        button.innerHTML = '<i data-lucide="check" aria-hidden="true"></i>';
+        button.title = "Copied"; button.setAttribute("aria-label", "Copied"); button.classList.add("is-confirmed");
+        if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
+        setTimeout(() => { button.innerHTML = '<i data-lucide="copy" aria-hidden="true"></i>'; button.title = "Copy"; button.setAttribute("aria-label", "Copy response"); button.classList.remove("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); }, 1500);
       } catch (_) {
         const textarea = document.createElement("textarea");
         textarea.value = text;
@@ -3732,7 +3727,7 @@ function initChatbot() {
         textarea.style.opacity = "0";
         document.body.appendChild(textarea);
         textarea.select();
-        try { document.execCommand("copy"); button.textContent = "Copied"; setTimeout(() => { button.textContent = "Copy"; }, 1500); } catch (_) {}
+        try { document.execCommand("copy"); button.innerHTML = '<i data-lucide="check" aria-hidden="true"></i>'; button.title = "Copied"; button.setAttribute("aria-label", "Copied"); button.classList.add("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); setTimeout(() => { button.innerHTML = '<i data-lucide="copy" aria-hidden="true"></i>'; button.title = "Copy"; button.setAttribute("aria-label", "Copy response"); button.classList.remove("is-confirmed"); if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } }); }, 1500); } catch (_) {}
         document.body.removeChild(textarea);
       }
     } else if (action === "good" || action === "bad") {
