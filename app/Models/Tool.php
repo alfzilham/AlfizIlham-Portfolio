@@ -15,11 +15,19 @@ class Tool
             ['Google Apps Script', 'tools', 'Automation', 58],
             ['Google Cloud', 'devops', 'Cloud Platform', 59],
             ['Firebase', 'backend', 'Backend Platform', 60],
+            ['Antigravity', 'ai', 'AI & ML', 62],
             ['Google AI Studio', 'ai', 'AI & ML', 61],
+            ['Stitch', 'ai', 'AI & ML', 63],
         ];
-        $stmt = $db->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, 'assets/image/icons/ai/google-colab.svg', :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");
         foreach ($googleTools as [$name, $category, $label, $sort]) {
-            $stmt->execute(['name' => $name, 'category' => $category, 'label' => $label, 'sort' => $sort, 'name_check' => $name]);
+            $icon = match ($name) {
+                'Antigravity' => 'assets/image/icons/ai/antigravity.svg',
+                'Google AI Studio' => 'assets/image/icons/ai/google-ai-studio.svg',
+                'Stitch' => 'assets/image/icons/ai/stitch.svg',
+                default => 'assets/image/icons/ai/google-colab.svg',
+            };
+            $stmt = $db->prepare("INSERT INTO tools (name, category, category_label, icon, sort_order) SELECT :name, :category, :label, :icon, :sort WHERE NOT EXISTS (SELECT 1 FROM tools WHERE lower(name) = lower(:name_check))");
+            $stmt->execute(['name' => $name, 'category' => $category, 'label' => $label, 'icon' => $icon, 'sort' => $sort, 'name_check' => $name]);
         }
         return $db->fetchAll("SELECT * FROM tools ORDER BY sort_order ASC, name ASC");
     }

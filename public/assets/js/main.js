@@ -485,6 +485,7 @@ function initScrollProgress() {
 
 function renderIconGrid(filter = "all", search = "") {
   const grid = document.getElementById("iconGrid");
+  const newGrid = document.getElementById("iconGridNew");
   if (!grid) return;
 
   const tools = window.TOOLS_DATA;
@@ -498,13 +499,15 @@ function renderIconGrid(filter = "all", search = "") {
 
   if (!filtered.length) {
     grid.innerHTML = "";
+    if (newGrid) newGrid.innerHTML = "";
     if (emptyState) emptyState.hidden = false;
     return;
   }
 
   if (emptyState) emptyState.hidden = true;
 
-  const gridHTML = filtered
+  const newSkillNames = ["Antigravity", "Google AI Studio", "Stitch"];
+  const renderTools = (list) => list
     .map(
       (tool) => `
     <div class="icon-grid-item"${tool.category_label ? ` data-tooltip="${tool.category_label}"` : ""}>
@@ -513,8 +516,10 @@ function renderIconGrid(filter = "all", search = "") {
     </div>`,
     )
     .join("");
-
-  grid.innerHTML = gridHTML;
+  const mainTools = filtered.filter((tool) => !newSkillNames.includes(tool.name));
+  const additionalTools = filtered.filter((tool) => newSkillNames.includes(tool.name));
+  grid.innerHTML = renderTools(mainTools);
+  if (newGrid) newGrid.innerHTML = renderTools(additionalTools);
 }
 
 function initSkillFilters() {
@@ -3368,6 +3373,8 @@ function initChatbot() {
   const bulkImportResult = document.getElementById("bulkImportResult");
   const bulkImportSubmit = document.getElementById("bulkImportSubmit");
   const bulkImportFileName = document.getElementById("bulkImportFileName");
+  const bulkImportFileSize = document.getElementById("bulkImportFileSize");
+  const bulkImportDropzone = document.getElementById("bulkImportDropzone");
   const closeBulkImportTypeOptions = () => {
     if (!bulkImportTypeOptions || !bulkImportTypeTrigger) return;
     bulkImportTypeOptions.hidden = true;
@@ -3392,8 +3399,44 @@ function initChatbot() {
   document.addEventListener("click", (event) => {
     if (!event.target.closest(".bulk-import-select-wrap")) closeBulkImportTypeOptions();
   });
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + " B";
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+  }
+
+  function setBulkImportFile(file) {
+    if (!file) return;
+    if (!file.name.endsWith(".json") && file.type !== "application/json") {
+      bulkImportError.textContent = "Only .json files are allowed.";
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      bulkImportError.textContent = "File exceeds 5 MB limit.";
+      return;
+    }
+    bulkImportError.textContent = "";
+    if (bulkImportFileName) bulkImportFileName.textContent = file.name;
+    if (bulkImportFileSize) bulkImportFileSize.textContent = formatFileSize(file.size);
+    if (bulkImportFile) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      bulkImportFile.files = dt.files;
+    }
+    if (bulkImportDropzone) bulkImportDropzone.classList.add("has-file");
+  }
+
   const openBulkImportOverlay = () => {
     if (!bulkImportOverlay) return;
+    bulkImportError.textContent = "";
+    bulkImportResult.hidden = true;
+    bulkImportSubmit.disabled = false;
+    if (bulkImportFileName) bulkImportFileName.textContent = "No file selected";
+    if (bulkImportFileSize) bulkImportFileSize.textContent = "";
+    if (bulkImportDropzone) bulkImportDropzone.classList.remove("has-file");
+    if (bulkImportFile) bulkImportFile.value = "";
+    closeBulkImportTypeOptions();
     bulkImportOverlay.hidden = false;
     document.body.classList.add("bulk-import-open");
     document.body.style.overflow = "hidden";
@@ -3406,18 +3449,30 @@ function initChatbot() {
     document.body.style.overflow = "";
     if (window.__lenis) window.__lenis.start();
   };
-  bulkImportBtn?.addEventListener("click", () => {
-    bulkImportError.textContent = "";
-    bulkImportResult.hidden = true;
-    if (bulkImportFileName) bulkImportFileName.textContent = "No file selected";
-    closeBulkImportTypeOptions();
-    openBulkImportOverlay();
-  });
+  bulkImportBtn?.addEventListener("click", openBulkImportOverlay);
   bulkImportFile?.addEventListener("change", () => {
-    if (bulkImportFileName) {
-      bulkImportFileName.textContent = bulkImportFile.files?.[0]?.name || "No file selected";
-    }
+    if (bulkImportFile.files?.[0]) setBulkImportFile(bulkImportFile.files[0]);
   });
+  if (bulkImportDropzone) {
+    bulkImportDropzone.addEventListener("click", () => bulkImportFile?.click());
+    ["dragover", "dragenter"].forEach((ev) =>
+      bulkImportDropzone.addEventListener(ev, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        bulkImportDropzone.classList.add("dragover");
+      })
+    );
+    ["dragleave", "drop"].forEach((ev) =>
+      bulkImportDropzone.addEventListener(ev, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        bulkImportDropzone.classList.remove("dragover");
+      })
+    );
+    bulkImportDropzone.addEventListener("drop", (e) => {
+      if (e.dataTransfer.files?.[0]) setBulkImportFile(e.dataTransfer.files[0]);
+    });
+  }
   document
     .querySelector("[data-close-bulk-import]")
     ?.addEventListener("click", closeBulkImportOverlay);
@@ -3444,6 +3499,7 @@ function initChatbot() {
       if (payload.length > 50) throw new Error("Maximum 50 entries per file.");
       const type = bulkImportType.value;
       bulkImportSubmit.disabled = true;
+      bulkImportSubmit.innerHTML = '<span class="bulk-import-spinner"></span>Importing…';
       const response = await fetch(
         "index.php?/api/admin/" +
           (type === "certificates" ? "certificates" : "projects") +
@@ -3458,26 +3514,35 @@ function initChatbot() {
       if (!response.ok || data.success !== true)
         throw new Error(data.error || "Import failed.");
       const failedCount = (data.failed || []).length;
+      const isPartial = data.imported > 0 && failedCount > 0;
+      const isFullSuccess = data.imported > 0 && failedCount === 0;
+      const isFullFail = data.imported === 0;
       bulkImportResult.className =
-        "form-status " + (data.imported > 0 && failedCount > 0 ? "warning" : data.imported > 0 ? "success" : "error");
-      bulkImportResult.textContent =
-        "Imported: " +
-        data.imported +
-        ". Failed: " +
-        failedCount +
-        "." +
-        ((data.failed || []).length
-          ? " " +
-            data.failed
-              .map((item) => "Row " + item.row + ": " + item.error)
-              .join(" | ")
-          : "");
+        "form-status " + (isPartial ? "warning" : isFullSuccess ? "success" : "error");
+      let resultHTML = "";
+      if (isFullSuccess) {
+        resultHTML = '<span class="bulk-result-icon">✓</span> All ' + data.imported + ' records imported successfully.';
+      } else if (isPartial) {
+        resultHTML = '<span class="bulk-result-icon">⚠</span> Imported: ' + data.imported + '. Failed: ' + failedCount + '.';
+      } else {
+        resultHTML = '<span class="bulk-result-icon">✗</span> Import failed. No records were imported.';
+      }
+      if (failedCount > 0) {
+        resultHTML += '<ul class="bulk-result-errors">';
+        data.failed.forEach((item) => {
+          resultHTML += '<li>Row ' + item.row + ': ' + item.error + '</li>';
+        });
+        resultHTML += '</ul>';
+      }
+      bulkImportResult.innerHTML = resultHTML;
       bulkImportResult.hidden = false;
-      if (data.imported) setTimeout(() => location.reload(), 900);
+      if (data.imported) setTimeout(() => location.reload(), 1200);
     } catch (error) {
       bulkImportError.textContent = error.message || "Invalid JSON.";
     } finally {
       bulkImportSubmit.disabled = false;
+      bulkImportSubmit.innerHTML = '<i data-lucide="upload"></i>Import records';
+      if (window.lucide) lucide.createIcons();
     }
   });
 
@@ -3560,7 +3625,7 @@ function initChatbot() {
     }
     appendAnimatedText(parent, text.slice(cursor), container);
   };
-  const appendRichMessage = (text) => {
+  const appendRichMessage = (text, insertAfter = null) => {
     const wrapper = document.createElement("div");
     wrapper.className = "chatbot-message-group chatbot-message-group--assistant";
     const item = document.createElement("div");
@@ -3591,9 +3656,54 @@ function initChatbot() {
     actions.className = "chatbot-message-actions";
     addActions(actions, "assistant", String(text));
     wrapper.appendChild(actions);
-    messages.appendChild(wrapper);
+    if (insertAfter && insertAfter.parentNode === messages) insertAfter.after(wrapper);
+    else messages.appendChild(wrapper);
     messages.scrollTop = messages.scrollHeight;
   };
+
+  async function hashString(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  async function sendFeedback(messageHash, feedbackType, question, answer) {
+    try {
+      const response = await fetch("index.php?/api/chat/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          message_hash: messageHash,
+          feedback_type: feedbackType,
+          question: question,
+          answer: answer,
+        }),
+      });
+      return await response.json().catch(() => ({}));
+    } catch (_) {
+      return { success: false };
+    }
+  }
+
+  function addEditActions(group, messageText) {
+    const actions = group.querySelector(".chatbot-message-actions");
+    if (!actions) return;
+    actions.innerHTML = "";
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "chatbot-action";
+    edit.dataset.chatAction = "edit";
+    edit.textContent = "Edit";
+    edit.dataset.message = messageText;
+    actions.appendChild(edit);
+  }
+
+  let isRewriting = false;
 
   messages.addEventListener("click", async (event) => {
     const button = event.target.closest("[data-chat-action]");
@@ -3602,23 +3712,140 @@ function initChatbot() {
     const group = button.closest(".chatbot-message-group");
     const bubble = group?.querySelector(".chatbot-message");
     const text = button.dataset.message || bubble?.textContent || "";
+    const labels = window.__CHAT_LANG || {};
+
     if (action === "copy") {
-      try { await navigator.clipboard.writeText(text); button.textContent = "Copied"; } catch (_) {}
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = button.textContent;
+        button.textContent = "Copied";
+        setTimeout(() => { button.textContent = original; }, 1500);
+      } catch (_) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try { document.execCommand("copy"); button.textContent = "Copied"; setTimeout(() => { button.textContent = "Copy"; }, 1500); } catch (_) {}
+        document.body.removeChild(textarea);
+      }
     } else if (action === "good" || action === "bad") {
+      const wasSelected = button.classList.contains("is-selected");
       group.querySelectorAll('[data-chat-action="good"],[data-chat-action="bad"]').forEach((b) => b.classList.remove("is-selected"));
-      button.classList.add("is-selected");
-    } else if (action === "rewrite" && lastQuestion) {
-      input.value = lastQuestion; form.requestSubmit();
+      const questionText = group.previousElementSibling?.querySelector(".chatbot-message--visitor")?.textContent || lastQuestion || "";
+      if (!wasSelected) {
+        button.classList.add("is-selected");
+        const msgHash = await hashString(questionText + "\n" + text);
+        const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
+        if (!feedbackResult.success) button.classList.remove("is-selected");
+      } else {
+        const msgHash = await hashString(questionText + "\n" + text);
+        const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
+        if (!feedbackResult.success) button.classList.add("is-selected");
+      }
+    } else if (action === "rewrite" && lastQuestion && !isRewriting) {
+      isRewriting = true;
+      input.value = lastQuestion;
+      form.requestSubmit();
+      setTimeout(() => { isRewriting = false; }, 2000);
     } else if (action === "edit" && bubble) {
       const original = bubble.textContent;
-      const editor = document.createElement("textarea"); editor.className = "chatbot-edit-input"; editor.value = original; editor.rows = 2;
-      bubble.replaceWith(editor); button.textContent = "Save"; button.dataset.chatAction = "save-edit"; button.dataset.original = original;
-      const cancel = document.createElement("button"); cancel.type = "button"; cancel.className = "chatbot-action"; cancel.dataset.chatAction = "cancel-edit"; cancel.dataset.original = original; cancel.textContent = "Cancel"; button.parentElement.appendChild(cancel);
+      const editor = document.createElement("textarea");
+      editor.className = "chatbot-edit-input";
+      editor.value = original;
+      editor.rows = 2;
+      editor.setAttribute("aria-label", "Edit your message");
+      bubble.replaceWith(editor);
+      editor.focus();
+      editor.setSelectionRange(editor.value.length, editor.value.length);
+      button.textContent = "Save";
+      button.dataset.chatAction = "save-edit";
+      button.dataset.original = original;
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.className = "chatbot-action";
+      cancel.dataset.chatAction = "cancel-edit";
+      cancel.dataset.original = original;
+      cancel.textContent = "Cancel";
+      cancel.setAttribute("aria-label", "Cancel editing");
+      button.parentElement.appendChild(cancel);
+      editor.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          cancel.click();
+        }
+        if ((e.key === "Enter" && (e.ctrlKey || e.metaKey)) || (e.key === "Enter" && !e.shiftKey)) {
+          e.preventDefault();
+          button.click();
+        }
+      });
     } else if (action === "save-edit" && bubble === null) {
-      const editor = group.querySelector(".chatbot-edit-input"); const value = editor?.value.trim();
-      if (value) { lastQuestion = value; const p = document.createElement("p"); p.className = "chatbot-message chatbot-message--visitor"; p.textContent = value; editor.replaceWith(p); button.textContent = "Edit"; button.dataset.chatAction = "edit"; button.dataset.message = value; group.querySelector('[data-chat-action="cancel-edit"]')?.remove(); }
+      const editor = group.querySelector(".chatbot-edit-input");
+      const value = editor?.value.trim();
+      if (!value || value.length < 2) {
+        if (editor) editor.style.borderColor = "#dc2626";
+        return;
+      }
+      const originalText = button.dataset.original || "";
+      button.disabled = true;
+      button.textContent = "Saving…";
+      const cancelBtn = group.querySelector('[data-chat-action="cancel-edit"]');
+      if (cancelBtn) cancelBtn.style.display = "none";
+      lastQuestion = value;
+      const p = document.createElement("p");
+      p.className = "chatbot-message chatbot-message--visitor";
+      p.textContent = value;
+      editor.replaceWith(p);
+      addEditActions(group, value);
+      const oldResponseGroup = group.nextElementSibling;
+      if (oldResponseGroup && oldResponseGroup.classList.contains("chatbot-message-group--assistant")) {
+        oldResponseGroup.remove();
+      }
+      const pending = document.createElement("p");
+      pending.className = "chatbot-message chatbot-message--assistant is-pending";
+      pending.innerHTML =
+        '<span class="chatbot-thinking-label">' +
+        (labels.sending || "Thinking…") +
+        '</span><span class="chatbot-thinking" aria-hidden="true"><i></i><i></i><i></i></span>';
+      const pendingWrapper = document.createElement("div");
+      pendingWrapper.className = "chatbot-message-group chatbot-message-group--assistant";
+      pendingWrapper.appendChild(pending);
+      messages.appendChild(pendingWrapper);
+      messages.scrollTop = messages.scrollHeight;
+      try {
+        const response = await fetch("index.php?/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ message: value }),
+        });
+        const data = await response.json().catch(() => ({}));
+        pendingWrapper.remove();
+        if (data.answer) {
+          appendRichMessage(data.answer, group);
+        } else {
+          appendRichMessage(data.error || labels.error || "The assistant is unavailable.", group);
+        }
+      } catch (error) {
+        pendingWrapper.remove();
+        appendRichMessage(labels.error || "The assistant is unavailable.", group);
+      } finally {
+        button.disabled = false;
+        button.textContent = "Edit";
+        button.dataset.chatAction = "edit";
+        button.dataset.message = value;
+      }
     } else if (action === "cancel-edit") {
-      const editor = group.querySelector(".chatbot-edit-input"); const p = document.createElement("p"); p.className = "chatbot-message chatbot-message--visitor"; p.textContent = button.dataset.original || ""; editor?.replaceWith(p); group.querySelector('[data-chat-action="save-edit"]')?.remove(); button.remove();
+      const editor = group.querySelector(".chatbot-edit-input");
+      const p = document.createElement("p");
+      p.className = "chatbot-message chatbot-message--visitor";
+      p.textContent = button.dataset.original || "";
+      editor?.replaceWith(p);
+      group.querySelector('[data-chat-action="save-edit"]')?.remove();
+      button.remove();
     }
   });
 }

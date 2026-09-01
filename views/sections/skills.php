@@ -31,6 +31,7 @@
     <div class="icon-grid" id="iconGrid">
       <!-- Rendered by JS from PHP data -->
     </div>
+    <div class="icon-grid icon-grid-new" id="iconGridNew" aria-label="Additional skills"></div>
 
     <p class="empty-state" id="skillEmptyState" hidden><?= i18n::t('skills_empty') ?></p>
   </div>
