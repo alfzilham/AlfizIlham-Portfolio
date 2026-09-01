@@ -227,6 +227,8 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 | GET | `/api/visitor` | Get visitor count | `{ count: int, today: int }` |
 | GET | `/api/tools?category=&search=` | Get filtered tools | `{ tools: array }` |
 | GET | `/api/projects?category=` | Get filtered projects | `{ projects: array }` |
+| POST | `/api/chat` | Grounded portfolio chatbot response | `{ success: bool, answer: string }` |
+| POST | `/api/chat/feedback` | Save/toggle Good or Bad response feedback | `{ success: bool, action: string }` |
 
 ---
 
@@ -271,6 +273,10 @@ Data is passed from Controller → View → JS via `window.__TOOLS`, `window.__F
 Public certificate pagination shows 12 items initially on desktop and 8 on mobile, with Load More revealing the next page. The current implementation uses the `certGrid` pool rendered from SQLite.
 
 Editor mode also supports JSON bulk import for certificates and showcase projects. Each file accepts up to 50 records; titles matching an existing row (case-insensitive) are skipped. External image URLs are validated, downloaded, dimension-checked, and converted to local WebP files before insertion. Imports return per-row failures without aborting valid rows.
+
+Editor mode supports JSON export via `GET /api/admin/projects/export` and `GET /api/admin/certificates/export`; both endpoints require an authenticated admin session and return downloadable UTF-8 JSON.
+
+The chatbot assistant supports inline user-message editing, response rewrite, clipboard copy, and Good/Bad feedback. Feedback is stored in the SQLite `chat_feedback` table and limited to 30 requests per IP per hour. The Google Developer Program section is a static, responsive view beneath Skills and links to the owner's Google Developer profile.
 
 All original open questions from the pre-MVC spec have been resolved:
 
