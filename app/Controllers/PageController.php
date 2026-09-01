@@ -32,6 +32,7 @@ class PageController
             'gallery' => $gallery,
             'certificates' => Certificate::all(),
             'visitorCount' => VisitorService::getCount(),
+            'feedbackCount' => VisitorService::getFeedbackCount(),
             'config' => [
                 'name' => config('name'),
                 'title' => config('title'),

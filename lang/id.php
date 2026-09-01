@@ -172,6 +172,7 @@ return [
     'footer_live' => 'LIVE',
     'footer_unique_visitors' => 'pengunjung unik',
     'footer_country' => 'ID · Indonesia',
+    'footer_ai_feedback' => 'feedback AI',
     'footer_copyright' => '© 2026 Alfiz Ilham',
     'footer_rights' => 'Hak Cipta Dilindungi.',
     'footer_privacy' => 'Kebijakan Privasi',

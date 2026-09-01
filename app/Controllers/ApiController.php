@@ -34,6 +34,7 @@ class ApiController
             'count' => VisitorService::getCount(),
             'today' => VisitorService::getTodayCount(),
             'byCountry' => VisitorService::getByCountry(),
+            'feedbackCount' => VisitorService::getFeedbackCount(),
         ]);
     }
 

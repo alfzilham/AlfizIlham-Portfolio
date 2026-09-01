@@ -64,4 +64,10 @@ class ChatFeedback
             [$messageHash]
         );
     }
+
+    public static function count()
+    {
+        self::ensureTable();
+        return Database::getInstance()->count('chat_feedback');
+    }
 }

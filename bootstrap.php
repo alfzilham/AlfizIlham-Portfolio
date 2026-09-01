@@ -60,6 +60,7 @@ require_once APP_PATH . '/Models/Visitor.php';
 require_once APP_PATH . '/Models/ShowcaseProject.php';
 require_once APP_PATH . '/Models/Certificate.php';
 require_once APP_PATH . '/Models/KnowledgeChunk.php';
+require_once APP_PATH . '/Models/ChatFeedback.php';
 
 // Load services
 require_once APP_PATH . '/Services/ContactService.php';

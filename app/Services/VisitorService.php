@@ -110,4 +110,9 @@ class VisitorService
     {
         return VisitorModel::countByCountry();
     }
+
+    public static function getFeedbackCount()
+    {
+        return ChatFeedback::count();
+    }
 }

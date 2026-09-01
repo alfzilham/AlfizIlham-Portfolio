@@ -103,6 +103,7 @@
   <?php echo View::partial('footer', [
       'social' => $config['social'],
       'visitorCount' => $visitorCount,
+      'feedbackCount' => $feedbackCount,
   ]); ?>
 
   <?php echo View::partial('chatbot'); ?>

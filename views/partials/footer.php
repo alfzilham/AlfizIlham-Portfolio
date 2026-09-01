@@ -3,6 +3,7 @@
  * Footer Partial
  * @var array $social
  * @var int   $visitorCount
+ * @var int   $feedbackCount
  */
 ?>
 <footer class="site-footer">
@@ -68,6 +69,10 @@
           <div class="visitor-widget-bottom">
             <span><?= i18n::t('footer_country') ?></span>
             <span class="visitor-badge" id="visitorCount"><?= $visitorCount ?></span>
+          </div>
+          <div class="visitor-widget-feedback">
+            <span><?= i18n::t('footer_ai_feedback') ?></span>
+            <span class="visitor-feedback-count" id="visitorFeedback"><?= $feedbackCount ?></span>
           </div>
         </div>
       </div>
