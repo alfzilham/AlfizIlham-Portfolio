@@ -2,8 +2,8 @@
 
 **Fullstack Developer, AI-Integrated Apps**
 
-Aceh Besar, Aceh, Indonesia • +62 852-1389-6460 • alfizilham@gmail.com  
-[LinkedIn](https://linkedin.com/in/alfiz-ilham093a2) • [GitHub](https://github.com/alfzilham) • [Website](https://alfizilham.my.id)
+Aceh Besar, Aceh, Indonesia • +62 852-1389-6460 • [alfizilham@gmail.com](mailto:alfizilham@gmail.com)
+linkedin.com/in/alfiz-ilham093a2 • github.com/alfzilham • alfizilham.my.id
 
 ## SUMMARY
 
@@ -11,96 +11,100 @@ Fullstack developer who builds AI directly into products rather than bolting it 
 
 ## EXPERIENCE
 
-### Independent — Remote
+### Freelance Software Developer
 
-**Freelance Software Developer**  
-_June 2026 – Present_
+**Independent — Remote**
+*June 2026 – Present*
 
-- Built an AI-powered WhatsApp automation using n8n and the WAHA (WhatsApp HTTP API) to automatically filter important incoming messages — webhook-triggered flow that detects image attachments, downloads and converts them to Base64, and routes text through the OpenRouter API and images through the Opencode.zen API (Ox Alpha model) for AI analysis before conditional filtering.
-- Built Personal Habit Tracker (Aug 2026), a productivity app with an in-app AI assistant powered by the OpenRouter API — reads and tracks user habit data directly so users can ask questions instead of digging through FAQs.
-- Built PusakaApp (Jul 2026), a full-stack school reunion attendance system: Excel import, payment-proof photo upload to Vercel Blob, and one-click export to Excel, PDF, and JSON. Delivered free as a community project.
-- Built FlowGram (May 2026), a workflow builder with drag-and-drop infinite canvas and multi-project dashboard, wired to Google OAuth and a Neon PostgreSQL database for cloud sync.
+* Built an AI-powered WhatsApp automation using n8n and the WAHA (WhatsApp HTTP API) to automatically filter important incoming messages — webhook-triggered flow that detects image attachments, downloads and converts them to Base64, and routes text through the OpenRouter API and images through the Opencode.zen API (Ox Alpha model) for AI analysis before conditional filtering.
+* Built Personal Habit Tracker (Aug 2026), a productivity app with an in-app AI assistant powered by the OpenRouter API — reads and tracks user habit data directly so users can ask questions instead of digging through FAQs.
+* Built PusakaApp (Jul 2026), a full-stack school reunion attendance system: Excel import, payment-proof photo upload to Vercel Blob, and one-click export to Excel, PDF, and JSON. Delivered free as a community project.
+* Built FlowGram (May 2026), a workflow builder with drag-and-drop infinite canvas and multi-project dashboard, wired to Google OAuth and a Neon PostgreSQL database for cloud sync.
 
-### Independent — Remote
+### Freelance Frontend Developer
 
-**Freelance Frontend Developer**  
-_March 2025 – June 2026_
+**Independent — Remote**
+*March 2025 – June 2026*
 
-- Built and shipped a client website for a school counselor — services section, blog layout, testimonials, and a working contact form — in plain HTML, CSS, and vanilla JavaScript.
-- Built a scroll-driven landing page using React and Next.js, implementing custom scroll-triggered image animations.
-- Live projects and source code: [github.com/alfzilham](https://github.com/alfzilham)
+* Built and shipped a client website for a school counselor — services section, blog layout, testimonials, and a working contact form — in plain HTML, CSS, and vanilla JavaScript.
+* Built a scroll-driven landing page using React and Next.js, implementing custom scroll-triggered image animations.
+* Live projects and source code: github.com/alfzilham
 
-### Imam Travel — Aceh, Indonesia
+### Freelance Graphic Designer
 
-**Freelance Graphic Designer**  
-_June 2025 – March 2026_
+**Imam Travel — Aceh, Indonesia**
+*June 2025 – March 2026*
 
-- Designed posters and promotional materials for Umrah and international tour packages using Adobe Photoshop and CorelDRAW.
-- Completed 20+ paid design projects across a range of client promotional needs.
+* Designed posters and promotional materials for Umrah and international tour packages using Adobe Photoshop and CorelDRAW.
+* Completed 20+ paid design projects across a range of client promotional needs.
 
-### Independent — Aceh, Indonesia
+### Freelance Calligrapher
 
-**Freelance Calligrapher**  
-_2023 – Present_
+**Independent — Aceh, Indonesia**
+*2023 – Present*
 
-- Completed 500+ paid custom calligraphy commissions based on individual client requests.
-- Specializes in Naskh script and Mushaf illumination decoration.
-- Won 10+ calligraphy competitions at local/school, sub-district, district, and provincial levels.
+* Completed 500+ paid custom calligraphy commissions based on individual client requests.
+* Specializes in Naskh script and Mushaf illumination decoration.
+* Won 10+ calligraphy competitions at local/school, sub-district, district, and provincial levels.
 
 ## LEADERSHIP & ACTIVITIES
 
-### OSMID — Student Organization of Dayah Jeumala Amal — Pidie Jaya, Aceh, Indonesia
+### OSMID — Student Organization of Dayah Jeumala Amal
 
-**Member, Events & Design Division**  
-_2025 – 2026_
+**Pidie Jaya, Aceh, Indonesia**
+*Member, Events & Design Division — 2025 – 2026*
 
-- Planned and ran school-wide events as part of the events and design division.
-- Designed posters and digital banners for organizational events.
-- Designed and installed hand-lettered Arabic vocabulary boards (mufradat) on plywood across the dayah campus.
-- Reinstalled Windows and resolved hardware issues on the organization secretary's computer.
+* Planned and ran school-wide events as part of the events and design division.
+* Designed posters and digital banners for organizational events.
+* Designed and installed hand-lettered Arabic vocabulary boards (mufradat) on plywood across the dayah campus.
+* Reinstalled Windows and resolved hardware issues on the organization secretary's computer.
 
-### KPMN 2024 — Kemah Pramuka Madrasah Nasional — Cibubur, Jakarta, Indonesia
+### KPMN 2024 — Kemah Pramuka Madrasah Nasional
 
-**Aceh Provincial Representative**  
-_2024_
+**Cibubur, Jakarta, Indonesia**
+*Aceh Provincial Representative — 2024*
 
-- Selected to represent Aceh Province at the national KPMN competition in Cibubur, Jakarta.
+* Selected to represent Aceh Province at the national KPMN competition in Cibubur, Jakarta.
 
-### Flood Relief Volunteer — Pidie Jaya, Aceh, Indonesia
+### Flood Relief Volunteer
 
-**Community Volunteer**  
-_2026_
+**Pidie Jaya, Aceh, Indonesia**
+*Community Volunteer — 2026*
 
-- Assisted flood victims in Pidie Jaya as part of a community disaster relief effort.
+* Assisted flood victims in Pidie Jaya as part of a community disaster relief effort.
 
 ## EDUCATION
 
-### Universitas Syiah Kuala — Aceh, Indonesia
+### Universitas Syiah Kuala
 
-**Bachelor's, Computer Engineering (Teknik Komputer)**  
-_2026 – Present_
+**Aceh, Indonesia**
+*Bachelor's, Computer Engineering (Teknik Komputer) — 2026 – Present*
 
-### MAS Jeumala Amal — Pidie Jaya, Aceh, Indonesia
+### MAS Jeumala Amal
 
-**High School Diploma, Science (IPA)**  
-_July 2024 – May 2026_
+**Islamic Senior High Boarding School — Pidie Jaya, Aceh, Indonesia**
+*High School Diploma, Science (IPA) — July 2024 – May 2026*
 
-### SMK Darul Ihsan — Aceh Besar, Aceh, Indonesia
+### SMK Darul Ihsan
 
-**Computer & Network Engineering**  
-_1 year; transferred to MAS Jeumala Amal • 2023 – 2024_
+**Vocational High Boarding School — Aceh Besar, Aceh, Indonesia**
+*Computer & Network Engineering — 1 year; transferred to MAS Jeumala Amal — 2023 – 2024*
 
-### MTsS Darul Ihsan — Aceh Besar, Aceh, Indonesia
+### MTsS Darul Ihsan
 
-**Junior High School Diploma**  
-_Graduated 2023_
+**Islamic Junior High Boarding School — Aceh Besar, Aceh, Indonesia**
+*Junior High School Diploma — Graduated 2023*
 
 ## SKILLS
 
-**Fullstack Development:** HTML, CSS, JavaScript, TypeScript, React, Next.js, Node.js, Express.js, PHP, Tailwind CSS, Bootstrap, MongoDB, PostgreSQL (Neon), MySQL, SQL, REST API, Git, GitHub, Docker, Vercel
+**Fullstack Development:**
+HTML, CSS, JavaScript, TypeScript, React, Next.js, Node.js, Express.js, PHP, Tailwind CSS, Bootstrap, MongoDB, PostgreSQL (Neon), MySQL, SQL, REST API, Git, GitHub, Docker, Vercel
 
-**AI Integration & Tools:** Python, Claude API, OpenRouter API, MCP, Claude Code, n8n, AWS Bedrock, Google Vertex AI
+**AI Integration & Tools:**
+Python, Claude API, OpenRouter API, MCP, Claude Code, n8n, Google AI Studio
 
-**Design Tools:** Adobe Photoshop, Lightroom, CorelDRAW, Canva
+**Design Tools:**
+Adobe Photoshop, Lightroom, CorelDRAW, Canva
 
-**Spoken Languages:** Indonesian (Native), English (Intermediate), Arabic (Intermediate)
+**Spoken Languages:**
+Indonesian (Native), English (Intermediate), Arabic (Intermediate)
