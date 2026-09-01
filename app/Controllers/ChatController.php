@@ -51,6 +51,14 @@ class ChatController
                 return $this->callOpenRouter($key, $model, $messages);
             } catch (Throwable $e) {
                 $errors[] = $e->getMessage();
+                // Retry transient upstream failures once before moving to the fallback model.
+                if (preg_match('/\((?:500|502|503|504)\)/', $e->getMessage())) {
+                    try {
+                        return $this->callOpenRouter($key, $model, $messages);
+                    } catch (Throwable $retryError) {
+                        $errors[] = $retryError->getMessage();
+                    }
+                }
             }
         }
         throw new RuntimeException('Chat completion failed: ' . implode(' | ', $errors));

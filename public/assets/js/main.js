@@ -3321,7 +3321,7 @@ function initChatbot() {
     if (role === "visitor") {
       const edit = document.createElement("button");
       edit.type = "button"; edit.className = "chatbot-action"; edit.dataset.chatAction = "edit";
-      edit.textContent = "Edit"; edit.dataset.message = text;
+      edit.innerHTML = '<i data-lucide="pencil" aria-hidden="true"></i>'; edit.title = "Edit"; edit.setAttribute("aria-label", "Edit message"); edit.dataset.message = text;
       group.appendChild(edit);
       return;
     }
@@ -3330,7 +3330,8 @@ function initChatbot() {
     ].forEach(([action, label]) => {
       const button = document.createElement("button");
       button.type = "button"; button.className = "chatbot-action"; button.dataset.chatAction = action;
-      button.textContent = label; button.dataset.message = text;
+      const icons = { copy: "copy", good: "thumbs-up", bad: "thumbs-down", rewrite: "refresh-cw" };
+      button.innerHTML = '<i data-lucide="' + icons[action] + '" aria-hidden="true"></i>'; button.title = label; button.setAttribute("aria-label", label + " response"); button.dataset.message = text;
       group.appendChild(button);
     });
   };
@@ -3344,6 +3345,7 @@ function initChatbot() {
     const actions = document.createElement("div");
     actions.className = "chatbot-message-actions";
     addActions(actions, role, text);
+    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     wrapper.appendChild(actions);
     messages.appendChild(wrapper);
     messages.scrollTop = messages.scrollHeight;
@@ -3655,6 +3657,7 @@ function initChatbot() {
     const actions = document.createElement("div");
     actions.className = "chatbot-message-actions";
     addActions(actions, "assistant", String(text));
+    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     wrapper.appendChild(actions);
     if (insertAfter && insertAfter.parentNode === messages) insertAfter.after(wrapper);
     else messages.appendChild(wrapper);
@@ -3698,7 +3701,9 @@ function initChatbot() {
     edit.type = "button";
     edit.className = "chatbot-action";
     edit.dataset.chatAction = "edit";
-    edit.textContent = "Edit";
+    edit.innerHTML = '<i data-lucide="pencil" aria-hidden="true"></i>';
+    edit.title = "Edit";
+    edit.setAttribute("aria-label", "Edit message");
     edit.dataset.message = messageText;
     actions.appendChild(edit);
   }
@@ -3759,7 +3764,9 @@ function initChatbot() {
       bubble.replaceWith(editor);
       editor.focus();
       editor.setSelectionRange(editor.value.length, editor.value.length);
-      button.textContent = "Save";
+      button.innerHTML = '<i data-lucide="check" aria-hidden="true"></i>';
+      button.title = "Save";
+      button.setAttribute("aria-label", "Save edited message");
       button.dataset.chatAction = "save-edit";
       button.dataset.original = original;
       const cancel = document.createElement("button");
@@ -3767,7 +3774,8 @@ function initChatbot() {
       cancel.className = "chatbot-action";
       cancel.dataset.chatAction = "cancel-edit";
       cancel.dataset.original = original;
-      cancel.textContent = "Cancel";
+      cancel.innerHTML = '<i data-lucide="x" aria-hidden="true"></i>';
+      cancel.title = "Cancel";
       cancel.setAttribute("aria-label", "Cancel editing");
       button.parentElement.appendChild(cancel);
       editor.addEventListener("keydown", (e) => {
@@ -3780,6 +3788,7 @@ function initChatbot() {
           button.click();
         }
       });
+      if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     } else if (action === "save-edit" && bubble === null) {
       const editor = group.querySelector(".chatbot-edit-input");
       const value = editor?.value.trim();
@@ -3789,7 +3798,7 @@ function initChatbot() {
       }
       const originalText = button.dataset.original || "";
       button.disabled = true;
-      button.textContent = "Saving…";
+      button.innerHTML = '<i data-lucide="loader-circle" aria-hidden="true"></i>';
       const cancelBtn = group.querySelector('[data-chat-action="cancel-edit"]');
       if (cancelBtn) cancelBtn.style.display = "none";
       lastQuestion = value;
@@ -3834,7 +3843,7 @@ function initChatbot() {
         appendRichMessage(labels.error || "The assistant is unavailable.", group);
       } finally {
         button.disabled = false;
-        button.textContent = "Edit";
+        button.innerHTML = '<i data-lucide="pencil" aria-hidden="true"></i>';
         button.dataset.chatAction = "edit";
         button.dataset.message = value;
       }
