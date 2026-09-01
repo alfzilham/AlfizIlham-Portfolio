@@ -3010,6 +3010,7 @@ function initLiveClock() {
 function initVisitorCounter() {
   var countEl = document.getElementById("visitorCount");
   var uniqueEl = document.getElementById("visitorUnique");
+  var feedbackEl = document.getElementById("visitorFeedback");
   var chartEl = document.getElementById("visitorChart");
   if (!countEl) return;
 
@@ -3028,6 +3029,7 @@ function initVisitorCounter() {
 
         if (countEl) countEl.textContent = count;
         if (uniqueEl) uniqueEl.textContent = count + " " + visitorsText;
+        if (feedbackEl) feedbackEl.textContent = data.feedbackCount || 0;
 
         // Render chart if data available
         if (
@@ -3311,7 +3313,7 @@ function initChatbot() {
       }, 360);
     }
   };
-  const addActions = (group, role, text) => {
+  const addActions = (group, role, text, question = "") => {
     if (role === "visitor") {
       const edit = document.createElement("button");
       edit.type = "button"; edit.className = "chatbot-action"; edit.dataset.chatAction = "edit";
@@ -3325,7 +3327,7 @@ function initChatbot() {
       const button = document.createElement("button");
       button.type = "button"; button.className = "chatbot-action"; button.dataset.chatAction = action;
       const icons = { copy: "copy", good: "thumbs-up", bad: "thumbs-down", rewrite: "refresh-cw" };
-      button.innerHTML = '<i data-lucide="' + icons[action] + '" aria-hidden="true"></i>'; button.title = label; button.setAttribute("aria-label", label + " response"); button.dataset.message = text;
+      button.innerHTML = '<i data-lucide="' + icons[action] + '" aria-hidden="true"></i>'; button.title = label; button.setAttribute("aria-label", label + " response"); button.dataset.message = text; button.dataset.question = question || lastQuestion;
       group.appendChild(button);
     });
   };
@@ -3339,9 +3341,9 @@ function initChatbot() {
     const actions = document.createElement("div");
     actions.className = "chatbot-message-actions";
     addActions(actions, role, text);
-    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     wrapper.appendChild(actions);
     messages.appendChild(wrapper);
+    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     messages.scrollTop = messages.scrollHeight;
     return item;
   };
@@ -3575,6 +3577,8 @@ function initChatbot() {
           data.error ||
           labels.error ||
           "The assistant is unavailable.",
+        null,
+        message,
       );
     } catch (error) {
       pending.remove();
@@ -3621,7 +3625,7 @@ function initChatbot() {
     }
     appendAnimatedText(parent, text.slice(cursor), container);
   };
-  const appendRichMessage = (text, insertAfter = null) => {
+  const appendRichMessage = (text, insertAfter = null, question = "") => {
     const wrapper = document.createElement("div");
     wrapper.className = "chatbot-message-group chatbot-message-group--assistant";
     const item = document.createElement("div");
@@ -3650,11 +3654,11 @@ function initChatbot() {
     wrapper.appendChild(item);
     const actions = document.createElement("div");
     actions.className = "chatbot-message-actions";
-    addActions(actions, "assistant", String(text));
-    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
+    addActions(actions, "assistant", String(text), question || lastQuestion);
     wrapper.appendChild(actions);
     if (insertAfter && insertAfter.parentNode === messages) insertAfter.after(wrapper);
     else messages.appendChild(wrapper);
+    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
     messages.scrollTop = messages.scrollHeight;
   };
 
@@ -3700,6 +3704,7 @@ function initChatbot() {
     edit.setAttribute("aria-label", "Edit message");
     edit.dataset.message = messageText;
     actions.appendChild(edit);
+    if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
   }
 
   let isRewriting = false;
@@ -3733,7 +3738,7 @@ function initChatbot() {
     } else if (action === "good" || action === "bad") {
       const wasSelected = button.classList.contains("is-selected");
       group.querySelectorAll('[data-chat-action="good"],[data-chat-action="bad"]').forEach((b) => b.classList.remove("is-selected"));
-      const questionText = group.previousElementSibling?.querySelector(".chatbot-message--visitor")?.textContent || lastQuestion || "";
+      const questionText = button.dataset.question || group.previousElementSibling?.querySelector(".chatbot-message--visitor")?.textContent || lastQuestion || "";
       if (!wasSelected) {
         button.classList.add("is-selected");
         const msgHash = await hashString(questionText + "\n" + text);
@@ -3744,9 +3749,9 @@ function initChatbot() {
         const feedbackResult = await sendFeedback(msgHash, action, questionText, text);
         if (!feedbackResult.success) button.classList.add("is-selected");
       }
-    } else if (action === "rewrite" && lastQuestion && !isRewriting) {
+    } else if (action === "rewrite" && (button.dataset.question || lastQuestion) && !isRewriting) {
       isRewriting = true;
-      input.value = lastQuestion;
+      input.value = button.dataset.question || lastQuestion;
       form.requestSubmit();
       setTimeout(() => { isRewriting = false; }, 2000);
     } else if (action === "edit" && bubble) {
@@ -3829,7 +3834,7 @@ function initChatbot() {
         const data = await response.json().catch(() => ({}));
         pendingWrapper.remove();
         if (data.answer) {
-          appendRichMessage(data.answer, group);
+          appendRichMessage(data.answer, group, value);
         } else {
           appendRichMessage(data.error || labels.error || "The assistant is unavailable.", group);
         }
@@ -3841,6 +3846,7 @@ function initChatbot() {
         button.innerHTML = '<i data-lucide="pencil" aria-hidden="true"></i>';
         button.dataset.chatAction = "edit";
         button.dataset.message = value;
+        if (window.lucide) lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
       }
     } else if (action === "cancel-edit") {
       const editor = group.querySelector(".chatbot-edit-input");
